@@ -1,9 +1,12 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
+    alias(libs.plugins.buildkonfig)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinxSerialization)
@@ -60,6 +63,7 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinxJson)
             implementation(libs.ktor.client.logging)
             implementation(libs.navigation.compose)
+            implementation(libs.sentry.kotlinMultiplatform)
             implementation(libs.sqldelight.runtime)
             implementation(libs.sqldelight.coroutinesExtensions)
         }
@@ -101,6 +105,24 @@ sqldelight {
         create("DynaquizDatabase") {
             packageName.set("com.leanite.dynaquiz.database")
         }
+    }
+}
+
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) {
+        load(file.inputStream())
+    }
+}
+
+buildkonfig {
+    packageName = "com.leanite.dynaquiz.config"
+    defaultConfigs {
+        buildConfigField(
+            STRING,
+            "SENTRY_DSN",
+            localProperties.getProperty("sentry.dsn", "")
+        )
     }
 }
 
