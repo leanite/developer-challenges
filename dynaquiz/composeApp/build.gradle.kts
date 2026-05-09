@@ -95,6 +95,14 @@ android {
     }
 }
 
+sqldelight {
+    databases {
+        create("DynaquizDatabase") {
+            packageName.set("com.leanite.dynaquiz.database")
+        }
+    }
+}
+
 dependencies {
     debugImplementation(libs.compose.uiTooling)
 }
