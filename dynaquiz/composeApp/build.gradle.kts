@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinxSerialization)
+    alias(libs.plugins.sqldelight)
 }
 
 kotlin {
@@ -32,9 +33,11 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.koin.android)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.sqldelight.androidDriver)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            implementation(libs.sqldelight.nativeDriver)
         }
         commonMain.dependencies {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
@@ -56,6 +59,8 @@ kotlin {
             implementation(libs.ktor.client.contentNegotiation)
             implementation(libs.ktor.serialization.kotlinxJson)
             implementation(libs.ktor.client.logging)
+            implementation(libs.sqldelight.runtime)
+            implementation(libs.sqldelight.coroutinesExtensions)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
