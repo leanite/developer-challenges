@@ -20,6 +20,14 @@ Splash nativa no Android:
 - Substituir theme na Activity launcher
 - `installSplashScreen()` antes de `super.onCreate()` na Activity launcher 
 
+## iOS
+
+O gerenciamento de "resources" (chamados Assets) é feito em `Assets.xcassets`
+
+Info.plist é um arquivo de metadados configurações fundamentais de um aplicativo, funcionando como um dicionário de pares chave-valor
+
+A cor de background da ViewController launcher tem seu próprio asset em`LaunchBackground.colorset/` e seu conteúdo em `Content.json`
+
 ## Aprendizagem futura:
 
 1. Como se comporta um projeto multi módulo no KMP?
