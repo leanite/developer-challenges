@@ -44,6 +44,7 @@ kotlin {
             implementation(libs.sqldelight.nativeDriver)
         }
         commonMain.dependencies {
+            implementation(libs.androidx.core.splashscreen)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.compose.runtime)
