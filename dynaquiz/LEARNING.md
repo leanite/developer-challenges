@@ -32,3 +32,4 @@ A cor de background da ViewController launcher tem seu próprio asset em`LaunchB
 
 1. Como se comporta um projeto multi módulo no KMP?
 2. É possível fazer `build-logic`/convention plugins em arquitetura multi módulo no KMP?
+3. O que acontece com o app quando muda de orientação no KMP/iOS?
