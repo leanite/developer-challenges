@@ -14,11 +14,32 @@ Onde coloco os resources do projeto Android?
 
 ## TBD
 
-Splash nativa no Android:
+**Splash nativa no Android:**
 - Lib androidx-core-splashscreen
 - Criar theme
 - Substituir theme na Activity launcher
 - `installSplashScreen()` antes de `super.onCreate()` na Activity launcher 
+
+**Modificadores `expect` e `actual`:**
+Expect: declara assinatura (nome, params, retorno) sem corpo. Cada source set de plataforma é **OBRIGADO** a fornecer um actual correspondente, senão o build falha. Funciona como um "contrato" multiplatforma.
+
+Actual: repete a assinatura do expect (precisa bater exatamente — params, retorno, modificadores) e fornece o corpo. Manter o mesmo nome dos arquivo nos source sets facilita pra IDE encontrar, mas não é obrigatório.
+
+No caso da configuração do client http:
+> Compose app
+```kotlin
+internal expect fun httpClientEngine(): HttpClientEngine
+```
+
+> Android app
+```kotlin
+internal actual fun httpClientEngine(): HttpClientEngine = OkHttp.create()
+```
+
+> iOS app
+```kotlin
+internal actual fun httpClientEngine(): HttpClientEngine = Darwin.create()
+```
 
 ## iOS
 
