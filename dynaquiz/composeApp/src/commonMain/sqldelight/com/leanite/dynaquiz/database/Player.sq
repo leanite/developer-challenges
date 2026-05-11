@@ -1,0 +1,22 @@
+CREATE TABLE PlayerEntity (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    createdAt INTEGER NOT NULL
+);
+
+CREATE INDEX idx_player_name ON PlayerEntity(name);
+
+selectByName:
+SELECT * FROM PlayerEntity WHERE name = ? LIMIT 1;
+
+selectById:
+SELECT * FROM PlayerEntity WHERE id = ? LIMIT 1;
+
+insertPlayer:
+INSERT INTO PlayerEntity(name, createdAt)
+VALUES (?, ?);
+
+-- O SQLDelight gera função sem retorno
+-- Pra pegar o id inserido, usar lastInsertedRowId
+lastInsertedRowId:
+SELECT last_insert_rowid();

@@ -1,0 +1,34 @@
+CREATE TABLE QuizSessionEntity (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    playerId INTEGER NOT NULL,
+    correctAnswers INTEGER NOT NULL,
+    challengeMode TEXT NOT NULL, -- "RELAXED" | "EASY" | "MEDIUM" | "HARD"
+    timeBonus INTEGER NOT NULL,
+    finishedAt INTEGER NOT NULL,
+    FOREIGN KEY (playerId) REFERENCES PlayerEntity(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_session_playerId ON QuizSessionEntity(playerId);
+CREATE INDEX idx_session_total_score ON QuizSessionEntity((correctAnswers + timeBonus) DESC);
+
+insertSession:
+INSERT INTO QuizSessionEntity(playerId, correctAnswers, challengeMode, timeBonus, finishedAt)
+VALUES (?, ?, ?, ?, ?);
+
+selectByPlayer:
+SELECT * FROM QuizSessionEntity
+WHERE playerId = ?
+ORDER BY finishedAt DESC;
+
+selectRanking:
+SELECT
+    p.id AS playerId,
+    p.name AS playerName,
+    s.correctAnswers,
+    s.challengeMode,
+    s.timeBonus,
+    s.finishedAt
+FROM QuizSessionEntity s
+INNER JOIN PlayerEntity p ON p.id = s.playerId
+ORDER BY (s.correctAnswers + s.timeBonus) DESC, s.finishedAt DESC
+LIMIT 50;
