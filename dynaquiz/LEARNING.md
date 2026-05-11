@@ -25,6 +25,9 @@ Expect: declara assinatura (nome, params, retorno) sem corpo. Cada source set de
 
 Actual: repete a assinatura do expect (precisa bater exatamente — params, retorno, modificadores) e fornece o corpo. Manter o mesmo nome dos arquivo nos source sets facilita pra IDE encontrar, mas não é obrigatório.
 
+**SQLDelight e Adapters**
+O SQLDelight possui uma interface `ColumnAdapter` para adaptar valores de objetos para valores de entidades do BD. Você implementa essa interface (como em `ChallengeModeAdapter`) e ao declarar um campo de uma tabela com AS (como em `QuizSession.sq`), a Entity correspondente será gerada com uma classe interna `Adapter` pronta para receber o código preparado para converter os dois tipos.
+
 No caso da configuração do client http:
 > Compose app
 ```kotlin

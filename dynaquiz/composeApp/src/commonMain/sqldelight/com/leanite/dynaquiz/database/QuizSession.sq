@@ -2,7 +2,7 @@ CREATE TABLE QuizSessionEntity (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     playerId INTEGER NOT NULL,
     correctAnswers INTEGER NOT NULL,
-    challengeMode TEXT NOT NULL, -- "RELAXED" | "EASY" | "MEDIUM" | "HARD"
+    challengeMode TEXT AS com.leanite.dynaquiz.core.domain.model.ChallengeMode NOT NULL,
     timeBonus INTEGER NOT NULL,
     finishedAt INTEGER NOT NULL,
     FOREIGN KEY (playerId) REFERENCES PlayerEntity(id) ON DELETE CASCADE
