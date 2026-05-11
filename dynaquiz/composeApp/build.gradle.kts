@@ -65,6 +65,8 @@ kotlin {
             implementation(libs.ktor.client.contentNegotiation)
             implementation(libs.ktor.serialization.kotlinxJson)
             implementation(libs.ktor.client.logging)
+            implementation(libs.multiplatformSettings.noArg)
+            implementation(libs.multiplatformSettings.coroutines)
             implementation(libs.navigation.compose)
             implementation(libs.sentry.kotlinMultiplatform)
             implementation(libs.sqldelight.runtime)
