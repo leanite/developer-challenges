@@ -52,6 +52,8 @@ Info.plist é um arquivo de metadados configurações fundamentais de um aplicat
 
 A cor de background da ViewController launcher tem seu próprio asset em`LaunchBackground.colorset/` e seu conteúdo em `Content.json`
 
+Tive que, explicitamente, adicionar a `libsqlite3` pelo XCode em `iosApp > TARGETS > General > Frameworks, Libraries, and Embedded Content` para poder compilar o projeto no iOS.
+
 ## Aprendizagem futura:
 
 1. Como se comporta um projeto multi módulo no KMP?

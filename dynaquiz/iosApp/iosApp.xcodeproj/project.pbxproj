@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		9CEF836F2FB2704800764B8A /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CEF836E2FB2703000764B8A /* libsqlite3.tbd */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		0E8D357C1BE5F4DB0D8696B0 /* Dynaquiz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dynaquiz.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9CEF836E2FB2703000764B8A /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -41,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9CEF836F2FB2704800764B8A /* libsqlite3.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,11 +61,20 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		9CEF836D2FB2703000764B8A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9CEF836E2FB2703000764B8A /* libsqlite3.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		E9E8D1B1B3FE383915D3B930 = {
 			isa = PBXGroup;
 			children = (
 				2BCB33A5359DCB7065C95683 /* Configuration */,
 				2CD7526696EA2E67CF6CCAB1 /* iosApp */,
+				9CEF836D2FB2703000764B8A /* Frameworks */,
 				824EEB9D98D97EA63CEF0A2C /* Products */,
 			);
 			sourceTree = "<group>";
