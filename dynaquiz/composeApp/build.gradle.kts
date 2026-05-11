@@ -127,6 +127,14 @@ buildkonfig {
             "SENTRY_DSN",
             localProperties.getProperty("sentry.dsn", "")
         )
+        buildConfigField(
+            STRING,
+            "DYNAMOX_QUIZ_BASE_URL",
+            localProperties.getProperty(
+                "dynamox.baseUrl",
+                "https://quiz-api-bwi5hjqyaq-uc.a.run.app"
+            )
+        )
     }
 }
 

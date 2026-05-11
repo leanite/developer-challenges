@@ -1,4 +1,4 @@
-package com.leanite.dynaquiz.core.domain
+package com.leanite.dynaquiz.core.domain.result
 
 sealed interface AppError {
     data object NoInternet : AppError

@@ -6,19 +6,13 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.json.Json
 
 internal fun buildHttpClient(): HttpClient = HttpClient(httpClientEngine()) {
     install(ContentNegotiation) {
-        json(
-            Json {
-                ignoreUnknownKeys = true
-                explicitNulls = false
-            }
-        )
+        json(DynaquizJson)
     }
     install(Logging) {
-        level = LogLevel.INFO
+        level = LogLevel.ALL
     }
     install(HttpTimeout) {
         requestTimeoutMillis = 15_000

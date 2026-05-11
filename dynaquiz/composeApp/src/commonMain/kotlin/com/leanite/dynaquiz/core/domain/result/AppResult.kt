@@ -1,4 +1,4 @@
-package com.leanite.dynaquiz.core.domain
+package com.leanite.dynaquiz.core.domain.result
 
 sealed interface AppResult<out T> {
     data class Success<T>(val data: T) : AppResult<T>
