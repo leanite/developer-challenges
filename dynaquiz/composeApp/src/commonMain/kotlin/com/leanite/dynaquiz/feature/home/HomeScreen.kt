@@ -33,21 +33,14 @@ import org.jetbrains.compose.resources.stringResource
 fun HomeScreen(
     uiState: HomeUiState,
     onIntent: (HomeIntent) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(horizontal = 24.dp, vertical = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(
-            text = stringResource(HomeRes.Title),
-            style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.primary,
-        )
-
-        Spacer(modifier = Modifier.height(32.dp))
-
         OutlinedTextField(
             value = uiState.nickname,
             onValueChange = { onIntent(HomeIntent.NicknameChanged(it)) },

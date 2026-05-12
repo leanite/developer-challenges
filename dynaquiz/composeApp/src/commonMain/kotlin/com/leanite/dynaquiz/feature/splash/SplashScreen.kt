@@ -14,18 +14,27 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import com.leanite.dynaquiz.core.ui.common.BrandTitle
 import com.leanite.dynaquiz.feature.splash.anim.SplashAnimation
 
 @Composable
-fun SplashScreen(onAnimationFinished: () -> Unit) {
+fun SplashScreen(
+    titleModifier: Modifier = Modifier,
+    purpleSurfaceModifier: Modifier = Modifier,
+    onAnimationFinished: () -> Unit
+) {
     var displayedText by remember { mutableStateOf(SplashAnimation.INITIAL_TEXT) }
+    var showCursor by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
         SplashAnimation.runTypingSequence(
             onTextChanged = { displayedText = it },
         )
+
+        // Cursor desaparece antes da transição — BrandLockup fica no estado
+        // final ("Dynaquiz" sem cursor), idêntico ao BrandLockup da Home.
+        // Transição shared bounds vai parecer "continuação", não corte.
+        showCursor = false
 
         onAnimationFinished()
     }
@@ -33,12 +42,14 @@ fun SplashScreen(onAnimationFinished: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .then(purpleSurfaceModifier)
             .background(MaterialTheme.colorScheme.primary),
         contentAlignment = Alignment.Center,
     ) {
         BrandTitle(
             text = displayedText,
-            showCursor = true,
+            showCursor = showCursor,
+            modifier = titleModifier
         )
     }
 }

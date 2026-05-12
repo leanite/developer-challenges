@@ -7,21 +7,31 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dynaquiz.composeapp.generated.resources.Res
 import dynaquiz.composeapp.generated.resources.dynamox_logo
 import org.jetbrains.compose.resources.painterResource
 
+enum class BrandTitleSize {
+    LARGE,
+    NORMAL,
+}
+
 @Composable
 fun BrandTitle(
     text: String,
     modifier: Modifier = Modifier,
     showCursor: Boolean = false,
-    logoHeight: Dp = DEFAULT_LOGO_HEIGHT,
+    size: BrandTitleSize = BrandTitleSize.LARGE,
 ) {
+    val spec = size.spec()
+    val color = MaterialTheme.colorScheme.onPrimary
+
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
@@ -30,22 +40,41 @@ fun BrandTitle(
         Image(
             painter = painterResource(Res.drawable.dynamox_logo),
             contentDescription = "Dynamox logo",
-            modifier = Modifier.height(logoHeight),
+            modifier = Modifier.height(spec.logoHeight),
         )
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = text,
-                color = MaterialTheme.colorScheme.onPrimary,
-                style = MaterialTheme.typography.displayMedium,
+                color = color,
+                style = spec.textStyle,
             )
             if (showCursor) {
-                BlinkingCursor(height = CURSOR_HEIGHT)
+                BlinkingCursor(height = spec.cursorHeight)
             }
         }
     }
 }
 
-private val DEFAULT_LOGO_HEIGHT = 48.dp
+@Immutable
+private data class BrandTitleSpec(
+    val logoHeight: Dp,
+    val textStyle: TextStyle,
+    val cursorHeight: Dp,
+)
+
+@Composable
+private fun BrandTitleSize.spec(): BrandTitleSpec = when (this) {
+    BrandTitleSize.LARGE -> BrandTitleSpec(
+        logoHeight = 48.dp,
+        textStyle = MaterialTheme.typography.displayMedium,
+        cursorHeight = 40.dp,
+    )
+    BrandTitleSize.NORMAL -> BrandTitleSpec(
+        logoHeight = 28.dp,
+        textStyle = MaterialTheme.typography.titleLarge,
+        cursorHeight = 22.dp,
+    )
+}
+
 private val SPACING = 12.dp
-private val CURSOR_HEIGHT = 40.dp
