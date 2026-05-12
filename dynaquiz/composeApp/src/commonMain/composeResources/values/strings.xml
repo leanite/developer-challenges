@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Home -->
+    <string name="home_title">Dynaquiz</string>
+    <string name="home_nickname_label">Nickname</string>
+    <string name="home_nickname_error_empty">Digite um nickname</string>
+    <string name="home_nickname_error_too_short">Mínimo %d caracteres</string>
+    <string name="home_nickname_error_too_long">Máximo %d caracteres</string>
+    <string name="home_difficulty_title">Dificuldade</string>
+    <string name="home_mode_relaxed_label">Sem desafio</string>
+    <string name="home_mode_relaxed_description">Sem timer</string>
+    <string name="home_mode_easy_label">Fácil</string>
+    <string name="home_mode_easy_description">30 segundos por pergunta</string>
+    <string name="home_mode_medium_label">Médio</string>
+    <string name="home_mode_medium_description">20 segundos por pergunta</string>
+    <string name="home_mode_hard_label">Difícil</string>
+    <string name="home_mode_hard_description">10 segundos por pergunta</string>
+    <string name="home_button_start">Jogar</string>
+    <string name="home_save_error_generic">Não foi possível salvar. Tente novamente.</string>
+</resources>

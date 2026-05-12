@@ -28,6 +28,10 @@ Actual: repete a assinatura do expect (precisa bater exatamente — params, reto
 **SQLDelight e Adapters**
 O SQLDelight possui uma interface `ColumnAdapter` para adaptar valores de objetos para valores de entidades do BD. Você implementa essa interface (como em `ChallengeModeAdapter`) e ao declarar um campo de uma tabela com AS (como em `QuizSession.sq`), a Entity correspondente será gerada com uma classe interna `Adapter` pronta para receber o código preparado para converter os dois tipos.
 
+**Res e strings**
+Para padronizar strings e não usar hardcoded nos `@Composable`, usar `composeResources/values/strings.xml` e importar `Res` para acessar `Res.string.<nome>`.
+A quantidade de imports é terrível, então provavelmente eu usarei uma classe wrapper.
+
 No caso da configuração do client http:
 > Compose app
 ```kotlin

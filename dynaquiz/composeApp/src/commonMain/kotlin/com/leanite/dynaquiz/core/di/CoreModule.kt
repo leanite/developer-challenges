@@ -10,11 +10,16 @@ import com.leanite.dynaquiz.core.data.datasource.QuizRemoteDataSourceImpl
 import com.leanite.dynaquiz.core.data.network.buildHttpClient
 import com.leanite.dynaquiz.core.data.repository.PlayerRepositoryImpl
 import com.leanite.dynaquiz.core.data.repository.QuizRepositoryImpl
+import com.leanite.dynaquiz.core.data.repository.UserRepositoryImpl
 import com.leanite.dynaquiz.core.domain.repository.PlayerRepository
 import com.leanite.dynaquiz.core.domain.repository.QuizRepository
+import com.leanite.dynaquiz.core.domain.repository.UserRepository
+import com.leanite.dynaquiz.core.domain.usecase.GetLastNicknameUseCase
 import com.leanite.dynaquiz.core.domain.usecase.RegisterOrFetchPlayerUseCase
+import com.leanite.dynaquiz.core.domain.usecase.SetLastNicknameUseCase
 import com.leanite.dynaquiz.database.DynaquizDatabase
 import com.leanite.dynaquiz.database.QuizSessionEntity
+import com.russhwolf.settings.Settings
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -34,6 +39,11 @@ val coreModule = module { //TODO: melhorar, todos estao aqui
             ignoreUnknownKeys = true
             explicitNulls = false
         }
+    }
+
+    // Multiplatform Settings
+    single<Settings> {
+        Settings()
     }
 
     // Dispatchers
@@ -78,6 +88,14 @@ val coreModule = module { //TODO: melhorar, todos estao aqui
         )
     }
 
+    single<UserRepository> {
+        UserRepositoryImpl(
+            settings = get()
+        )
+    }
+
     // Player use cases
+    factory { GetLastNicknameUseCase(repository = get()) }
+    factory { SetLastNicknameUseCase(repository = get()) }
     factory { RegisterOrFetchPlayerUseCase(repository = get()) }
 }
