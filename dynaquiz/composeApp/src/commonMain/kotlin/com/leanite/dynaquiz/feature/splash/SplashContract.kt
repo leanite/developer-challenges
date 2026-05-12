@@ -3,13 +3,8 @@ package com.leanite.dynaquiz.feature.splash
 import androidx.compose.runtime.Immutable
 
 @Immutable
-data class SplashUiState(
-    val progress: Float = 0f,
-)
-
-@Immutable
 sealed interface SplashIntent {
-    data object Start : SplashIntent
+    data object AnimationFinished : SplashIntent
 }
 
 @Immutable

@@ -10,30 +10,20 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class SplashViewModel(
-    private val displayDurationMillis: Long = DEFAULT_DURATION_MILLIS,
-) : ViewModel() {
-
-    private val _uiState = MutableStateFlow(SplashUiState())
-    val uiState: StateFlow<SplashUiState> = _uiState.asStateFlow()
+class SplashViewModel : ViewModel() {
 
     private val _events = Channel<SplashEvent>(Channel.BUFFERED)
     val events = _events.receiveAsFlow()
 
     fun onIntent(intent: SplashIntent) {
         when (intent) {
-            SplashIntent.Start -> start()
+            SplashIntent.AnimationFinished -> onAnimationFinished()
         }
     }
 
-    private fun start() {
+    private fun onAnimationFinished() {
         viewModelScope.launch {
-            delay(displayDurationMillis)
             _events.send(SplashEvent.NavigateToNext)
         }
-    }
-
-    private companion object {
-        const val DEFAULT_DURATION_MILLIS = 1_500L
     }
 }

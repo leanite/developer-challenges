@@ -1,6 +1,7 @@
 package com.leanite.dynaquiz.core.di
 
 import com.leanite.dynaquiz.feature.home.di.featureHomeModule
+import com.leanite.dynaquiz.feature.splash.di.featureSplashModule
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -17,6 +18,7 @@ fun initKoin(
         modules(
             listOf(
                 coreModule,
+                featureSplashModule,
                 featureHomeModule
             ) + extraModules)
     }

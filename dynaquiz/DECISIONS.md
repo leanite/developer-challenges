@@ -10,3 +10,7 @@ val events = _events.receiveAsFlow()
  ## Intent iniciais em Screens
 
  Não costumo deixar intents serem executadas por default em um `ViewModel`. Gosto de, explicitamente, chamar uma intent usando um `onIntent()` inicial para ajudar na visibilidade futura do código, tentando diminuir o número de "mágicas" que ocorrem no código.
+
+ ## Apenas um PNG com resolução suficiente em `drawable`
+ 
+ Para facilitar a geração de resources, vou usar apenas um *.png com resolução suficiente para funcionar bem na aparesentação/uso da maioria dos dispositivos
