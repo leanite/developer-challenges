@@ -1,32 +1,29 @@
 package com.leanite.dynaquiz.feature.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
 import com.leanite.dynaquiz.feature.home.res.HomeRes
+import com.leanite.dynaquiz.feature.home.ui.ChallengeModeOption
+import com.leanite.dynaquiz.feature.home.ui.MainCard
+import com.leanite.dynaquiz.feature.home.ui.NicknameField
+import com.leanite.dynaquiz.feature.home.ui.RankingCard
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -38,30 +35,18 @@ fun HomeScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .background(Color(0xFFEFEDF1))
             .padding(horizontal = 24.dp, vertical = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        OutlinedTextField(
-            value = uiState.nickname,
-            onValueChange = { onIntent(HomeIntent.NicknameChanged(it)) },
-            label = { Text(stringResource(HomeRes.NicknameLabel)) },
-            singleLine = true,
-            isError = uiState.nicknameError != null && uiState.nickname.isNotEmpty(),
-            supportingText = {
-                if (uiState.nickname.isNotEmpty()) {
-                    uiState.nicknameError?.let { error ->
-                        Text(error.toUserMessage())
-                    }
-                }
-            },
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.Words,
-                imeAction = ImeAction.Done,
-            ),
-            modifier = Modifier.fillMaxWidth(),
+        MainCard(
+            nickname = uiState.nickname,
+            nicknameError = uiState.nicknameError,
+            onNicknameChange = { onIntent(HomeIntent.NicknameChanged(it)) },
+            onRankingClick = { onIntent(HomeIntent.RankingClicked) }
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(4.dp))
 
         Text(
             text = stringResource(HomeRes.DifficultyTitle),
@@ -74,7 +59,7 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         Column(
-            verticalArrangement = Arrangement.spacedBy(4.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxWidth(),
         ) {
             ChallengeModeOption(
@@ -125,52 +110,4 @@ fun HomeScreen(
             }
         }
     }
-}
-
-@Composable
-private fun ChallengeModeOption(
-    label: String,
-    description: String,
-    mode: ChallengeMode,
-    isSelected: Boolean,
-    onSelect: (ChallengeMode) -> Unit,
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .selectable(
-                selected = isSelected,
-                onClick = { onSelect(mode) },
-                role = Role.RadioButton,
-            )
-            .padding(vertical = 4.dp, horizontal = 4.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        RadioButton(
-            selected = isSelected,
-            onClick = null,
-        )
-        Spacer(modifier = Modifier.width(12.dp))
-        Column {
-            Text(label, style = MaterialTheme.typography.bodyLarge)
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
-    }
-}
-
-@Composable
-private fun NicknameError.toUserMessage(): String = when (this) {
-    NicknameError.Empty -> stringResource(HomeRes.NicknameErrorEmpty)
-    NicknameError.TooShort -> stringResource(
-        HomeRes.NicknameErrorTooShort,
-        HomeValidation.MIN_NICKNAME_LENGTH,
-    )
-    NicknameError.TooLong -> stringResource(
-        HomeRes.NicknameErrorTooLong,
-        HomeValidation.MAX_NICKNAME_LENGTH,
-    )
 }

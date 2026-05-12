@@ -15,8 +15,12 @@ import dynaquiz.composeapp.generated.resources.home_nickname_error_empty
 import dynaquiz.composeapp.generated.resources.home_nickname_error_too_long
 import dynaquiz.composeapp.generated.resources.home_nickname_error_too_short
 import dynaquiz.composeapp.generated.resources.home_nickname_label
+import dynaquiz.composeapp.generated.resources.home_ranking_description
+import dynaquiz.composeapp.generated.resources.home_ranking_title
 import dynaquiz.composeapp.generated.resources.home_save_error_generic
 import dynaquiz.composeapp.generated.resources.home_title
+import dynaquiz.composeapp.generated.resources.ic_chevron_forward
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 
 internal object HomeRes {
@@ -26,6 +30,8 @@ internal object HomeRes {
     val NicknameErrorEmpty: StringResource = Res.string.home_nickname_error_empty
     val NicknameErrorTooShort: StringResource = Res.string.home_nickname_error_too_short
     val NicknameErrorTooLong: StringResource = Res.string.home_nickname_error_too_long
+    val RankingTitle = Res.string.home_ranking_title
+    val RankingDescription = Res.string.home_ranking_description
 
     val DifficultyTitle: StringResource = Res.string.home_difficulty_title
 
@@ -40,4 +46,6 @@ internal object HomeRes {
 
     val ButtonStart: StringResource = Res.string.home_button_start
     val SaveErrorGeneric: StringResource = Res.string.home_save_error_generic
+
+    val Chevron: DrawableResource = Res.drawable.ic_chevron_forward
 }

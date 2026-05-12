@@ -6,6 +6,8 @@
     <string name="home_nickname_error_empty">Digite um nickname</string>
     <string name="home_nickname_error_too_short">Mínimo %d caracteres</string>
     <string name="home_nickname_error_too_long">Máximo %d caracteres</string>
+    <string name="home_ranking_title">Ranking</string>
+    <string name="home_ranking_description">Veja os melhores jogadores</string>
     <string name="home_difficulty_title">Dificuldade</string>
     <string name="home_mode_relaxed_label">Sem desafio</string>
     <string name="home_mode_relaxed_description">Sem timer</string>
