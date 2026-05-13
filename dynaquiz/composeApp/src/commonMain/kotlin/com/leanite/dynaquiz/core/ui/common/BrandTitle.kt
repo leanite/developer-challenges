@@ -14,7 +14,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dynaquiz.composeapp.generated.resources.Res
-import dynaquiz.composeapp.generated.resources.dynamox_logo
+import dynaquiz.composeapp.generated.resources.mascot_logo_quiz
 import org.jetbrains.compose.resources.painterResource
 
 enum class BrandTitleSize {
@@ -38,7 +38,7 @@ fun BrandTitle(
         horizontalArrangement = Arrangement.spacedBy(SPACING),
     ) {
         Image(
-            painter = painterResource(Res.drawable.dynamox_logo),
+            painter = painterResource(Res.drawable.mascot_logo_quiz),
             contentDescription = "Dynamox logo",
             modifier = Modifier.height(spec.logoHeight),
         )

@@ -23,7 +23,7 @@ class HomeViewModel(
     private val getLastNicknameUseCase: GetLastNicknameUseCase,
     private val setLastNicknameUseCase: SetLastNicknameUseCase,
     private val registerOrFetchPlayerUseCase: RegisterOrFetchPlayerUseCase,
-    private val saveNicknameDebounce: Duration = DEFAULT_DEBOUNCE,
+    private val saveNicknameDelay: Duration = DEFAULT_NICKNAME_DELAY,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -46,34 +46,22 @@ class HomeViewModel(
 
     private fun load() {
         viewModelScope.launch {
-            val lastNickname = getLastNicknameUseCase().orEmpty()
-            _uiState.update {
-                it.copy(
-                    nickname = lastNickname,
-                    nicknameError =
-                        HomeValidation.validateNickname(lastNickname).takeIf {
-                            lastNickname.isNotEmpty()
-                        },
-                )
-            }
+            val lastNickname = getLastNicknameUseCase()
+                .orEmpty()
+                .take(HomeValidation.MAX_NICKNAME_LENGTH)
+            _uiState.update { it.copy(nickname = lastNickname) }
         }
     }
 
     private fun onNicknameChanged(rawValue: String) {
-        _uiState.update {
-            it.copy(
-                nickname = rawValue,
-                nicknameError =
-                HomeValidation.validateNickname(rawValue).takeIf {
-                    rawValue.isNotEmpty()
-                }
-            )
-        }
-        // 2) Debounced save: cancela o anterior, agenda novo pra 1s
+        val safeValue = rawValue.take(HomeValidation.MAX_NICKNAME_LENGTH)
+        _uiState.update { it.copy(nickname = safeValue) }
+
+        // Cancela o job anterior, agenda um novo pra 1s
         saveNicknameJob?.cancel()
         saveNicknameJob = viewModelScope.launch {
-            delay(saveNicknameDebounce)
-            setLastNicknameUseCase(rawValue)
+            delay(saveNicknameDelay)
+            setLastNicknameUseCase(safeValue)
         }
     }
 
@@ -103,6 +91,6 @@ class HomeViewModel(
     }
 
     private companion object {
-        val DEFAULT_DEBOUNCE = 1.seconds
+        val DEFAULT_NICKNAME_DELAY = 1.seconds
     }
 }

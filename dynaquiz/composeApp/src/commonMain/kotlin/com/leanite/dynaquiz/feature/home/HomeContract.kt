@@ -8,19 +8,11 @@ import com.leanite.dynaquiz.core.domain.result.AppError
 @Immutable
 data class HomeUiState(
     val nickname: String = "",
-    val nicknameError: NicknameError? = null,
-    val challengeMode: ChallengeMode = ChallengeMode.Relaxed,
+    val challengeMode: ChallengeMode = ChallengeMode.Timed.Easy,
     val isStarting: Boolean = false,
 ) {
     val canStart: Boolean
-        get() = nicknameError == null && nickname.trim().isNotEmpty() && !isStarting
-}
-
-@Immutable
-sealed interface NicknameError {
-    data object Empty : NicknameError
-    data object TooShort : NicknameError
-    data object TooLong : NicknameError //TODO: talvez eu limite a quantidade de caracteres no Input
+        get() = nickname.trim().length >= HomeValidation.MIN_NICKNAME_LENGTH && !isStarting
 }
 
 @Immutable
@@ -48,16 +40,6 @@ sealed interface HomeMessage {
 }
 
 internal object HomeValidation {
-    const val MIN_NICKNAME_LENGTH = 2
-    const val MAX_NICKNAME_LENGTH = 20
-
-    fun validateNickname(value: String): NicknameError? {
-        val trimmed = value.trim()
-        return when {
-            trimmed.isEmpty() -> NicknameError.Empty
-            trimmed.length < MIN_NICKNAME_LENGTH -> NicknameError.TooShort
-            trimmed.length > MAX_NICKNAME_LENGTH -> NicknameError.TooLong
-            else -> null
-        }
-    }
+    const val MIN_NICKNAME_LENGTH = 3
+    const val MAX_NICKNAME_LENGTH = 15
 }

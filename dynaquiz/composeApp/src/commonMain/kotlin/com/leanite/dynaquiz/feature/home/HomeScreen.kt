@@ -1,29 +1,49 @@
 package com.leanite.dynaquiz.feature.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.leanite.dynaquiz.core.domain.model.ChallengeMode
+import com.leanite.dynaquiz.core.domain.model.Mascot
+import com.leanite.dynaquiz.core.domain.model.toMascot
+import com.leanite.dynaquiz.core.ui.common.GameBackground
+import com.leanite.dynaquiz.core.ui.common.GameButton
+import com.leanite.dynaquiz.core.ui.common.GameButtonStyle
+import com.leanite.dynaquiz.core.ui.common.MascotImage
+import com.leanite.dynaquiz.core.ui.theme.DynamoxPurple
+import com.leanite.dynaquiz.core.ui.theme.DynamoxPurpleDeep
+import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
+import com.leanite.dynaquiz.core.ui.theme.MascotYellow
+import com.leanite.dynaquiz.core.ui.theme.MascotYellowDeep
 import com.leanite.dynaquiz.feature.home.res.HomeRes
-import com.leanite.dynaquiz.feature.home.ui.ChallengeModeOption
-import com.leanite.dynaquiz.feature.home.ui.MainCard
-import com.leanite.dynaquiz.feature.home.ui.NicknameField
-import com.leanite.dynaquiz.feature.home.ui.RankingCard
+import com.leanite.dynaquiz.feature.home.ui.MainMenu
+import com.leanite.dynaquiz.feature.home.ui.ProfileCard
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -32,82 +52,42 @@ fun HomeScreen(
     onIntent: (HomeIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Color(0xFFEFEDF1))
-            .padding(horizontal = 24.dp, vertical = 32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        MainCard(
-            nickname = uiState.nickname,
-            nicknameError = uiState.nicknameError,
-            onNicknameChange = { onIntent(HomeIntent.NicknameChanged(it)) },
-            onRankingClick = { onIntent(HomeIntent.RankingClicked) }
-        )
-
-        Spacer(modifier = Modifier.height(4.dp))
-
-        Text(
-            text = stringResource(HomeRes.DifficultyTitle),
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 4.dp),
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
+    GameBackground(modifier = modifier) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 20.dp, vertical = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            ChallengeModeOption(
-                label = stringResource(HomeRes.ModeRelaxedLabel),
-                description = stringResource(HomeRes.ModeRelaxedDescription),
-                mode = ChallengeMode.Relaxed,
-                isSelected = uiState.challengeMode == ChallengeMode.Relaxed,
-                onSelect = { onIntent(HomeIntent.ChallengeModeSelected(it)) },
+            ProfileCard(
+                nickname = uiState.nickname,
+                mascot = uiState.challengeMode.toMascot(),
+                onNicknameChange = { onIntent(HomeIntent.NicknameChanged(it.uppercase())) },
             )
-            ChallengeModeOption(
-                label = stringResource(HomeRes.ModeEasyLabel),
-                description = stringResource(HomeRes.ModeEasyDescription),
-                mode = ChallengeMode.Timed.Easy,
-                isSelected = uiState.challengeMode == ChallengeMode.Timed.Easy,
-                onSelect = { onIntent(HomeIntent.ChallengeModeSelected(it)) },
-            )
-            ChallengeModeOption(
-                label = stringResource(HomeRes.ModeMediumLabel),
-                description = stringResource(HomeRes.ModeMediumDescription),
-                mode = ChallengeMode.Timed.Medium,
-                isSelected = uiState.challengeMode == ChallengeMode.Timed.Medium,
-                onSelect = { onIntent(HomeIntent.ChallengeModeSelected(it)) },
-            )
-            ChallengeModeOption(
-                label = stringResource(HomeRes.ModeHardLabel),
-                description = stringResource(HomeRes.ModeHardDescription),
-                mode = ChallengeMode.Timed.Hard,
-                isSelected = uiState.challengeMode == ChallengeMode.Timed.Hard,
-                onSelect = { onIntent(HomeIntent.ChallengeModeSelected(it)) },
-            )
-        }
 
-        Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.weight(1f))
 
-        Button(
-            onClick = { onIntent(HomeIntent.StartQuizClicked) },
-            enabled = uiState.canStart,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            if (uiState.isStarting) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(20.dp),
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    strokeWidth = 2.dp,
-                )
-            } else {
-                Text(stringResource(HomeRes.ButtonStart))
-            }
+            MainMenu(
+                isStartEnabled = uiState.canStart,
+                onStartClick = { onIntent(HomeIntent.StartQuizClicked) },
+                onDifficultyClick = {},
+                onRankingClick = { onIntent(HomeIntent.RankingClicked) }
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
         }
+    }
+}
+
+@Preview
+@Composable
+private fun HomeScreenPreview() { //TODO: criar Preview default incorporando ja o DynaquizTheme por ext fun
+    DynaquizTheme {
+        HomeScreen(
+            HomeUiState(
+                nickname = "Leandro",
+            ),
+            onIntent = {}
+        )
     }
 }

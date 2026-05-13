@@ -2,8 +2,10 @@ package com.leanite.dynaquiz.core.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-internal val DynamoxPurple = Color(0xFF45152E)
-internal val DynamoxPurpleDark = Color(0xFF2D0E1E)
-internal val DynamoxPurpleLight = Color(0xFF6E2548)
-internal val White = Color(0xFFFFFFFF)
-internal val OffWhite = Color(0xFFF5F5F5)
+val DynamoxPurple = Color(0xFF45152E)
+val DynamoxPurpleDeep = Color(0xFF2D0F1F)
+val DynamoxPurpleSurface = Color(0xFF3D1A2D)
+val MascotYellow = Color(0xFFFBBF24)
+val MascotYellowDeep = Color(0xFFF5B100)
+val MascotBrown = Color(0xFF3D2818)
+val FactoryRed = Color(0xFFE53935)
