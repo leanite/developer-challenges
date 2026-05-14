@@ -93,7 +93,7 @@ class HomeViewModel(
             when (val result = registerOrFetchPlayerUseCase(state.nickname.trim())) {
                 is AppResult.Success -> {
                     _events.send(HomeEvent.NavigateToQuiz(
-                        playerId = result.data.id,
+                        playerName = result.data.name,
                         challengeMode = state.challengeMode,
                     ))
                 }

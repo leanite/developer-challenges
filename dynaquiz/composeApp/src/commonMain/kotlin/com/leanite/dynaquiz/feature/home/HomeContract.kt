@@ -27,7 +27,7 @@ sealed interface HomeIntent {
 @Immutable
 sealed interface HomeEvent {
     data class NavigateToQuiz(
-        val playerId: PlayerId,
+        val playerName: String,
         val challengeMode: ChallengeMode,
     ) : HomeEvent
     data object NavigateToDifficulty : HomeEvent

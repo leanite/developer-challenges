@@ -6,7 +6,7 @@ import kotlin.jvm.JvmInline
 data class Player(
     val id: PlayerId,
     val name: String,
-    val createdAt: Instant,
+    val createdAt: Instant, //TODO: realmente necessario?
 )
 
 @JvmInline

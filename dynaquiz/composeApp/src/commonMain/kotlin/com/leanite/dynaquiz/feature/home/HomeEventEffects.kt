@@ -14,7 +14,7 @@ import org.jetbrains.compose.resources.getString
 fun HomeEventEffects(
     events: Flow<HomeEvent>,
     snackbarHostState: SnackbarHostState,
-    onNavigateToQuiz: (PlayerId, ChallengeMode) -> Unit,
+    onNavigateToQuiz: (String, ChallengeMode) -> Unit,
     onNavigateToDifficulty: () -> Unit,
     onNavigateToRanking: () -> Unit,
 ) {
@@ -22,7 +22,7 @@ fun HomeEventEffects(
         events.collectLatest { event ->
             when (event) {
                 is HomeEvent.NavigateToQuiz -> {
-                    onNavigateToQuiz(event.playerId, event.challengeMode)
+                    onNavigateToQuiz(event.playerName, event.challengeMode)
                 }
                 HomeEvent.NavigateToDifficulty -> {
                     onNavigateToDifficulty()

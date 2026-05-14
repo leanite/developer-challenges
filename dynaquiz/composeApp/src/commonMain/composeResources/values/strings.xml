@@ -20,4 +20,14 @@
     <string name="difficulty_mode_hard_label">Difícil</string>
     <string name="difficulty_mode_hard_description">10 segundos por pergunta</string>
     <string name="difficulty_button_confirm">CONFIRMAR</string>
+
+    <!-- Quiz -->
+    <string name="quiz_topbar_progress">Pergunta %1$d/%2$d</string>
+    <string name="quiz_loading_question">Carregando próxima pergunta...</string>
+    <string name="quiz_dialog_exit_title">Tem certeza?</string>
+    <string name="quiz_dialog_exit_body">Você vai perder o progresso e o cronômetro continua rodando.</string>
+    <string name="quiz_button_exit">Sair</string>
+    <string name="quiz_button_continue">Continuar</string>
+    <string name="quiz_msg_question_load_failed">Erro ao carregar pergunta.</string>
+    <string name="quiz_msg_answer_submit_failed">Erro ao enviar resposta.</string>
 </resources>

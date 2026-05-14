@@ -9,8 +9,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import com.leanite.dynaquiz.core.domain.model.ChallengeMode
 import com.leanite.dynaquiz.feature.difficulty.DifficultyHost
 import com.leanite.dynaquiz.feature.home.HomeHost
+import com.leanite.dynaquiz.feature.quiz.QuizHost
 import com.leanite.dynaquiz.feature.splash.SplashHost
 
 @Composable
@@ -51,8 +54,13 @@ fun DynaquizAppNavigation() {
                 popEnterTransition = { EnterTransition.None },
             ) {
                 HomeHost(
-                    onNavigateToQuiz = { playerId, challengeMode ->
-                        //TODO: implementar
+                    onNavigateToQuiz = { playerName, challengeMode ->
+                        navController.navigate(
+                            Quiz(
+                                playerName = playerName,
+                                challengeMode = challengeMode.serializedName,
+                            )
+                        )
                     },
                     onNavigateToDifficulty = { navController.navigate(Difficulty) },
                     onNavigateToRanking = {
@@ -73,6 +81,20 @@ fun DynaquizAppNavigation() {
 
             composable<Difficulty> {
                 DifficultyHost(
+                    onNavigateBack = { navController.popBackStack() },
+                )
+            }
+
+            composable<Quiz> { entry ->
+                val args = entry.toRoute<Quiz>()
+                QuizHost(
+                    playerName = args.playerName,
+                    challengeMode = ChallengeMode.fromSerializedName(args.challengeMode),
+                    onNavigateToResult = { result ->
+                        // STUB temporário
+                        println("Quiz finished: $result")
+                        navController.popBackStack(route = Home, inclusive = false)
+                    },
                     onNavigateBack = { navController.popBackStack() },
                 )
             }

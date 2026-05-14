@@ -3,7 +3,7 @@ package com.leanite.dynaquiz.core.data.repository
 import com.leanite.dynaquiz.core.data.datasource.QuizRemoteDataSource
 import com.leanite.dynaquiz.core.data.error.toAppError
 import com.leanite.dynaquiz.core.data.mapper.toDomain
-import com.leanite.dynaquiz.core.domain.model.AnswerResult
+import com.leanite.dynaquiz.core.domain.model.Answer
 import com.leanite.dynaquiz.core.domain.model.Question
 import com.leanite.dynaquiz.core.domain.model.QuestionId
 import com.leanite.dynaquiz.core.domain.repository.QuizRepository
@@ -25,7 +25,7 @@ internal class QuizRepositoryImpl(
             }
         }
 
-    override suspend fun submitAnswer(questionId: QuestionId, answer: String): AppResult<AnswerResult> =
+    override suspend fun submitAnswer(questionId: QuestionId, answer: String): AppResult<Answer> =
         withContext(ioDispatcher) {
             try {
                 AppResult.Success(remoteDataSource.submitAnswer(questionId.value, answer).toDomain())
