@@ -70,7 +70,7 @@ fun HomeScreen(
             MainMenu(
                 isStartEnabled = uiState.canStart,
                 onStartClick = { onIntent(HomeIntent.StartQuizClicked) },
-                onDifficultyClick = {},
+                onDifficultyClick = { onIntent(HomeIntent.DifficultyClicked) },
                 onRankingClick = { onIntent(HomeIntent.RankingClicked) }
             )
 

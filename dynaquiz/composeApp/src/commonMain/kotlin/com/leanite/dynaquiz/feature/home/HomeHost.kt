@@ -21,6 +21,7 @@ import com.leanite.dynaquiz.core.domain.model.ChallengeMode
 import com.leanite.dynaquiz.core.domain.model.PlayerId
 import com.leanite.dynaquiz.core.ui.common.BrandTitle
 import com.leanite.dynaquiz.core.ui.common.BrandTitleSize
+import com.leanite.dynaquiz.core.ui.common.DynaquizTopBar
 import com.leanite.dynaquiz.feature.home.res.HomeRes
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -29,6 +30,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun HomeHost(
     onNavigateToQuiz: (PlayerId, ChallengeMode) -> Unit,
+    onNavigateToDifficulty: () -> Unit,
     onNavigateToRanking: () -> Unit,
     titleModifier: Modifier = Modifier,
     purpleSurfaceModifier: Modifier = Modifier,
@@ -42,31 +44,22 @@ fun HomeHost(
         events = viewModel.events,
         snackbarHostState = snackbarHostState,
         onNavigateToQuiz = onNavigateToQuiz,
+        onNavigateToDifficulty = onNavigateToDifficulty,
         onNavigateToRanking = onNavigateToRanking,
     )
 
     Scaffold(
         topBar = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .then(purpleSurfaceModifier)
-                    .background(MaterialTheme.colorScheme.primary),
-            ) {
-                CenterAlignedTopAppBar(
-                    title = {
-                        BrandTitle(
-                            text = stringResource(HomeRes.Title),
-                            size = BrandTitleSize.NORMAL,
-                            modifier = titleModifier,
-                        )
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                    ),
-                )
-            }
+            DynaquizTopBar(
+                modifier = purpleSurfaceModifier,
+                title = {
+                    BrandTitle(
+                        text = stringResource(HomeRes.Title),
+                        size = BrandTitleSize.NORMAL,
+                        modifier = titleModifier,
+                    )
+                },
+            )
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }, //TODO: temporário
     ) { innerPadding ->

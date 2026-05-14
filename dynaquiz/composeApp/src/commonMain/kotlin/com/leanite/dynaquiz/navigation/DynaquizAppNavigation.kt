@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.leanite.dynaquiz.feature.difficulty.DifficultyHost
 import com.leanite.dynaquiz.feature.home.HomeHost
 import com.leanite.dynaquiz.feature.splash.SplashHost
 
@@ -53,6 +54,7 @@ fun DynaquizAppNavigation() {
                     onNavigateToQuiz = { playerId, challengeMode ->
                         //TODO: implementar
                     },
+                    onNavigateToDifficulty = { navController.navigate(Difficulty) },
                     onNavigateToRanking = {
                         //TODO: implementar
                     },
@@ -66,6 +68,12 @@ fun DynaquizAppNavigation() {
                         animatedVisibilityScope = this@composable,
                         boundsTransform = { _, _ -> tween(durationMillis = BRAND_LOCKUP_DURATION) },
                     ),
+                )
+            }
+
+            composable<Difficulty> {
+                DifficultyHost(
+                    onNavigateBack = { navController.popBackStack() },
                 )
             }
         }

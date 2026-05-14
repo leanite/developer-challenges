@@ -38,8 +38,8 @@ class HomeViewModel(
         when (intent) {
             HomeIntent.Load -> load()
             is HomeIntent.NicknameChanged -> onNicknameChanged(intent.value)
-            is HomeIntent.ChallengeModeSelected -> onChallengeModeSelected(intent.mode)
             HomeIntent.StartQuizClicked -> startQuiz()
+            HomeIntent.DifficultyClicked -> _events.trySend(HomeEvent.NavigateToDifficulty)
             HomeIntent.RankingClicked -> _events.trySend(HomeEvent.NavigateToRanking)
         }
     }

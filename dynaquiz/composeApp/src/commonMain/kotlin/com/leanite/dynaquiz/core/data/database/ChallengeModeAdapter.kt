@@ -7,6 +7,7 @@ internal val ChallengeModeAdapter: ColumnAdapter<ChallengeMode, String> =
     object : ColumnAdapter<ChallengeMode, String> {
         override fun decode(databaseValue: String): ChallengeMode =
             ChallengeMode.fromSerializedName(databaseValue)
+                ?: error("Unknown ChallengeMode in database: '$databaseValue'")
 
         override fun encode(value: ChallengeMode): String =
             value.serializedName

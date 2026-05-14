@@ -19,8 +19,8 @@ data class HomeUiState(
 sealed interface HomeIntent {
     data object Load : HomeIntent
     data class NicknameChanged(val value: String) : HomeIntent
-    data class ChallengeModeSelected(val mode: ChallengeMode) : HomeIntent
     data object StartQuizClicked : HomeIntent
+    data object DifficultyClicked : HomeIntent
     data object RankingClicked : HomeIntent
 }
 
@@ -30,6 +30,7 @@ sealed interface HomeEvent {
         val playerId: PlayerId,
         val challengeMode: ChallengeMode,
     ) : HomeEvent
+    data object NavigateToDifficulty : HomeEvent
     data object NavigateToRanking : HomeEvent
     data class ShowMessage(val type: HomeMessage) : HomeEvent
 }

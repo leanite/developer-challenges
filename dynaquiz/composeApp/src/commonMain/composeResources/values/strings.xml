@@ -4,19 +4,21 @@
     <string name="home_title">Dynaquiz</string>
     <string name="home_profile_title">PERFIL</string>
     <string name="home_profile_name_label">NOME</string>
-    <string name="home_nickname_error_empty">Digite um nickname</string>
-    <string name="home_nickname_error_too_short">Mínimo %d caracteres</string>
-    <string name="home_nickname_error_too_long">Máximo %d caracteres</string>
+    <string name="home_button_start">COMEÇAR QUIZ</string>
     <string name="home_button_ranking">VER RANKING</string>
     <string name="home_button_difficulty">DIFICULDADE</string>
-    <string name="home_mode_relaxed_label">Sem desafio</string>
-    <string name="home_mode_relaxed_description">Sem timer</string>
-    <string name="home_mode_easy_label">Fácil</string>
-    <string name="home_mode_easy_description">30 segundos por pergunta</string>
-    <string name="home_mode_medium_label">Médio</string>
-    <string name="home_mode_medium_description">20 segundos por pergunta</string>
-    <string name="home_mode_hard_label">Difícil</string>
-    <string name="home_mode_hard_description">10 segundos por pergunta</string>
-    <string name="home_button_start">COMEÇAR QUIZ</string>
     <string name="home_save_error_generic">Não foi possível salvar. Tente novamente.</string>
+
+    <!-- Difficulty -->
+    <string name="difficulty_title">Escolha sua dificuldade</string>
+    <string name="difficulty_mode_relaxed_label">Relaxado</string>
+    <string name="difficulty_mode_relaxed_description">Sem pressão, sem cronômetro</string>
+    <string name="difficulty_mode_easy_label">Fácil</string>
+    <string name="difficulty_mode_easy_description">30 segundos por pergunta</string>
+    <string name="difficulty_mode_medium_label">Médio</string>
+    <string name="difficulty_mode_medium_description">20 segundos por pergunta</string>
+    <string name="difficulty_mode_hard_label">Difícil</string>
+    <string name="difficulty_mode_hard_description">10 segundos por pergunta</string>
+    <string name="difficulty_button_confirm">Confirmar</string>
+    <string name="difficulty_button_back">Voltar</string>
 </resources>

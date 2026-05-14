@@ -14,3 +14,7 @@ data object Splash : QuizNavKey
 @Immutable
 @Serializable
 data object Home : QuizNavKey
+
+@Immutable
+@Serializable
+data object Difficulty : QuizNavKey

@@ -18,9 +18,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
+import com.leanite.dynaquiz.core.ext.usableString
 import com.leanite.dynaquiz.feature.home.HomeValidation
 import com.leanite.dynaquiz.feature.home.res.HomeRes
-import com.leanite.dynaquiz.feature.home.res.usableString
 
 @Composable
 fun ProfileInput(

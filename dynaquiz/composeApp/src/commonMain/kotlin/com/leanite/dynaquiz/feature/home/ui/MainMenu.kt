@@ -13,10 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.leanite.dynaquiz.core.ext.usableString
 import com.leanite.dynaquiz.core.ui.common.GameButton
 import com.leanite.dynaquiz.core.ui.common.GameButtonStyle
 import com.leanite.dynaquiz.feature.home.res.HomeRes
-import com.leanite.dynaquiz.feature.home.res.usableString
 import dynaquiz.composeapp.generated.resources.Res
 import dynaquiz.composeapp.generated.resources.ic_button_difficulty
 import dynaquiz.composeapp.generated.resources.ic_button_play

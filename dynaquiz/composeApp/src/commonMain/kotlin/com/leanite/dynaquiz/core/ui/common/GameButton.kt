@@ -27,9 +27,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.leanite.dynaquiz.core.ext.usableString
 import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
 import com.leanite.dynaquiz.feature.home.res.HomeRes
-import com.leanite.dynaquiz.feature.home.res.usableString
 import dynaquiz.composeapp.generated.resources.Res
 import dynaquiz.composeapp.generated.resources.ic_button_ranking
 import org.jetbrains.compose.resources.painterResource

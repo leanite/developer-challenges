@@ -15,6 +15,7 @@ fun HomeEventEffects(
     events: Flow<HomeEvent>,
     snackbarHostState: SnackbarHostState,
     onNavigateToQuiz: (PlayerId, ChallengeMode) -> Unit,
+    onNavigateToDifficulty: () -> Unit,
     onNavigateToRanking: () -> Unit,
 ) {
     LaunchedEffect(events) {
@@ -22,6 +23,9 @@ fun HomeEventEffects(
             when (event) {
                 is HomeEvent.NavigateToQuiz -> {
                     onNavigateToQuiz(event.playerId, event.challengeMode)
+                }
+                HomeEvent.NavigateToDifficulty -> {
+                    onNavigateToDifficulty()
                 }
                 HomeEvent.NavigateToRanking -> {
                     onNavigateToRanking()
