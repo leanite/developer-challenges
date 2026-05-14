@@ -5,9 +5,11 @@ import androidx.compose.runtime.Immutable
 @Immutable
 sealed interface ChallengeMode {
     val serializedName: String
+    val mascot: Mascot
 
     data object Relaxed : ChallengeMode {
         override val serializedName: String = "RELAXED"
+        override val mascot: Mascot = Mascot(MascotMood.Relaxed)
     }
 
     @Immutable
@@ -17,14 +19,17 @@ sealed interface ChallengeMode {
         data object Easy : Timed {
             override val perQuestionSeconds = 30
             override val serializedName: String = "EASY"
+            override val mascot: Mascot = Mascot(MascotMood.Noob)
         }
         data object Medium : Timed {
             override val perQuestionSeconds = 20
             override val serializedName: String = "MEDIUM"
+            override val mascot: Mascot = Mascot(MascotMood.Normal)
         }
         data object Hard : Timed {
             override val perQuestionSeconds = 10
             override val serializedName: String = "HARD"
+            override val mascot: Mascot = Mascot(MascotMood.Expert)
         }
     }
 

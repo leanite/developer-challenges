@@ -31,11 +31,9 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leanite.dynaquiz.core.domain.model.Mascot
-import com.leanite.dynaquiz.core.domain.model.toMascot
 import com.leanite.dynaquiz.core.ui.common.GameBackground
 import com.leanite.dynaquiz.core.ui.common.GameButton
 import com.leanite.dynaquiz.core.ui.common.GameButtonStyle
-import com.leanite.dynaquiz.core.ui.common.MascotImage
 import com.leanite.dynaquiz.core.ui.theme.DynamoxPurple
 import com.leanite.dynaquiz.core.ui.theme.DynamoxPurpleDeep
 import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
@@ -61,7 +59,7 @@ fun HomeScreen(
         ) {
             ProfileCard(
                 nickname = uiState.nickname,
-                mascot = uiState.challengeMode.toMascot(),
+                mascot = uiState.challengeMode.mascot,
                 onNicknameChange = { onIntent(HomeIntent.NicknameChanged(it.uppercase())) },
             )
 

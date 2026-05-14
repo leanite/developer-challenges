@@ -23,17 +23,22 @@ fun SimpleSpriteAnimator(
     idle: DrawableResource,
     active: DrawableResource,
     modifier: Modifier = Modifier,
+    shouldAnimate: Boolean = true,
     idleDuration: Duration = 1.seconds,
     activeDuration: Duration = 400.milliseconds,
     contentDescription: String? = null,
 ) {
     var showActive by remember { mutableStateOf(false) }
 
-    LaunchedEffect(idle, active) {
-        while (true) {
-            delay(idleDuration)
-            showActive = true
-            delay(activeDuration)
+    LaunchedEffect(idle, active, shouldAnimate) {
+        if (shouldAnimate) {
+            while (true) {
+                delay(idleDuration)
+                showActive = true
+                delay(activeDuration)
+                showActive = false
+            }
+        } else {
             showActive = false
         }
     }

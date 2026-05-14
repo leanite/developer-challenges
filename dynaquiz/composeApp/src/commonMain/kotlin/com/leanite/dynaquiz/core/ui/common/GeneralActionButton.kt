@@ -35,29 +35,15 @@ import dynaquiz.composeapp.generated.resources.Res
 import dynaquiz.composeapp.generated.resources.ic_button_ranking
 import org.jetbrains.compose.resources.painterResource
 
-enum class GameButtonStyle { Primary, Secondary }
-
 @Composable
-fun GameButton(
+fun GeneralActionButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    style: GameButtonStyle = GameButtonStyle.Primary,
     enabled: Boolean = true,
-    leadingContent: @Composable (() -> Unit)? = null,
 ) {
-    val containerColor = when (style) {
-        GameButtonStyle.Primary -> MaterialTheme.colorScheme.secondary
-        GameButtonStyle.Secondary -> Color.White.copy(alpha = 0.95f)
-    }
-    val contentColor = when (style) {
-        GameButtonStyle.Primary -> MaterialTheme.colorScheme.onSecondary
-        GameButtonStyle.Secondary -> MaterialTheme.colorScheme.primary
-    }
-    val border = when (style) {
-        GameButtonStyle.Primary -> BorderStroke(2.dp, MaterialTheme.colorScheme.onSecondary)
-        GameButtonStyle.Secondary -> BorderStroke(2.dp, MaterialTheme.colorScheme.secondary)
-    }
+    val containerColor = MaterialTheme.colorScheme.secondary
+    val contentColor = Color.White.copy(alpha = 0.95f)
 
     Button(
         onClick = onClick,
@@ -69,51 +55,27 @@ fun GameButton(
             disabledContainerColor = containerColor.copy(alpha = 0.5f),
             disabledContentColor = contentColor.copy(alpha = 0.5f),
         ),
-        border = border,
         contentPadding = ButtonDefaults.ContentPadding,
         modifier = modifier
             .fillMaxWidth()
             .height(CoreRes.Measures.ButtonHeight),
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = 8.dp),
-        ) {
-            if (leadingContent != null) {
-                Box(
-                    modifier = if (!enabled) {
-                        Modifier.alpha(0.5f)
-                    } else Modifier
-                ) {
-                    leadingContent.invoke()
-                }
-                Spacer(Modifier.width(16.dp))
-            }
-            Text(
-                text = text,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
+        Text(
+            text = text,
+            fontSize = 26.sp,
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.SemiBold,
+        )
     }
 }
 
 @Preview
 @Composable
-fun GameButtonPreview() {
+fun GeneralActionButtonPreview() {
     DynaquizTheme {
-        GameButton(
-            text = HomeRes.RankingTitle.usableString(),
+        GeneralActionButton(
+            text = "SALVAR",
             onClick = {},
-            style = GameButtonStyle.Secondary,
-            leadingContent = {
-                Image(
-                    painter = painterResource(Res.drawable.ic_button_ranking),
-                    contentDescription = null,
-                    Modifier.size(36.dp)
-                )
-            }
         )
     }
 }
