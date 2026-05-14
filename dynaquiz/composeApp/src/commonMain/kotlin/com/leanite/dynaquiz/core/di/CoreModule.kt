@@ -20,9 +20,11 @@ import com.leanite.dynaquiz.core.domain.repository.QuizRepository
 import com.leanite.dynaquiz.core.domain.repository.UserRepository
 import com.leanite.dynaquiz.core.domain.usecase.GetLastChallengeModeUseCase
 import com.leanite.dynaquiz.core.domain.usecase.GetLastNicknameUseCase
+import com.leanite.dynaquiz.core.domain.usecase.GetRandomQuestionUseCase
 import com.leanite.dynaquiz.core.domain.usecase.RegisterOrFetchPlayerUseCase
 import com.leanite.dynaquiz.core.domain.usecase.SetLastChallengeModeUseCase
 import com.leanite.dynaquiz.core.domain.usecase.SetLastNicknameUseCase
+import com.leanite.dynaquiz.core.domain.usecase.SubmitAnswerUseCase
 import com.leanite.dynaquiz.database.DynaquizDatabase
 import com.leanite.dynaquiz.database.QuizSessionEntity
 import com.russhwolf.settings.Settings
@@ -111,10 +113,14 @@ val coreModule = module { //TODO: melhorar, todos estao aqui
         )
     }
 
-    // Player use cases
+    // Home use cases
     factory { GetLastNicknameUseCase(repository = get()) }
     factory { SetLastNicknameUseCase(repository = get()) }
     factory { RegisterOrFetchPlayerUseCase(repository = get()) }
     factory { GetLastChallengeModeUseCase(repository = get()) }
     factory { SetLastChallengeModeUseCase(repository = get()) }
+
+    // Quiz use cases
+    factory { GetRandomQuestionUseCase(repository = get()) }
+    factory { SubmitAnswerUseCase(repository = get()) }
 }
