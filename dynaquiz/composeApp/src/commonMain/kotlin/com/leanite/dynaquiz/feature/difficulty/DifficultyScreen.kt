@@ -28,55 +28,55 @@ fun DifficultyScreen(
     onIntent: (DifficultyIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    GameBackground(modifier = modifier) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 20.dp, vertical = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                ChallengeModeOption(
-                    label = stringResource(DifficultyRes.ModeRelaxedLabel),
-                    description = stringResource(DifficultyRes.ModeRelaxedDescription),
-                    mode = ChallengeMode.Relaxed,
-                    isSelected = uiState.selectedMode == ChallengeMode.Relaxed,
-                    onSelect = { onIntent(DifficultyIntent.ModeSelected(it)) },
-                )
-                ChallengeModeOption(
-                    label = stringResource(DifficultyRes.ModeEasyLabel),
-                    description = stringResource(DifficultyRes.ModeEasyDescription),
-                    mode = ChallengeMode.Timed.Easy,
-                    isSelected = uiState.selectedMode == ChallengeMode.Timed.Easy,
-                    onSelect = { onIntent(DifficultyIntent.ModeSelected(it)) },
-                )
-                ChallengeModeOption(
-                    label = stringResource(DifficultyRes.ModeMediumLabel),
-                    description = stringResource(DifficultyRes.ModeMediumDescription),
-                    mode = ChallengeMode.Timed.Medium,
-                    isSelected = uiState.selectedMode == ChallengeMode.Timed.Medium,
-                    onSelect = { onIntent(DifficultyIntent.ModeSelected(it)) },
-                )
-                ChallengeModeOption(
-                    label = stringResource(DifficultyRes.ModeHardLabel),
-                    description = stringResource(DifficultyRes.ModeHardDescription),
-                    mode = ChallengeMode.Timed.Hard,
-                    isSelected = uiState.selectedMode == ChallengeMode.Timed.Hard,
-                    onSelect = { onIntent(DifficultyIntent.ModeSelected(it)) },
-                )
-            }
+    GameBackground()
 
-            Spacer(modifier = Modifier.weight(1f))
-            GeneralActionButton(
-                text = stringResource(DifficultyRes.ButtonConfirm),
-                onClick = { onIntent(DifficultyIntent.ConfirmClicked) },
-                enabled = !uiState.isConfirming,
-                modifier = Modifier.fillMaxWidth().padding(20.dp),
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 20.dp, vertical = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            ChallengeModeOption(
+                label = stringResource(DifficultyRes.ModeRelaxedLabel),
+                description = stringResource(DifficultyRes.ModeRelaxedDescription),
+                mode = ChallengeMode.Relaxed,
+                isSelected = uiState.selectedMode == ChallengeMode.Relaxed,
+                onSelect = { onIntent(DifficultyIntent.ModeSelected(it)) },
+            )
+            ChallengeModeOption(
+                label = stringResource(DifficultyRes.ModeEasyLabel),
+                description = stringResource(DifficultyRes.ModeEasyDescription),
+                mode = ChallengeMode.Timed.Easy,
+                isSelected = uiState.selectedMode == ChallengeMode.Timed.Easy,
+                onSelect = { onIntent(DifficultyIntent.ModeSelected(it)) },
+            )
+            ChallengeModeOption(
+                label = stringResource(DifficultyRes.ModeMediumLabel),
+                description = stringResource(DifficultyRes.ModeMediumDescription),
+                mode = ChallengeMode.Timed.Medium,
+                isSelected = uiState.selectedMode == ChallengeMode.Timed.Medium,
+                onSelect = { onIntent(DifficultyIntent.ModeSelected(it)) },
+            )
+            ChallengeModeOption(
+                label = stringResource(DifficultyRes.ModeHardLabel),
+                description = stringResource(DifficultyRes.ModeHardDescription),
+                mode = ChallengeMode.Timed.Hard,
+                isSelected = uiState.selectedMode == ChallengeMode.Timed.Hard,
+                onSelect = { onIntent(DifficultyIntent.ModeSelected(it)) },
             )
         }
+
+        Spacer(modifier = Modifier.weight(1f))
+        GeneralActionButton(
+            text = stringResource(DifficultyRes.ButtonConfirm),
+            onClick = { onIntent(DifficultyIntent.ConfirmClicked) },
+            enabled = !uiState.isConfirming,
+            modifier = Modifier.fillMaxWidth().padding(20.dp),
+        )
     }
 }
 

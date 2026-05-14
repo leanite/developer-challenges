@@ -28,7 +28,9 @@ fun QuizScreen(
     onIntent: (QuizIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    GameBackground(modifier = modifier) {
+    GameBackground()
+
+    Box(modifier = modifier) {
         when (val phase = uiState.phase) {
             is QuizPhase.Countdown -> CountdownDisplay(
                 secondsRemaining = phase.secondsRemaining,

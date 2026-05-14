@@ -29,31 +29,32 @@ fun HomeScreen(
     onIntent: (HomeIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    GameBackground(modifier = modifier) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 20.dp, vertical = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            ProfileCard(
-                nickname = uiState.nickname,
-                mascot = uiState.challengeMode.mascot,
-                onNicknameChange = { onIntent(HomeIntent.NicknameChanged(it.uppercase())) },
-            )
+    GameBackground()
 
-            Spacer(modifier = Modifier.weight(1f))
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 20.dp, vertical = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        ProfileCard(
+            nickname = uiState.nickname,
+            mascot = uiState.challengeMode.mascot,
+            onNicknameChange = { onIntent(HomeIntent.NicknameChanged(it.uppercase())) },
+        )
 
-            MainMenu(
-                isStartEnabled = uiState.canStart,
-                onStartClick = { onIntent(HomeIntent.StartQuizClicked) },
-                onDifficultyClick = { onIntent(HomeIntent.DifficultyClicked) },
-                onRankingClick = { onIntent(HomeIntent.RankingClicked) }
-            )
+        Spacer(modifier = Modifier.weight(1f))
 
-            Spacer(modifier = Modifier.weight(1f))
-        }
+        MainMenu(
+            isStartEnabled = uiState.canStart,
+            onStartClick = { onIntent(HomeIntent.StartQuizClicked) },
+            onDifficultyClick = { onIntent(HomeIntent.DifficultyClicked) },
+            onRankingClick = { onIntent(HomeIntent.RankingClicked) }
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
     }
+
 }
 
 @Preview

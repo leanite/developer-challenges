@@ -20,7 +20,6 @@ import org.jetbrains.compose.resources.painterResource
 fun GameBackground(
     modifier: Modifier = Modifier,
     darkenEdges: Boolean = true,
-    content: @Composable () -> Unit,
 ) {
     Box(modifier = modifier.background(DynamoxPurple)) {
         Image(
@@ -43,6 +42,5 @@ fun GameBackground(
                     ),
             )
         }
-        content()
     }
 }
