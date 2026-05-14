@@ -11,38 +11,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
+
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardCapitalization
+
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.leanite.dynaquiz.core.domain.model.Mascot
 import com.leanite.dynaquiz.core.ui.common.GameBackground
-import com.leanite.dynaquiz.core.ui.common.GameButton
-import com.leanite.dynaquiz.core.ui.common.GameButtonStyle
-import com.leanite.dynaquiz.core.ui.theme.DynamoxPurple
-import com.leanite.dynaquiz.core.ui.theme.DynamoxPurpleDeep
 import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
-import com.leanite.dynaquiz.core.ui.theme.MascotYellow
-import com.leanite.dynaquiz.core.ui.theme.MascotYellowDeep
-import com.leanite.dynaquiz.feature.home.res.HomeRes
 import com.leanite.dynaquiz.feature.home.ui.MainMenu
 import com.leanite.dynaquiz.feature.home.ui.ProfileCard
-import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun HomeScreen(

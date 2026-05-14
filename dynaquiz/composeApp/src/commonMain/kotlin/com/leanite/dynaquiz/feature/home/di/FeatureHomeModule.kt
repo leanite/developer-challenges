@@ -9,6 +9,7 @@ val featureHomeModule = module {
         HomeViewModel(
             getLastNicknameUseCase = get(),
             setLastNicknameUseCase = get(),
+            getLastChallengeModeUseCase = get(),
             registerOrFetchPlayerUseCase = get(),
         )
     }

@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.leanite.dynaquiz.core.domain.model.Mascot
+import com.leanite.dynaquiz.core.ui.common.MascotAnimation
 import com.leanite.dynaquiz.core.ui.common.SimpleSpriteAnimator
 import dynaquiz.composeapp.generated.resources.Res
 import dynaquiz.composeapp.generated.resources.anim_expert_1
@@ -58,11 +59,7 @@ fun ProfileCard(
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            SimpleSpriteAnimator( //todo: use Mascot object <-> MascotAnimator (com as 2 imgs aqui de acordo com o tipo de Mascote)
-                idle = Res.drawable.anim_expert_1,
-                active = Res.drawable.anim_expert_2,
-                modifier = Modifier.size(MASCOT_IMAGE_SIZE)
-            )
+            MascotAnimation(mascotMood = mascot.mood)
 
             Spacer(modifier = Modifier.width(16.dp))
 
@@ -74,5 +71,3 @@ fun ProfileCard(
         }
     }
 }
-
-private val MASCOT_IMAGE_SIZE = 112.dp

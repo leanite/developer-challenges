@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
 import com.leanite.dynaquiz.core.domain.result.AppResult
+import com.leanite.dynaquiz.core.domain.usecase.GetLastChallengeModeUseCase
 import com.leanite.dynaquiz.core.domain.usecase.GetLastNicknameUseCase
 import com.leanite.dynaquiz.core.domain.usecase.RegisterOrFetchPlayerUseCase
 import com.leanite.dynaquiz.core.domain.usecase.SetLastNicknameUseCase
@@ -22,6 +23,7 @@ import kotlin.time.Duration.Companion.seconds
 class HomeViewModel(
     private val getLastNicknameUseCase: GetLastNicknameUseCase,
     private val setLastNicknameUseCase: SetLastNicknameUseCase,
+    private val getLastChallengeModeUseCase: GetLastChallengeModeUseCase,
     private val registerOrFetchPlayerUseCase: RegisterOrFetchPlayerUseCase,
     private val saveNicknameDelay: Duration = DEFAULT_NICKNAME_DELAY,
 ) : ViewModel() {
@@ -45,6 +47,19 @@ class HomeViewModel(
     }
 
     private fun load() {
+        observeChallengeMode()
+        getLastNickname()
+    }
+
+    private fun observeChallengeMode() {
+        viewModelScope.launch {
+            getLastChallengeModeUseCase().collect { mode ->
+                _uiState.update { it.copy(challengeMode = mode) }
+            }
+        }
+    }
+
+    private fun getLastNickname() {
         viewModelScope.launch {
             val lastNickname = getLastNicknameUseCase()
                 .orEmpty()
