@@ -18,8 +18,6 @@ internal class UserRepositoryImpl(
     override suspend fun setLastNickname(nickname: String) {
         suspendSettings.putString(KEY_LAST_NICKNAME, nickname)
     }
-
-    private companion object {
-        const val KEY_LAST_NICKNAME = "last_nickname"
-    }
 }
+
+private const val KEY_LAST_NICKNAME = "last_nickname"

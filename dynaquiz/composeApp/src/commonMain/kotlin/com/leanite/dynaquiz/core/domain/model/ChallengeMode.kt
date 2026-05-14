@@ -29,12 +29,12 @@ sealed interface ChallengeMode {
     }
 
     companion object {
-        fun fromSerializedName(name: String): ChallengeMode = when (name) {
+        fun fromSerializedName(name: String): ChallengeMode? = when (name) {
             Relaxed.serializedName -> Relaxed
             Timed.Easy.serializedName -> Timed.Easy
             Timed.Medium.serializedName -> Timed.Medium
             Timed.Hard.serializedName -> Timed.Hard
-            else -> error("Unknown ChallengeMode serializedName: '$name'")
+            else -> null
         }
     }
 }

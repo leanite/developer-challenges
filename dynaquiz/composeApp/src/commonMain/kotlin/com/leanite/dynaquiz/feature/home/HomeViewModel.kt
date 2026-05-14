@@ -89,8 +89,6 @@ class HomeViewModel(
             _uiState.update { it.copy(isStarting = false) }
         }
     }
-
-    private companion object {
-        val DEFAULT_NICKNAME_DELAY = 1.seconds
-    }
 }
+
+private val DEFAULT_NICKNAME_DELAY = 1.seconds
