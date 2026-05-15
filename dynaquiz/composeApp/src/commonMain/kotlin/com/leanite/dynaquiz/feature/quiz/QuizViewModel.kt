@@ -2,6 +2,7 @@ package com.leanite.dynaquiz.feature.quiz
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.leanite.dynaquiz.core.domain.model.Answer
 import com.leanite.dynaquiz.core.domain.model.AnswerLog
 import com.leanite.dynaquiz.core.domain.model.AnswerOutcome
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
@@ -11,6 +12,7 @@ import com.leanite.dynaquiz.core.domain.model.computeScore
 import com.leanite.dynaquiz.core.domain.result.AppResult
 import com.leanite.dynaquiz.core.domain.usecase.GetRandomQuestionUseCase
 import com.leanite.dynaquiz.core.domain.usecase.SubmitAnswerUseCase
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
@@ -37,6 +39,7 @@ class QuizViewModel(
     val events = _events.receiveAsFlow()
 
     private var timerJob: Job? = null
+    private var prefetchedNextQuestion: Deferred<Question?>? = null
 
     fun onIntent(intent: QuizIntent) {
         when (intent) {
@@ -53,16 +56,15 @@ class QuizViewModel(
 
     private fun start() {
         viewModelScope.launch {
+            // A ideia é a contagem regressiva mascarar o tempo de request da primeira pergunta
             val firstQuestionDeferred = async { fetchQuestion() }
             runCountdown()
             val firstQuestion = firstQuestionDeferred.await()
 
             if (firstQuestion == null) {
-                _events.send(QuizEvent.ShowMessage(QuizMessage.QuestionLoadFailed))
-                _events.send(QuizEvent.NavigateBack)
+                abortWithLoadError()
                 return@launch
             }
-
             startPlaying(firstQuestion)
         }
     }
@@ -75,24 +77,21 @@ class QuizViewModel(
         _uiState.update { it.copy(phase = QuizPhase.Loading) }
     }
 
-    private suspend fun fetchQuestion(): Question? =
-        when (val result = getRandomQuestionUseCase()) {
-            is AppResult.Success -> result.data
-            is AppResult.Error -> null
-        }
-
     private fun startPlaying(question: Question) {
         _uiState.update { it.copy(phase = QuizPhase.Playing(question = question)) }
         startTimer()
+        schedulePrefetchOfNextQuestion()
     }
 
     private fun startTimer() {
         timerJob?.cancel()
         val mode = _uiState.value.challengeMode
+
         if (mode !is ChallengeMode.Timed) {
             _uiState.update { it.copy(timeRemainingSec = null) }
             return
         }
+
         val totalSeconds = mode.perQuestionSeconds
         timerJob = viewModelScope.launch {
             for (sec in totalSeconds downTo 1) {
@@ -105,18 +104,25 @@ class QuizViewModel(
     }
 
     private fun onTimeOut() {
-        val state = _uiState.value
-        val playing = state.phase as? QuizPhase.Playing ?: return
-
+        val playing = currentPlaying() ?: return
         val log = AnswerLog(
             questionId = playing.question.id,
             chosenAnswer = null,
             timeRemainingSec = 0,
             outcome = AnswerOutcome.TimedOut,
         )
+        viewModelScope.launch { advanceToNextQuestion(log) }
+    }
 
-        viewModelScope.launch {
-            advanceToNextQuestion(log)
+    // Inicia em background o fetch da próxima pergunta enquanto o user resolve a atual.
+    private fun schedulePrefetchOfNextQuestion() {
+        prefetchedNextQuestion?.cancel()
+        val nextIndex = _uiState.value.currentQuestionIndex + 1
+
+        prefetchedNextQuestion = if (nextIndex < QuizRules.TOTAL_QUESTIONS) {
+            viewModelScope.async { fetchQuestion() }
+        } else {
+            null
         }
     }
 
@@ -125,74 +131,90 @@ class QuizViewModel(
         val playing = state.phase as? QuizPhase.Playing ?: return
         if (playing.isSubmitting) return
 
-        timerJob?.cancel()
+        markAnswerSelected(playing, answer)
+
         val timeRemaining = state.timeRemainingSec ?: 0
-
-        _uiState.update {
-            it.copy(phase = playing.copy(selectedAnswer = answer, isSubmitting = true))
-        }
-
         viewModelScope.launch {
-            val submitDeferred = async { submitAnswerUseCase(playing.question.id, answer) }
-            val nextQuestionDeferred = async {
-                val nextIndex = state.currentQuestionIndex + 1
-                if (nextIndex < QuizRules.TOTAL_QUESTIONS) fetchQuestion() else null
-            }
-
-            val outcome = when (val r = submitDeferred.await()) {
-                is AppResult.Success -> AnswerOutcome.Confirmed(correct = r.data.correct)
-                is AppResult.Error -> {
-                    _events.send(QuizEvent.ShowMessage(QuizMessage.AnswerSubmitFailed))
-                    AnswerOutcome.SubmitFailed
-                }
-            }
-
-            val log = AnswerLog(
-                questionId = playing.question.id,
-                chosenAnswer = answer,
-                timeRemainingSec = timeRemaining,
-                outcome = outcome,
-            )
-
-            advanceToNextQuestion(log, nextQuestionDeferred.await())
+            val entry = submitAndBuildEntry(playing.question, answer, timeRemaining)
+            advanceToNextQuestion(entry)
         }
     }
 
-    private suspend fun advanceToNextQuestion(
-        log: AnswerLog,
-        preloadedNextQuestion: Question? = null,
-    ) {
-        val state = _uiState.value
-        val newLog = state.answerLog + log
-        val nextIndex = state.currentQuestionIndex + 1
-        val isLast = nextIndex >= QuizRules.TOTAL_QUESTIONS
+    private fun markAnswerSelected(playing: QuizPhase.Playing, answer: String) {
+        timerJob?.cancel()
+        _uiState.update {
+            it.copy(phase = playing.copy(selectedAnswer = answer, isSubmitting = true))
+        }
+    }
 
-        if (isLast) {
-            val finalState = state.copy(
+    private suspend fun submitAndBuildEntry(
+        question: Question,
+        answer: String,
+        timeRemaining: Int,
+    ): AnswerLog = AnswerLog(
+        questionId = question.id,
+        chosenAnswer = answer,
+        timeRemainingSec = timeRemaining,
+        outcome = submitAnswerUseCase(question.id, answer).toOutcome(),
+    )
+
+    private suspend fun AppResult<Answer>.toOutcome(): AnswerOutcome = when (this) {
+        is AppResult.Success -> AnswerOutcome.Confirmed(correct = data.correct)
+        is AppResult.Error -> {
+            _events.send(QuizEvent.ShowMessage(QuizMessage.AnswerSubmitFailed))
+            AnswerOutcome.SubmitFailed
+        }
+    }
+
+    private suspend fun advanceToNextQuestion(entry: AnswerLog) {
+        val state = _uiState.value
+        val updatedLog = state.answerLog + entry
+        val nextIndex = state.currentQuestionIndex + 1
+
+        if (nextIndex >= QuizRules.TOTAL_QUESTIONS) {
+            completeSession(updatedLog, nextIndex)
+        } else {
+            goToQuestion(updatedLog, nextIndex)
+        }
+    }
+
+    private suspend fun completeSession(answerLog: List<AnswerLog>, finalIndex: Int) {
+        val mode = _uiState.value.challengeMode
+        _uiState.update {
+            it.copy(
                 phase = QuizPhase.Completed,
-                answerLog = newLog,
-                currentQuestionIndex = nextIndex,
+                answerLog = answerLog,
+                currentQuestionIndex = finalIndex,
                 timeRemainingSec = null,
             )
-            _uiState.value = finalState
-
-            val finalScore = newLog.computeScore(state.challengeMode)
-            _events.send(QuizEvent.NavigateToResult(
-                result = QuizSessionResult(
-                    playerName = playerName,
-                    challengeMode = state.challengeMode,
-                    score = finalScore,
-                    correctAnswers = finalState.correctAnswers,
-                    totalQuestions = QuizRules.TOTAL_QUESTIONS,
-                )
-            ))
-            return
         }
+        _events.send(QuizEvent.NavigateToResult(buildSessionResult(answerLog, mode)))
+    }
 
-        val nextQuestion = preloadedNextQuestion ?: fetchQuestion()
+    private fun buildSessionResult(
+        answerLog: List<AnswerLog>,
+        mode: ChallengeMode,
+    ): QuizSessionResult {
+        val confirmedCorrect = answerLog.count {
+            (it.outcome as? AnswerOutcome.Confirmed)?.correct == true
+        }
+        return QuizSessionResult(
+            playerName = playerName,
+            challengeMode = mode,
+            score = answerLog.computeScore(mode),
+            correctAnswers = confirmedCorrect,
+            totalQuestions = QuizRules.TOTAL_QUESTIONS,
+        )
+    }
+
+    private suspend fun goToQuestion(newLog: List<AnswerLog>, nextIndex: Int) {
+        // Consome o prefetched provavelmente já pronto
+        // Fallback é um fetch reativo caso o prefetched falhe
+        val nextQuestion = prefetchedNextQuestion?.await() ?: fetchQuestion()
+        prefetchedNextQuestion = null
+
         if (nextQuestion == null) {
-            _events.send(QuizEvent.ShowMessage(QuizMessage.QuestionLoadFailed))
-            _events.send(QuizEvent.NavigateBack)
+            abortWithLoadError()
             return
         }
 
@@ -204,10 +226,26 @@ class QuizViewModel(
             )
         }
         startTimer()
+        schedulePrefetchOfNextQuestion()
     }
+
+    private suspend fun fetchQuestion(): Question? =
+        when (val result = getRandomQuestionUseCase()) {
+            is AppResult.Success -> result.data
+            is AppResult.Error -> null
+        }
+
+    private suspend fun abortWithLoadError() {
+        _events.send(QuizEvent.ShowMessage(QuizMessage.QuestionLoadFailed))
+        _events.send(QuizEvent.NavigateBack)
+    }
+
+    private fun currentPlaying(): QuizPhase.Playing? =
+        _uiState.value.phase as? QuizPhase.Playing
 
     override fun onCleared() {
         timerJob?.cancel()
+        prefetchedNextQuestion?.cancel()
         super.onCleared()
     }
 }
