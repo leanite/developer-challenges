@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Core -->
+    <string name="core_mode_relaxed">Relaxado</string>
+    <string name="core_mode_easy">Fácil</string>
+    <string name="core_mode_medium">Médio</string>
+    <string name="core_mode_hard">Difícil</string>
+
     <!-- Home -->
     <string name="home_title">Dynaquiz</string>
     <string name="home_profile_title">PERFIL</string>
@@ -30,6 +36,14 @@
     <string name="quiz_msg_question_load_failed">Erro ao carregar pergunta.</string>
     <string name="quiz_msg_answer_submit_failed">Erro ao enviar resposta.</string>
 
+    <!-- Result -->
+    <string name="result_title">Fim de jogo!</string>
+    <string name="result_congrats">Boa, %1$s!</string>
+    <string name="result_points_label">PONTOS</string>
+    <string name="result_details">%1$d/%2$d acertos no modo %3$s</string>
+    <string name="result_button_ranking">VER RANKING</string>
+    <string name="result_button_home">VOLTAR PARA HOME</string>
+
     <!-- Ranking -->
     <string name="ranking_title">Ranking</string>
     <string name="ranking_tab_all">Todos</string>
@@ -39,8 +53,4 @@
     <string name="ranking_points_format">%1$d pts</string>
     <string name="ranking_correct_format">%1$d/%2$d acertos</string>
     <string name="ranking_msg_load_failed">Não consegui carregar o ranking</string>
-    <string name="ranking_mode_relaxed">Relaxado</string>
-    <string name="ranking_mode_easy">Fácil</string>
-    <string name="ranking_mode_medium">Médio</string>
-    <string name="ranking_mode_hard">Difícil</string>
 </resources>

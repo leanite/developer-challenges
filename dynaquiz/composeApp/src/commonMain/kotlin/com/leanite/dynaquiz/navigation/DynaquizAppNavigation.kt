@@ -11,10 +11,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
+import com.leanite.dynaquiz.core.domain.model.QuizSessionResult
+import com.leanite.dynaquiz.core.domain.model.Score
 import com.leanite.dynaquiz.feature.difficulty.DifficultyHost
 import com.leanite.dynaquiz.feature.home.HomeHost
 import com.leanite.dynaquiz.feature.quiz.QuizHost
 import com.leanite.dynaquiz.feature.ranking.RankingHost
+import com.leanite.dynaquiz.feature.result.ResultHost
 import com.leanite.dynaquiz.feature.splash.SplashHost
 
 @Composable
@@ -92,11 +95,45 @@ fun DynaquizAppNavigation() {
                     playerName = args.playerName,
                     challengeMode = ChallengeMode.fromSerializedName(args.challengeMode),
                     onNavigateToResult = { result ->
-                        // STUB temporário
-                        println("Quiz finished: $result")
-                        navController.popBackStack(route = Home, inclusive = false)
+                        navController.navigate(
+                            Result(
+                                playerName = result.playerName,
+                                challengeMode = result.challengeMode.serializedName,
+                                scorePoints = result.score.points,
+                                correctAnswers = result.correctAnswers,
+                                totalQuestions = result.totalQuestions,
+                            )
+                        ) {
+                            // Remove o Quiz do back stack para não voltar pro quiz já terminado
+                            popUpTo<Quiz> { inclusive = true }
+                        }
                     },
                     onNavigateBack = { navController.popBackStack() },
+                )
+            }
+
+            composable<Result> { entry ->
+                val args = entry.toRoute<Result>()
+                val sessionResult = QuizSessionResult(
+                    playerName = args.playerName,
+                    challengeMode = ChallengeMode.fromSerializedName(args.challengeMode),
+                    score = Score(args.scorePoints),
+                    correctAnswers = args.correctAnswers,
+                    totalQuestions = args.totalQuestions,
+                )
+                ResultHost(
+                    sessionResult = sessionResult,
+                    onNavigateToHome = {
+                        navController.navigate(Home) {
+                            popUpTo(Home) { inclusive = false }
+                        }
+                    },
+                    onNavigateToRanking = { playerName ->
+                        navController.navigate(Ranking(playerName = playerName)) {
+                            // Ranking substitui Result no stack
+                            popUpTo<Result> { inclusive = true }
+                        }
+                    },
                 )
             }
 

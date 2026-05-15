@@ -23,15 +23,17 @@ data object Difficulty : QuizNavKey
 data class Quiz(
     val playerName: String,
     val challengeMode: String,
-)
+) : QuizNavKey
 
+@Immutable
 @Serializable
 data class Result(
     val playerName: String,
     val challengeMode: String,
     val scorePoints: Int,
     val correctAnswers: Int,
-)
+    val totalQuestions: Int,
+) : QuizNavKey
 
 @Immutable
 @Serializable

@@ -1,5 +1,6 @@
 package com.leanite.dynaquiz.core.ui.common
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,15 +18,29 @@ import androidx.compose.ui.unit.sp
 import com.leanite.dynaquiz.core.res.CoreRes
 import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
 
+enum class GeneralActionButtonStyle { Primary, Secondary }
+
 @Composable
 fun GeneralActionButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    style: GeneralActionButtonStyle = GeneralActionButtonStyle.Primary,
     enabled: Boolean = true,
 ) {
-    val containerColor = MaterialTheme.colorScheme.secondary
-    val contentColor = Color.White.copy(alpha = 0.95f)
+
+    val containerColor = when (style) {
+        GeneralActionButtonStyle.Primary -> MaterialTheme.colorScheme.secondary
+        GeneralActionButtonStyle.Secondary -> Color.White.copy(alpha = 0.95f)
+    }
+    val contentColor = when (style) {
+        GeneralActionButtonStyle.Primary -> MaterialTheme.colorScheme.onSecondary
+        GeneralActionButtonStyle.Secondary -> MaterialTheme.colorScheme.primary
+    }
+    val border = when (style) {
+        GeneralActionButtonStyle.Primary -> BorderStroke(0.dp, MaterialTheme.colorScheme.secondary)
+        GeneralActionButtonStyle.Secondary -> BorderStroke(2.dp, MaterialTheme.colorScheme.secondary)
+    }
 
     Button(
         onClick = onClick,
@@ -37,6 +52,7 @@ fun GeneralActionButton(
             disabledContainerColor = containerColor.copy(alpha = 0.5f),
             disabledContentColor = contentColor.copy(alpha = 0.5f),
         ),
+        border = border,
         contentPadding = ButtonDefaults.ContentPadding,
         modifier = modifier
             .fillMaxWidth()
@@ -53,11 +69,23 @@ fun GeneralActionButton(
 
 @Preview
 @Composable
-fun GeneralActionButtonPreview() {
+fun GeneralActionButtonPrimaryPreview() {
     DynaquizTheme {
         GeneralActionButton(
             text = "SALVAR",
             onClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+fun GeneralActionButtonSecondaryPreview() {
+    DynaquizTheme {
+        GeneralActionButton(
+            text = "SALVAR",
+            onClick = {},
+            style = GeneralActionButtonStyle.Secondary
         )
     }
 }

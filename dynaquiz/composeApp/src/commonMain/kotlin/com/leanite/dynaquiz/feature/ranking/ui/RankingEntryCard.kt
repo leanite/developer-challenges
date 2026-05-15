@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
 import com.leanite.dynaquiz.core.domain.model.RankingEntry
+import com.leanite.dynaquiz.core.ui.common.label
 import com.leanite.dynaquiz.core.ui.theme.DynamoxLightPurple
 import com.leanite.dynaquiz.feature.ranking.res.RankingRes
 import kotlinx.datetime.TimeZone
@@ -106,16 +107,6 @@ private fun PositionBadge(position: Int) {
         }
     }
 }
-
-@Composable
-private fun ChallengeMode.label(): String = stringResource(
-    when (this) {
-        ChallengeMode.Relaxed -> RankingRes.ModeRelaxed
-        ChallengeMode.Timed.Easy -> RankingRes.ModeEasy
-        ChallengeMode.Timed.Medium -> RankingRes.ModeMedium
-        ChallengeMode.Timed.Hard -> RankingRes.ModeHard
-    }
-)
 
 private fun formatFinishedAt(instant: Instant): String {
     val dt = instant.toLocalDateTime(TimeZone.currentSystemDefault())

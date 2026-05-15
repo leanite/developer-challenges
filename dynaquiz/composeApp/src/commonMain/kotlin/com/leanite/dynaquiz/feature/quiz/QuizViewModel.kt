@@ -192,7 +192,6 @@ class QuizViewModel(
         }
 
         val result = buildSessionResult(answerLog, mode)
-        // TODO: mover esse save pro ResultViewModel quando for criado
         saveQuizSessionUseCase(result)
         _events.send(QuizEvent.NavigateToResult(result))
     }
