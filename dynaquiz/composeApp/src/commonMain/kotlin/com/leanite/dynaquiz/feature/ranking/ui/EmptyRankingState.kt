@@ -12,6 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.leanite.dynaquiz.core.domain.model.MascotMood
+import com.leanite.dynaquiz.core.ui.common.MascotAnimation
 import com.leanite.dynaquiz.feature.ranking.RankingTab
 import com.leanite.dynaquiz.feature.ranking.res.RankingRes
 import dynaquiz.composeapp.generated.resources.Res
@@ -29,11 +31,7 @@ fun EmptyRankingState(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Image(
-            painter = painterResource(Res.drawable.anim_relaxed_1),
-            contentDescription = null,
-            modifier = Modifier.size(100.dp),
-        )
+        MascotAnimation(mascotMood = MascotMood.Relaxed)
         Text(
             text = stringResource(
                 when (tab) {

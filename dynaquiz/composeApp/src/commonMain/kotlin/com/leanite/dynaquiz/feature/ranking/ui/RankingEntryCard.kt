@@ -1,5 +1,6 @@
 package com.leanite.dynaquiz.feature.ranking.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -20,9 +22,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
 import com.leanite.dynaquiz.core.domain.model.RankingEntry
+import com.leanite.dynaquiz.core.ui.theme.DynamoxLightPurple
 import com.leanite.dynaquiz.feature.ranking.res.RankingRes
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import kotlin.time.Instant
 
@@ -53,7 +58,9 @@ fun RankingEntryCard(
                 fontWeight = FontWeight.SemiBold,
             )
             Text(
-                text = "${entry.challengeMode.label()} · ${stringResource(RankingRes.CorrectFormat, entry.correctAnswers, entry.totalQuestions)} · ${formatFinishedAt(entry.finishedAt)}",
+                text = "${entry.challengeMode.label()} · " +
+                        "${stringResource(RankingRes.CorrectFormat, entry.correctAnswers, entry.totalQuestions)} · " +
+                        formatFinishedAt(entry.finishedAt),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
             )
@@ -70,24 +77,33 @@ fun RankingEntryCard(
 
 @Composable
 private fun PositionBadge(position: Int) {
-    val bg = when (position) {
-        1 -> Color(0xFFFFD700)        // ouro
-        2 -> Color(0xFFC0C0C0)        // prata
-        3 -> Color(0xFFCD7F32)        // bronze
-        else -> MaterialTheme.colorScheme.primary
+    val imageResource = when (position) {
+        1 -> RankingRes.Drawable.Top1
+        2 -> RankingRes.Drawable.Top2
+        3 -> RankingRes.Drawable.Top3
+        else -> null
     }
-    Box(
-        modifier = Modifier
-            .size(36.dp)
-            .background(bg, CircleShape),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(
-            text = position.toString(),
-            style = MaterialTheme.typography.titleSmall,
-            color = Color.White,
-            fontWeight = FontWeight.Bold,
+
+    if (imageResource != null) {
+        Image(
+            painter = painterResource(imageResource),
+            contentDescription = null,
+            modifier = Modifier.width(36.dp)
         )
+    } else {
+        Box(
+            modifier = Modifier
+                .size(36.dp)
+                .background(DynamoxLightPurple, CircleShape),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = position.toString(),
+                style = MaterialTheme.typography.titleSmall,
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+            )
+        }
     }
 }
 
@@ -104,7 +120,7 @@ private fun ChallengeMode.label(): String = stringResource(
 private fun formatFinishedAt(instant: Instant): String {
     val dt = instant.toLocalDateTime(TimeZone.currentSystemDefault())
     val dd = dt.day.toString().padStart(2, '0')
-    val mm = dt.month.toString().padStart(2, '0')
+    val mm = dt.month.number.toString().padStart(2, '0')
     val hh = dt.hour.toString().padStart(2, '0')
     val mi = dt.minute.toString().padStart(2, '0')
     return "$dd/$mm $hh:$mi"

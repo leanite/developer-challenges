@@ -4,6 +4,9 @@ import dynaquiz.composeapp.generated.resources.Res
 import dynaquiz.composeapp.generated.resources.ranking_correct_format
 import dynaquiz.composeapp.generated.resources.ranking_empty_all
 import dynaquiz.composeapp.generated.resources.ranking_empty_mine
+import dynaquiz.composeapp.generated.resources.ranking_medal_1
+import dynaquiz.composeapp.generated.resources.ranking_medal_2
+import dynaquiz.composeapp.generated.resources.ranking_medal_3
 import dynaquiz.composeapp.generated.resources.ranking_mode_easy
 import dynaquiz.composeapp.generated.resources.ranking_mode_hard
 import dynaquiz.composeapp.generated.resources.ranking_mode_medium
@@ -27,4 +30,10 @@ internal object RankingRes {
     val ModeEasy = Res.string.ranking_mode_easy
     val ModeMedium = Res.string.ranking_mode_medium
     val ModeHard = Res.string.ranking_mode_hard
+
+    object Drawable {
+        val Top1 = Res.drawable.ranking_medal_1
+        val Top2 = Res.drawable.ranking_medal_2
+        val Top3 = Res.drawable.ranking_medal_3
+    }
 }

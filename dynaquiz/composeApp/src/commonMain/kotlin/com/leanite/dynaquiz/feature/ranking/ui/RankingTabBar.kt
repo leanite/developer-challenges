@@ -30,6 +30,7 @@ fun RankingTabBar(
                 color = MaterialTheme.colorScheme.secondary,
             )
         },
+        divider = {},
         modifier = modifier,
     ) {
         tabs.forEach { tab ->

@@ -19,27 +19,25 @@ fun RankingScreen(
     onIntent: (RankingIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier) {
-        GameBackground(modifier = Modifier.matchParentSize())
+    GameBackground()
 
-        Column(modifier = Modifier.fillMaxSize()) {
-            RankingTabBar(
-                selectedTab = uiState.selectedTab,
-                onTabSelected = { onIntent(RankingIntent.TabSelected(it)) },
-            )
+    Column(modifier = modifier.fillMaxSize()) {
+        RankingTabBar(
+            selectedTab = uiState.selectedTab,
+            onTabSelected = { onIntent(RankingIntent.TabSelected(it)) },
+        )
 
-            Box(modifier = Modifier.fillMaxSize()) {
-                when {
-                    uiState.isLoading -> CircularProgressIndicator(
-                        color = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier.align(Alignment.Center),
-                    )
-                    uiState.entries.isEmpty() -> EmptyRankingState(
-                        tab = uiState.selectedTab,
-                        modifier = Modifier.align(Alignment.Center),
-                    )
-                    else -> RankingList(entries = uiState.entries)
-                }
+        Box(modifier = Modifier.fillMaxSize()) {
+            when {
+                uiState.isLoading -> CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.align(Alignment.Center),
+                )
+                uiState.entries.isEmpty() -> EmptyRankingState(
+                    tab = uiState.selectedTab,
+                    modifier = Modifier.align(Alignment.Center),
+                )
+                else -> RankingList(entries = uiState.entries)
             }
         }
     }
