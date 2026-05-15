@@ -43,7 +43,6 @@ fun DifficultyHost(
                 },
             )
         },
-        containerColor = Color.Transparent,
     ) { innerPadding ->
         DifficultyScreen(
             uiState = uiState,

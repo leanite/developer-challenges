@@ -68,7 +68,6 @@ fun QuizHost(
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
-        containerColor = Color.Transparent,
     ) { innerPadding ->
         QuizScreen(
             uiState = uiState,

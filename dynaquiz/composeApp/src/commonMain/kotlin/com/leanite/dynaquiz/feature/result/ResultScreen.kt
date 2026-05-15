@@ -2,6 +2,7 @@ package com.leanite.dynaquiz.feature.result
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,35 +42,37 @@ fun ResultScreen(
     onIntent: (ResultIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    GameBackground()
+    Box(modifier = modifier.fillMaxSize()) {
+        GameBackground(Modifier.matchParentSize())
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp, vertical = 24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Spacer(modifier = Modifier.weight(1f))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 20.dp, vertical = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Spacer(modifier = Modifier.weight(1f))
 
-        FinalScorePanel(
-            result = uiState.result,
-            modifier = Modifier.fillMaxWidth(0.85f)
-        )
+            FinalScorePanel(
+                result = uiState.result,
+                modifier = Modifier.fillMaxWidth(0.85f)
+            )
 
-        Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.weight(1f))
 
-        GeneralActionButton(
-            text = stringResource(ResultRes.ButtonRanking),
-            onClick = { onIntent(ResultIntent.RankingClicked) },
-        )
-        Spacer(modifier = Modifier.height(12.dp))
-        GeneralActionButton(
-            text = stringResource(ResultRes.ButtonHome),
-            onClick = { onIntent(ResultIntent.HomeClicked) },
-            style = GeneralActionButtonStyle.Secondary,
-        )
+            GeneralActionButton(
+                text = stringResource(ResultRes.ButtonRanking),
+                onClick = { onIntent(ResultIntent.RankingClicked) },
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            GeneralActionButton(
+                text = stringResource(ResultRes.ButtonHome),
+                onClick = { onIntent(ResultIntent.HomeClicked) },
+                style = GeneralActionButtonStyle.Secondary,
+            )
 
-        Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
+        }
     }
 }
 

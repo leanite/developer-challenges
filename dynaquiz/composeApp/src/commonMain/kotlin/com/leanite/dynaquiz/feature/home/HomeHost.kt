@@ -61,7 +61,7 @@ fun HomeHost(
                 },
             )
         },
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }, //TODO: temporário
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { innerPadding ->
         HomeScreen(
             uiState = uiState,

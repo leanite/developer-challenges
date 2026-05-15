@@ -19,7 +19,6 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun GameBackground(
     modifier: Modifier = Modifier,
-    darkenEdges: Boolean = true,
 ) {
     Box(modifier = modifier.background(DynamoxPurple)) {
         Image(
@@ -28,19 +27,5 @@ fun GameBackground(
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize(),
         )
-        if (darkenEdges) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        brush = Brush.verticalGradient(
-                            0f to DynamoxPurple,
-                            0.40f to Color.Transparent,
-                            0.60f to Color.Transparent,
-                            1f to DynamoxPurpleDeep,
-                        ),
-                    ),
-            )
-        }
     }
 }

@@ -44,7 +44,6 @@ fun RankingHost(
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
-        containerColor = Color.Transparent,
     ) { innerPadding ->
         RankingScreen(
             uiState = uiState,

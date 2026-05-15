@@ -31,9 +31,7 @@ fun SplashScreen(
             onTextChanged = { displayedText = it },
         )
 
-        // Cursor desaparece antes da transição — BrandLockup fica no estado
-        // final ("Dynaquiz" sem cursor), idêntico ao BrandLockup da Home.
-        // Transição shared bounds vai parecer "continuação", não corte.
+        // Cursor desaparece antes da transição
         showCursor = false
 
         onAnimationFinished()
