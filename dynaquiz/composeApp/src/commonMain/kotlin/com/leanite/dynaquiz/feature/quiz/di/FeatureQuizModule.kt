@@ -11,6 +11,7 @@ val featureQuizModule = module {
             challengeMode = params.get(),
             getRandomQuestionUseCase = get(),
             submitAnswerUseCase = get(),
+            saveQuizSessionUseCase = get(),
         )
     }
 }

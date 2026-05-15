@@ -31,7 +31,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun HomeHost(
     onNavigateToQuiz: (String, ChallengeMode) -> Unit,
     onNavigateToDifficulty: () -> Unit,
-    onNavigateToRanking: () -> Unit,
+    onNavigateToRanking: (String) -> Unit,
     titleModifier: Modifier = Modifier,
     purpleSurfaceModifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel(),

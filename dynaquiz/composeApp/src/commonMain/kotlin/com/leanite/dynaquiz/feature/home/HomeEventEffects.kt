@@ -16,20 +16,17 @@ fun HomeEventEffects(
     snackbarHostState: SnackbarHostState,
     onNavigateToQuiz: (String, ChallengeMode) -> Unit,
     onNavigateToDifficulty: () -> Unit,
-    onNavigateToRanking: () -> Unit,
+    onNavigateToRanking: (String) -> Unit,
 ) {
     LaunchedEffect(events) {
         events.collectLatest { event ->
             when (event) {
-                is HomeEvent.NavigateToQuiz -> {
-                    onNavigateToQuiz(event.playerName, event.challengeMode)
-                }
-                HomeEvent.NavigateToDifficulty -> {
-                    onNavigateToDifficulty()
-                }
-                HomeEvent.NavigateToRanking -> {
-                    onNavigateToRanking()
-                }
+                is HomeEvent.NavigateToQuiz -> onNavigateToQuiz(event.playerName, event.challengeMode)
+
+                HomeEvent.NavigateToDifficulty -> onNavigateToDifficulty()
+
+                is HomeEvent.NavigateToRanking -> onNavigateToRanking(event.playerName)
+                
                 is HomeEvent.ShowMessage -> { //TODO: temporário
                     val text = resolveMessage(event.type)
                     snackbarHostState.showSnackbar(text)

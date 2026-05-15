@@ -32,3 +32,7 @@ data class Result(
     val scorePoints: Int,
     val correctAnswers: Int,
 )
+
+@Immutable
+@Serializable
+data class Ranking(val playerName: String) : QuizNavKey

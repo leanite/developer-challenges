@@ -11,6 +11,7 @@ import com.leanite.dynaquiz.core.domain.model.QuizSessionResult
 import com.leanite.dynaquiz.core.domain.model.computeScore
 import com.leanite.dynaquiz.core.domain.result.AppResult
 import com.leanite.dynaquiz.core.domain.usecase.GetRandomQuestionUseCase
+import com.leanite.dynaquiz.core.domain.usecase.SaveQuizSessionUseCase
 import com.leanite.dynaquiz.core.domain.usecase.SubmitAnswerUseCase
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
@@ -30,6 +31,7 @@ class QuizViewModel(
     challengeMode: ChallengeMode,
     private val getRandomQuestionUseCase: GetRandomQuestionUseCase,
     private val submitAnswerUseCase: SubmitAnswerUseCase,
+    private val saveQuizSessionUseCase: SaveQuizSessionUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(QuizUiState(challengeMode = challengeMode))
@@ -188,7 +190,11 @@ class QuizViewModel(
                 timeRemainingSec = null,
             )
         }
-        _events.send(QuizEvent.NavigateToResult(buildSessionResult(answerLog, mode)))
+
+        val result = buildSessionResult(answerLog, mode)
+        // TODO: mover esse save pro ResultViewModel quando for criado
+        saveQuizSessionUseCase(result)
+        _events.send(QuizEvent.NavigateToResult(result))
     }
 
     private fun buildSessionResult(

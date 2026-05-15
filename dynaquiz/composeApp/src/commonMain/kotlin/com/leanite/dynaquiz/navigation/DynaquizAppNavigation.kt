@@ -63,8 +63,8 @@ fun DynaquizAppNavigation() {
                         )
                     },
                     onNavigateToDifficulty = { navController.navigate(Difficulty) },
-                    onNavigateToRanking = {
-                        //TODO: implementar
+                    onNavigateToRanking = { playerName ->
+                        navController.navigate(Ranking(playerName = playerName))
                     },
                     titleModifier = Modifier.sharedBounds(
                         sharedContentState = rememberSharedContentState(key = BRAND_TITLE_KEY),
@@ -97,6 +97,14 @@ fun DynaquizAppNavigation() {
                     },
                     onNavigateBack = { navController.popBackStack() },
                 )
+            }
+
+            composable<Ranking> { entry ->
+                val args = entry.toRoute<Ranking>()
+//                RankingHost(
+//                    playerName = args.playerName,
+//                    onNavigateBack = { navController.popBackStack() },
+//                )
             }
         }
     }

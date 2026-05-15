@@ -1,19 +1,20 @@
 CREATE TABLE QuizSessionEntity (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     playerId INTEGER NOT NULL,
-    correctAnswers INTEGER NOT NULL,
     challengeMode TEXT AS com.leanite.dynaquiz.core.domain.model.ChallengeMode NOT NULL,
-    timeBonus INTEGER NOT NULL,
+    scorePoints INTEGER NOT NULL,
+    correctCount INTEGER NOT NULL,
+    totalQuestions INTEGER NOT NULL,
     finishedAt INTEGER NOT NULL,
     FOREIGN KEY (playerId) REFERENCES PlayerEntity(id) ON DELETE CASCADE
 );
 
 CREATE INDEX idx_session_playerId ON QuizSessionEntity(playerId);
-CREATE INDEX idx_session_total_score ON QuizSessionEntity((correctAnswers + timeBonus) DESC);
+CREATE INDEX idx_session_score ON QuizSessionEntity(scorePoints DESC);
 
 insertSession:
-INSERT INTO QuizSessionEntity(playerId, correctAnswers, challengeMode, timeBonus, finishedAt)
-VALUES (?, ?, ?, ?, ?);
+INSERT INTO QuizSessionEntity(playerId, challengeMode, scorePoints, correctCount, totalQuestions, finishedAt)
+VALUES (?, ?, ?, ?, ?, ?);
 
 selectByPlayer:
 SELECT * FROM QuizSessionEntity
@@ -24,11 +25,27 @@ selectRanking:
 SELECT
     p.id AS playerId,
     p.name AS playerName,
-    s.correctAnswers,
     s.challengeMode,
-    s.timeBonus,
+    s.scorePoints,
+    s.correctCount,
+    s.totalQuestions,
     s.finishedAt
 FROM QuizSessionEntity s
 INNER JOIN PlayerEntity p ON p.id = s.playerId
-ORDER BY (s.correctAnswers + s.timeBonus) DESC, s.finishedAt DESC
+ORDER BY s.scorePoints DESC, s.finishedAt DESC
+LIMIT 50;
+
+selectRankingByPlayerName:
+SELECT
+    p.id AS playerId,
+    p.name AS playerName,
+    s.challengeMode,
+    s.scorePoints,
+    s.correctCount,
+    s.totalQuestions,
+    s.finishedAt
+FROM QuizSessionEntity s
+INNER JOIN PlayerEntity p ON p.id = s.playerId
+WHERE p.name = ?
+ORDER BY s.scorePoints DESC, s.finishedAt DESC
 LIMIT 50;

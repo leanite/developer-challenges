@@ -31,7 +31,7 @@ sealed interface HomeEvent {
         val challengeMode: ChallengeMode,
     ) : HomeEvent
     data object NavigateToDifficulty : HomeEvent
-    data object NavigateToRanking : HomeEvent
+    data class NavigateToRanking(val playerName: String) : HomeEvent
     data class ShowMessage(val type: HomeMessage) : HomeEvent
 }
 

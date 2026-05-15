@@ -9,19 +9,24 @@ import com.leanite.dynaquiz.core.data.datasource.PlayerLocalDataSource
 import com.leanite.dynaquiz.core.data.datasource.PlayerLocalDataSourceImpl
 import com.leanite.dynaquiz.core.data.datasource.QuizRemoteDataSource
 import com.leanite.dynaquiz.core.data.datasource.QuizRemoteDataSourceImpl
+import com.leanite.dynaquiz.core.data.datasource.QuizSessionLocalDataSource
+import com.leanite.dynaquiz.core.data.datasource.QuizSessionLocalDataSourceImpl
 import com.leanite.dynaquiz.core.data.network.buildHttpClient
 import com.leanite.dynaquiz.core.data.repository.ChallengeModeRepositoryImpl
 import com.leanite.dynaquiz.core.data.repository.PlayerRepositoryImpl
 import com.leanite.dynaquiz.core.data.repository.QuizRepositoryImpl
+import com.leanite.dynaquiz.core.data.repository.RankingRepositoryImpl
 import com.leanite.dynaquiz.core.data.repository.UserRepositoryImpl
 import com.leanite.dynaquiz.core.domain.repository.ChallengeModeRepository
 import com.leanite.dynaquiz.core.domain.repository.PlayerRepository
 import com.leanite.dynaquiz.core.domain.repository.QuizRepository
+import com.leanite.dynaquiz.core.domain.repository.RankingRepository
 import com.leanite.dynaquiz.core.domain.repository.UserRepository
 import com.leanite.dynaquiz.core.domain.usecase.GetLastChallengeModeUseCase
 import com.leanite.dynaquiz.core.domain.usecase.GetLastNicknameUseCase
 import com.leanite.dynaquiz.core.domain.usecase.GetRandomQuestionUseCase
 import com.leanite.dynaquiz.core.domain.usecase.RegisterOrFetchPlayerUseCase
+import com.leanite.dynaquiz.core.domain.usecase.SaveQuizSessionUseCase
 import com.leanite.dynaquiz.core.domain.usecase.SetLastChallengeModeUseCase
 import com.leanite.dynaquiz.core.domain.usecase.SetLastNicknameUseCase
 import com.leanite.dynaquiz.core.domain.usecase.SubmitAnswerUseCase
@@ -113,6 +118,15 @@ val coreModule = module { //TODO: melhorar, todos estao aqui
         )
     }
 
+    single<QuizSessionLocalDataSource> { QuizSessionLocalDataSourceImpl(database = get()) }
+    single<RankingRepository> {
+        RankingRepositoryImpl(
+            quizSessionDataSource = get(),
+            playerDataSource = get(),
+            ioDispatcher = get(named("io")),
+        )
+    }
+
     // Home use cases
     factory { GetLastNicknameUseCase(repository = get()) }
     factory { SetLastNicknameUseCase(repository = get()) }
@@ -123,4 +137,7 @@ val coreModule = module { //TODO: melhorar, todos estao aqui
     // Quiz use cases
     factory { GetRandomQuestionUseCase(repository = get()) }
     factory { SubmitAnswerUseCase(repository = get()) }
+
+    // Ranking use cases
+    factory { SaveQuizSessionUseCase(repository = get()) }
 }

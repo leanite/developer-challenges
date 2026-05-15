@@ -42,7 +42,8 @@ class HomeViewModel(
             is HomeIntent.NicknameChanged -> onNicknameChanged(intent.value)
             HomeIntent.StartQuizClicked -> startQuiz()
             HomeIntent.DifficultyClicked -> _events.trySend(HomeEvent.NavigateToDifficulty)
-            HomeIntent.RankingClicked -> _events.trySend(HomeEvent.NavigateToRanking)
+            HomeIntent.RankingClicked ->
+                _events.trySend(HomeEvent.NavigateToRanking(playerName = _uiState.value.nickname))
         }
     }
 
