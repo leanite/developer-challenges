@@ -6,11 +6,10 @@ import com.leanite.dynaquiz.core.domain.model.AnswerOutcome
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
 import com.leanite.dynaquiz.core.domain.model.Question
 import com.leanite.dynaquiz.core.domain.model.QuizSessionResult
-import com.leanite.dynaquiz.core.domain.model.Score
 
 @Immutable
 sealed interface QuizPhase {
-    data class Countdown(val secondsRemaining: Int) : QuizPhase
+    data class Countdown(val countdownSecondsRemaining: Int) : QuizPhase
     data object Loading : QuizPhase
     data class Playing(
         val question: Question,

@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
 
 @Composable
 fun CountdownDisplay(
@@ -30,14 +31,24 @@ fun CountdownDisplay(
         AnimatedContent(
             targetState = secondsRemaining,
             transitionSpec = {
-                (fadeIn(tween(200)) + scaleIn(initialScale = 1.6f, animationSpec = tween(400)))
-                    .togetherWith(fadeOut(tween(200)) + scaleOut(targetScale = 0.4f, animationSpec = tween(400)))
+                (
+                    fadeIn(
+                        tween(200)) +
+                            scaleIn(initialScale = 1.6f, animationSpec = tween(400)
+                        )
+                )
+                .togetherWith(
+                    fadeOut(
+                        tween(200)) +
+                            scaleOut(targetScale = 0.4f, animationSpec = tween(400)
+                        )
+                )
             },
             label = "countdown",
         ) { sec ->
             Text(
                 text = sec.toString(),
-                fontSize = 180.sp,
+                fontSize = 240.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.secondary,
             )
@@ -48,5 +59,7 @@ fun CountdownDisplay(
 @Preview
 @Composable
 private fun CountdownDisplayPreview() {
-    CountdownDisplay(secondsRemaining = 3)
+    DynaquizTheme {
+        CountdownDisplay(secondsRemaining = 3)
+    }
 }

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CircularProgressIndicator
@@ -40,7 +39,7 @@ fun QuizScreen(
     Box(modifier = modifier) {
         when (val phase = uiState.phase) {
             is QuizPhase.Countdown -> CountdownDisplay(
-                secondsRemaining = phase.secondsRemaining, //TODO: renomear
+                secondsRemaining = phase.countdownSecondsRemaining,
             )
 
             QuizPhase.Loading -> LoadingPlaceholder()
@@ -61,6 +60,16 @@ fun QuizScreen(
                 onDismiss = { onIntent(QuizIntent.ExitCancelled) },
             )
         }
+    }
+}
+
+@Composable
+private fun LoadingPlaceholder() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)
     }
 }
 
@@ -104,16 +113,6 @@ private fun PlayingContent(
             isSubmitting = phase.isSubmitting,
             onOptionSelected = onOptionSelected,
         )
-    }
-}
-
-@Composable
-private fun LoadingPlaceholder() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)
     }
 }
 
