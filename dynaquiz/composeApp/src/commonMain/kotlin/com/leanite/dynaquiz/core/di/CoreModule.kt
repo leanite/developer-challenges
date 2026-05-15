@@ -32,6 +32,7 @@ import com.leanite.dynaquiz.core.domain.usecase.SaveQuizSessionUseCase
 import com.leanite.dynaquiz.core.domain.usecase.SetLastChallengeModeUseCase
 import com.leanite.dynaquiz.core.domain.usecase.SetLastNicknameUseCase
 import com.leanite.dynaquiz.core.domain.usecase.SubmitAnswerUseCase
+import com.leanite.dynaquiz.core.domain.usecase.WarmupServerUseCase
 import com.leanite.dynaquiz.database.DynaquizDatabase
 import com.leanite.dynaquiz.database.QuizSessionEntity
 import com.russhwolf.settings.Settings
@@ -128,6 +129,9 @@ val coreModule = module { //TODO: melhorar, todos estao aqui
             ioDispatcher = get(named("io")),
         )
     }
+
+    // Splash use case
+    factory { WarmupServerUseCase(repository = get()) }
 
     // Home use cases
     factory { GetLastNicknameUseCase(repository = get()) }

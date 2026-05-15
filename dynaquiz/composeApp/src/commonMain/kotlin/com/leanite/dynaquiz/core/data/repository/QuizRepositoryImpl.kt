@@ -33,4 +33,12 @@ internal class QuizRepositoryImpl(
                 AppResult.Error(throwable.toAppError())
             }
         }
+
+    override suspend fun warmupServer() {
+        withContext(ioDispatcher) {
+            try {
+                remoteDataSource.fetchRandomQuestion()
+            } catch (_: Throwable) { }
+        }
+    }
 }

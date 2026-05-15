@@ -9,4 +9,6 @@ interface QuizRepository {
     suspend fun getRandomQuestion(): AppResult<Question>
     suspend fun submitAnswer(questionId: QuestionId, answer: String): AppResult<Answer>
 
+    //  Bate no servidor somente pra acordar de cold start
+    suspend fun warmupServer()
 }
