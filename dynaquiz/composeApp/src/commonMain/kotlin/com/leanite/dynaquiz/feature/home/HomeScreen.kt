@@ -40,7 +40,7 @@ fun HomeScreen(
         ProfileCard(
             nickname = uiState.nickname,
             mascot = uiState.challengeMode.mascot,
-            onNicknameChange = { onIntent(HomeIntent.NicknameChanged(it.uppercase())) },
+            onNicknameChange = { onIntent(HomeIntent.NicknameChanged(it.trim().uppercase())) },
         )
 
         Spacer(modifier = Modifier.weight(1f))
