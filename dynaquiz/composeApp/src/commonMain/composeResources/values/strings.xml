@@ -29,4 +29,18 @@
     <string name="quiz_button_continue">Continuar</string>
     <string name="quiz_msg_question_load_failed">Erro ao carregar pergunta.</string>
     <string name="quiz_msg_answer_submit_failed">Erro ao enviar resposta.</string>
+
+    <!-- Ranking -->
+    <string name="ranking_title">Ranking</string>
+    <string name="ranking_tab_all">Todos</string>
+    <string name="ranking_tab_mine">Meus jogos</string>
+    <string name="ranking_empty_all">Nenhum jogo registrado ainda</string>
+    <string name="ranking_empty_mine">Você ainda não jogou</string>
+    <string name="ranking_points_format">%1$d pts</string>
+    <string name="ranking_correct_format">%1$d/%2$d acertos</string>
+    <string name="ranking_msg_load_failed">Não consegui carregar o ranking</string>
+    <string name="ranking_mode_relaxed">Relaxado</string>
+    <string name="ranking_mode_easy">Fácil</string>
+    <string name="ranking_mode_medium">Médio</string>
+    <string name="ranking_mode_hard">Difícil</string>
 </resources>

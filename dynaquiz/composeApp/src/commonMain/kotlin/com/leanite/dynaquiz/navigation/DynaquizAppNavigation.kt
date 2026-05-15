@@ -14,6 +14,7 @@ import com.leanite.dynaquiz.core.domain.model.ChallengeMode
 import com.leanite.dynaquiz.feature.difficulty.DifficultyHost
 import com.leanite.dynaquiz.feature.home.HomeHost
 import com.leanite.dynaquiz.feature.quiz.QuizHost
+import com.leanite.dynaquiz.feature.ranking.RankingHost
 import com.leanite.dynaquiz.feature.splash.SplashHost
 
 @Composable
@@ -101,10 +102,10 @@ fun DynaquizAppNavigation() {
 
             composable<Ranking> { entry ->
                 val args = entry.toRoute<Ranking>()
-//                RankingHost(
-//                    playerName = args.playerName,
-//                    onNavigateBack = { navController.popBackStack() },
-//                )
+                RankingHost(
+                    playerName = args.playerName,
+                    onNavigateBack = { navController.popBackStack() },
+                )
             }
         }
     }

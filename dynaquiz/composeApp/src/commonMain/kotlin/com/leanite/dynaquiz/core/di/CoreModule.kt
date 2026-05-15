@@ -24,7 +24,9 @@ import com.leanite.dynaquiz.core.domain.repository.RankingRepository
 import com.leanite.dynaquiz.core.domain.repository.UserRepository
 import com.leanite.dynaquiz.core.domain.usecase.GetLastChallengeModeUseCase
 import com.leanite.dynaquiz.core.domain.usecase.GetLastNicknameUseCase
+import com.leanite.dynaquiz.core.domain.usecase.GetMyRankingUseCase
 import com.leanite.dynaquiz.core.domain.usecase.GetRandomQuestionUseCase
+import com.leanite.dynaquiz.core.domain.usecase.GetRankingUseCase
 import com.leanite.dynaquiz.core.domain.usecase.RegisterOrFetchPlayerUseCase
 import com.leanite.dynaquiz.core.domain.usecase.SaveQuizSessionUseCase
 import com.leanite.dynaquiz.core.domain.usecase.SetLastChallengeModeUseCase
@@ -140,4 +142,6 @@ val coreModule = module { //TODO: melhorar, todos estao aqui
 
     // Ranking use cases
     factory { SaveQuizSessionUseCase(repository = get()) }
+    factory { GetRankingUseCase(repository = get()) }
+    factory { GetMyRankingUseCase(repository = get()) }
 }

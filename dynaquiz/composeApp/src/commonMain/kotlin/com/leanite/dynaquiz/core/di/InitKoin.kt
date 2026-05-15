@@ -3,6 +3,7 @@ package com.leanite.dynaquiz.core.di
 import com.leanite.dynaquiz.feature.difficulty.di.featureDifficultyModule
 import com.leanite.dynaquiz.feature.home.di.featureHomeModule
 import com.leanite.dynaquiz.feature.quiz.di.featureQuizModule
+import com.leanite.dynaquiz.feature.ranking.di.featureRankingModule
 import com.leanite.dynaquiz.feature.splash.di.featureSplashModule
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
@@ -23,7 +24,8 @@ fun initKoin(
                 featureSplashModule,
                 featureHomeModule,
                 featureDifficultyModule,
-                featureQuizModule
+                featureQuizModule,
+                featureRankingModule
             ) + extraModules)
     }
 }
