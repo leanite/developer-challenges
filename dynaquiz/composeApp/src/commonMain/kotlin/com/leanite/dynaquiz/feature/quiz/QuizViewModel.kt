@@ -44,7 +44,10 @@ class QuizViewModel(
             is QuizIntent.AnswerSelected -> onAnswerSelected(intent.answer)
             QuizIntent.BackPressed -> _uiState.update { it.copy(showExitDialog = true) }
             QuizIntent.ExitCancelled -> _uiState.update { it.copy(showExitDialog = false) }
-            QuizIntent.ExitConfirmed -> _events.trySend(QuizEvent.NavigateBack)
+            QuizIntent.ExitConfirmed -> {
+                _uiState.update { it.copy(showExitDialog = false) }
+                _events.trySend(QuizEvent.NavigateBack)
+            }
         }
     }
 

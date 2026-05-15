@@ -15,6 +15,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
 import com.leanite.dynaquiz.core.domain.model.QuizSessionResult
 import com.leanite.dynaquiz.core.domain.model.Score
+import com.leanite.dynaquiz.core.ui.common.BackHandler
 import com.leanite.dynaquiz.core.ui.common.DynaquizTopBar
 import com.leanite.dynaquiz.feature.quiz.res.QuizRes
 import com.leanite.dynaquiz.feature.quiz.ui.TimerRing
@@ -43,6 +44,12 @@ fun QuizHost(
         onNavigateToResult = onNavigateToResult,
         onNavigateBack = onNavigateBack,
     )
+
+    // Quando o dialog já estiver aberto, não intercepta
+    // deixa o back nativo fechar o dialog (dismissOnBackPress = true)
+    BackHandler(enabled = !uiState.showExitDialog) {
+        viewModel.onIntent(QuizIntent.BackPressed)
+    }
 
     Scaffold(
         topBar = {
