@@ -4,7 +4,7 @@ import androidx.compose.ui.unit.dp
 
 internal object CoreRes {
 
-    object Measures {
+    object Dimensions {
         val ButtonHeight = 56.dp
     }
 }

@@ -3,8 +3,13 @@ package com.leanite.dynaquiz.feature.quiz
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -17,8 +22,10 @@ import com.leanite.dynaquiz.core.domain.model.Question
 import com.leanite.dynaquiz.core.domain.model.QuestionId
 import com.leanite.dynaquiz.core.ui.common.GameBackground
 import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
+import com.leanite.dynaquiz.feature.quiz.res.QuizRes
 import com.leanite.dynaquiz.feature.quiz.ui.CountdownDisplay
 import com.leanite.dynaquiz.feature.quiz.ui.ExitQuizDialog
+import com.leanite.dynaquiz.feature.quiz.ui.MascotTimerAnimation
 import com.leanite.dynaquiz.feature.quiz.ui.QuestionCard
 import com.leanite.dynaquiz.feature.quiz.ui.TimerRing
 
@@ -33,7 +40,7 @@ fun QuizScreen(
     Box(modifier = modifier) {
         when (val phase = uiState.phase) {
             is QuizPhase.Countdown -> CountdownDisplay(
-                secondsRemaining = phase.secondsRemaining,
+                secondsRemaining = phase.secondsRemaining, //TODO: renomear
             )
 
             QuizPhase.Loading -> LoadingPlaceholder()
@@ -71,13 +78,24 @@ private fun PlayingContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
-        if (challengeMode is ChallengeMode.Timed && timeRemainingSec != null) {
-            TimerRing(
-                timeRemainingSec = timeRemainingSec,
-                totalSec = challengeMode.perQuestionSeconds,
-                size = 88.dp,
-                strokeWidth = 6.dp,
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+        ) {
+            MascotTimerAnimation(
+                mascotMood = challengeMode.mascot.mood,
             )
+            if (challengeMode is ChallengeMode.Timed && timeRemainingSec != null) {
+                Spacer(Modifier.width(8.dp))
+                TimerRing(
+                    timeRemainingSec = timeRemainingSec,
+                    totalSec = challengeMode.perQuestionSeconds,
+                    size = QuizRes.Dimensions.TimerHeight,
+                    strokeWidth = 6.dp,
+                    modifier = Modifier.padding(end = QuizRes.Dimensions.TimerHeight)
+                )
+            }
         }
 
         QuestionCard(
@@ -110,7 +128,7 @@ private fun QuizScreenPreview() {
                     question =
                         Question(
                             QuestionId("48"),
-                            "Xasss?",
+                            "Hello?",
                             listOf("A", "B", "C", "D", "E")
                         )
                 ),

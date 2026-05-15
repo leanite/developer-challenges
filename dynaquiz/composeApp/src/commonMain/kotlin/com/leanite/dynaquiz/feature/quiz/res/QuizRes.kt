@@ -1,5 +1,6 @@
 package com.leanite.dynaquiz.feature.quiz.res
 
+import androidx.compose.ui.unit.dp
 import dynaquiz.composeapp.generated.resources.Res
 import dynaquiz.composeapp.generated.resources.quiz_button_continue
 import dynaquiz.composeapp.generated.resources.quiz_button_exit
@@ -19,4 +20,8 @@ internal object QuizRes {
     val ButtonContinue = Res.string.quiz_button_continue
     val MsgQuestionLoadFailed = Res.string.quiz_msg_question_load_failed
     val MsgAnswerSubmitFailed = Res.string.quiz_msg_answer_submit_failed
+
+    object Dimensions {
+        val TimerHeight = 88.dp
+    }
 }
