@@ -17,9 +17,7 @@ internal class PlayerLocalDataSourceImpl(
 ) : PlayerLocalDataSource {
     private val queries get() = database.playerQueries // gerado pelo SQLDelight
 
-    override fun selectByName(name: String): PlayerEntity? =
-        // TODO: verificar necessidade
-        queries.selectByName(name).executeAsOneOrNull()
+    override fun selectByName(name: String): PlayerEntity? = queries.selectByName(name).executeAsOneOrNull()
 
     override fun findOrInsert(
         name: String,

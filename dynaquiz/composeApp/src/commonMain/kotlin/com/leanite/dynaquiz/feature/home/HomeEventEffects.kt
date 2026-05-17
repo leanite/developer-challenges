@@ -26,7 +26,7 @@ fun HomeEventEffects(
 
                 is HomeEvent.NavigateToRanking -> onNavigateToRanking(event.playerName)
 
-                is HomeEvent.ShowMessage -> { // TODO: temporário
+                is HomeEvent.ShowMessage -> {
                     val text = resolveMessage(event.type)
                     snackbarHostState.showSnackbar(text)
                 }

@@ -55,7 +55,7 @@ fun HomeScreen(
 
 @Preview
 @Composable
-private fun HomeScreenPreview() { // TODO: criar Preview default incorporando ja o DynaquizTheme por ext fun
+private fun HomeScreenPreview() {
     DynaquizTheme {
         HomeScreen(
             HomeUiState(

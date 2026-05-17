@@ -79,7 +79,6 @@ class HomeViewModelTest {
         Player(
             id = PlayerId(1L),
             name = name,
-            createdAt = Instant.fromEpochMilliseconds(0L),
         )
 
     @Test
