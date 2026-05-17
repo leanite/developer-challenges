@@ -11,6 +11,7 @@ import com.leanite.dynaquiz.uitest.UiTest
 import com.leanite.dynaquiz.uitest.assertTextIsDisplayed
 import com.leanite.dynaquiz.uitest.assertTextIsSelected
 import com.leanite.dynaquiz.uitest.clickOnText
+import kotlinx.collections.immutable.persistentListOf
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Instant
@@ -49,7 +50,7 @@ class RankingScreenTest : UiTest() {
                     RankingScreen(
                         uiState =
                             RankingUiState(
-                                entries = listOf(entry("Leandro", 200), entry("Bruno", 100)),
+                                entries = persistentListOf(entry("Leandro", 200), entry("Bruno", 100)),
                             ),
                         onIntent = {},
                     )
@@ -66,7 +67,7 @@ class RankingScreenTest : UiTest() {
             setContent {
                 DynaquizTheme {
                     RankingScreen(
-                        uiState = RankingUiState(selectedTab = RankingTab.All, entries = emptyList()),
+                        uiState = RankingUiState(selectedTab = RankingTab.All, entries = persistentListOf()),
                         onIntent = {},
                     )
                 }
@@ -81,7 +82,7 @@ class RankingScreenTest : UiTest() {
             setContent {
                 DynaquizTheme {
                     RankingScreen(
-                        uiState = RankingUiState(selectedTab = RankingTab.Mine, entries = emptyList()),
+                        uiState = RankingUiState(selectedTab = RankingTab.Mine, entries = persistentListOf()),
                         onIntent = {},
                     )
                 }
@@ -99,7 +100,7 @@ class RankingScreenTest : UiTest() {
                         uiState =
                             RankingUiState(
                                 selectedTab = RankingTab.All,
-                                entries = emptyList(),
+                                entries = persistentListOf(),
                                 isLoading = true,
                             ),
                         onIntent = {},

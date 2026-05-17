@@ -12,11 +12,13 @@ import com.leanite.dynaquiz.core.domain.model.ChallengeMode
 import com.leanite.dynaquiz.core.domain.model.RankingEntry
 import com.leanite.dynaquiz.core.domain.model.Score
 import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlin.time.Instant
 
 @Composable
 fun RankingList(
-    entries: List<RankingEntry>,
+    entries: ImmutableList<RankingEntry>,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -40,7 +42,7 @@ private fun RankingListPreview() {
     DynaquizTheme {
         RankingList(
             entries =
-                listOf(
+                persistentListOf(
                     RankingEntry(
                         playerName = "Leandro",
                         challengeMode = ChallengeMode.Timed.Hard,

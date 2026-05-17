@@ -1,8 +1,5 @@
 package com.leanite.dynaquiz.core.domain.model
 
-import androidx.compose.runtime.Immutable
-
-@Immutable
 data class AnswerLog(
     val questionId: QuestionId,
     val chosenAnswer: String?, // null em caso de acabar o tempo da pergunta
@@ -10,7 +7,6 @@ data class AnswerLog(
     val outcome: AnswerOutcome,
 )
 
-@Immutable
 sealed interface AnswerOutcome {
     // Backend confirmou certo ou errado
     data class Confirmed(

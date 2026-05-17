@@ -13,6 +13,7 @@ import com.leanite.dynaquiz.core.domain.result.AppResult
 import com.leanite.dynaquiz.core.domain.usecase.GetRandomQuestionUseCase
 import com.leanite.dynaquiz.core.domain.usecase.SaveQuizSessionUseCase
 import com.leanite.dynaquiz.core.domain.usecase.SubmitAnswerUseCase
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -195,7 +196,7 @@ class QuizViewModel(
         _uiState.update {
             it.copy(
                 phase = QuizPhase.Completed,
-                answerLog = answerLog,
+                answerLog = answerLog.toImmutableList(),
                 currentQuestionIndex = finalIndex,
                 timeRemainingSec = null,
             )
@@ -240,7 +241,7 @@ class QuizViewModel(
         _uiState.update {
             it.copy(
                 phase = QuizPhase.Playing(question = nextQuestion),
-                answerLog = newLog,
+                answerLog = newLog.toImmutableList(),
                 currentQuestionIndex = nextIndex,
             )
         }

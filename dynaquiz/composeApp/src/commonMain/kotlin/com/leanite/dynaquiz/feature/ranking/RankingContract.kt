@@ -2,11 +2,13 @@ package com.leanite.dynaquiz.feature.ranking
 
 import androidx.compose.runtime.Immutable
 import com.leanite.dynaquiz.core.domain.model.RankingEntry
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
 data class RankingUiState(
     val selectedTab: RankingTab = RankingTab.All,
-    val entries: List<RankingEntry> = emptyList(),
+    val entries: ImmutableList<RankingEntry> = persistentListOf(),
     val isLoading: Boolean = false,
 )
 

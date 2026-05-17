@@ -6,6 +6,8 @@ import com.leanite.dynaquiz.core.domain.model.AnswerOutcome
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
 import com.leanite.dynaquiz.core.domain.model.Question
 import com.leanite.dynaquiz.core.domain.model.QuizSessionResult
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
 sealed interface QuizPhase {
@@ -29,7 +31,7 @@ data class QuizUiState(
     val challengeMode: ChallengeMode,
     val phase: QuizPhase = QuizPhase.Countdown(QuizRules.INITIAL_COUNTDOWN_SECONDS),
     val currentQuestionIndex: Int = 0,
-    val answerLog: List<AnswerLog> = emptyList(),
+    val answerLog: ImmutableList<AnswerLog> = persistentListOf(),
     val timeRemainingSec: Int? = null,
     val showExitDialog: Boolean = false,
 ) {

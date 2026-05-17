@@ -2,6 +2,7 @@ package com.leanite.dynaquiz.feature.quiz
 
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
 import com.leanite.dynaquiz.fixture.AnswerLogFixtures
+import kotlinx.collections.immutable.persistentListOf
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -23,7 +24,7 @@ class QuizUiStateTest {
             QuizUiState(
                 challengeMode = ChallengeMode.Timed.Easy,
                 answerLog =
-                    listOf(
+                    persistentListOf(
                         AnswerLogFixtures.confirmedCorrectNoTimeBonus,
                         AnswerLogFixtures.confirmedCorrectNoTimeBonus,
                         AnswerLogFixtures.confirmedIncorrect,

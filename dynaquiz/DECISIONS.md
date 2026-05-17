@@ -23,3 +23,6 @@ A compatibilidade do detekt com Kotlin 2.x só veio nas versões alpha. As vers�
 
 ## Usar portrait no AndroidManifest
 Decidi manter a definição de portrait na MainActivity pelo AndroidManifest mesmo com o warning novo do Android Studio/Lint indicando que travar orientação dessa forma deixou de ser a direção recomendada por causa das mudanças do Android 16 em telas grandes.
+
+## Compose Stability
+Mantive os modelos de domain livres de qualquer dependência de androidx (UI), removendo @Immutable da implementação. Decidi usar Compose Stability para que o Compose pule recomposição dos @Composables que recebem esses modelos diretamente fora de um UiState (Immutable), como RankingEntryCard, QuestionCard, FinalScorePanel, ChallengeModeOption e PlayingContent.

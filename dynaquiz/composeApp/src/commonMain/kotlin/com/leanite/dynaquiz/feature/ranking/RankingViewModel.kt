@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.leanite.dynaquiz.core.domain.result.AppResult
 import com.leanite.dynaquiz.core.domain.usecase.GetMyRankingUseCase
 import com.leanite.dynaquiz.core.domain.usecase.GetRankingUseCase
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -49,10 +51,10 @@ class RankingViewModel(
             when (result) {
                 is AppResult.Success ->
                     _uiState.update {
-                        it.copy(entries = result.data, isLoading = false)
+                        it.copy(entries = result.data.toImmutableList(), isLoading = false)
                     }
                 is AppResult.Error -> {
-                    _uiState.update { it.copy(isLoading = false, entries = emptyList()) }
+                    _uiState.update { it.copy(isLoading = false, entries = persistentListOf()) }
                     _events.send(RankingEvent.ShowMessage(RankingMessage.LoadFailed))
                 }
             }

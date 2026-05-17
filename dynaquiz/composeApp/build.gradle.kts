@@ -129,6 +129,12 @@ android {
     }
 }
 
+composeCompiler {
+    stabilityConfigurationFiles.add(
+        rootProject.layout.projectDirectory.file("compose-stability.conf"),
+    )
+}
+
 sqldelight {
     databases {
         create("DynaquizDatabase") {

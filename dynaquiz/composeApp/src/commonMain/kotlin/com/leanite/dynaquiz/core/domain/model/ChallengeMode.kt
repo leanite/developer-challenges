@@ -1,8 +1,5 @@
 package com.leanite.dynaquiz.core.domain.model
 
-import androidx.compose.runtime.Immutable
-
-@Immutable
 sealed interface ChallengeMode {
     val serializedName: String
     val mascot: Mascot
@@ -16,7 +13,6 @@ sealed interface ChallengeMode {
         override val timeBonusPerSecond: Int = 0
     }
 
-    @Immutable
     sealed interface Timed : ChallengeMode {
         val perQuestionSeconds: Int
 
