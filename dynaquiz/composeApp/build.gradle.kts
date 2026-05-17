@@ -37,6 +37,7 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.koin.android)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.sentry.kotlinMultiplatform)
             implementation(libs.sqldelight.androidDriver)
         }
         iosMain.dependencies {
@@ -68,15 +69,22 @@ kotlin {
             implementation(libs.multiplatformSettings.noArg)
             implementation(libs.multiplatformSettings.coroutines)
             implementation(libs.navigation.compose)
-            implementation(libs.sentry.kotlinMultiplatform)
             implementation(libs.sqldelight.runtime)
             implementation(libs.sqldelight.coroutinesExtensions)
         }
         commonTest.dependencies {
+            implementation(libs.compose.uiTest)
             implementation(libs.kotlin.test)
             implementation(libs.kotlinx.coroutines.test)
             implementation(libs.multiplatformSettings.test)
             implementation(libs.turbine)
+        }
+        val androidUnitTest by getting {
+            dependencies {
+                // Robolectric is required so Compose UI test on Android JVM can populate
+                // Build.FINGERPRINT and run runComposeUiTest in unit tests.
+                implementation(libs.robolectric)
+            }
         }
     }
 }
@@ -105,6 +113,9 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
     }
 }
 
@@ -144,5 +155,8 @@ buildkonfig {
 
 dependencies {
     debugImplementation(libs.compose.uiTooling)
+    // Provides the ComponentActivity declaration in the merged debug manifest used by
+    // Robolectric unit tests via runComposeUiTest.
+    debugImplementation(libs.androidx.compose.uiTestManifest)
 }
 
