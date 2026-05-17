@@ -1,7 +1,9 @@
 package com.leanite.dynaquiz.feature.splash
 
 import app.cash.turbine.test
+import com.leanite.dynaquiz.core.domain.repository.DatabaseRepository
 import com.leanite.dynaquiz.core.domain.repository.QuizRepository
+import com.leanite.dynaquiz.core.domain.usecase.WarmupDatabaseUseCase
 import com.leanite.dynaquiz.core.domain.usecase.WarmupServerUseCase
 import dev.mokkery.MockMode
 import dev.mokkery.answering.returns
@@ -23,12 +25,15 @@ import kotlin.test.assertEquals
 class SplashViewModelTest {
     private val testDispatcher = UnconfinedTestDispatcher()
     private val quizRepository = mock<QuizRepository>(MockMode.autofill)
+    private val databaseRepository = mock<DatabaseRepository>(MockMode.autofill)
     private val warmupServerUseCase = WarmupServerUseCase(quizRepository)
+    private val warmupDatabaseUseCase = WarmupDatabaseUseCase(databaseRepository)
 
     @BeforeTest
     fun setup() {
         Dispatchers.setMain(testDispatcher)
         everySuspend { quizRepository.warmupServer() } returns Unit
+        everySuspend { databaseRepository.warmup() } returns Unit
     }
 
     @AfterTest
@@ -36,7 +41,11 @@ class SplashViewModelTest {
         Dispatchers.resetMain()
     }
 
-    private fun createViewModel() = SplashViewModel(warmupServerUseCase = warmupServerUseCase)
+    private fun createViewModel() =
+        SplashViewModel(
+            warmupServerUseCase = warmupServerUseCase,
+            warmupDatabaseUseCase = warmupDatabaseUseCase,
+        )
 
     @Test
     fun `init should trigger server warmup exactly once`() =
@@ -44,6 +53,14 @@ class SplashViewModelTest {
             createViewModel()
 
             verifySuspend { quizRepository.warmupServer() }
+        }
+
+    @Test
+    fun `init should trigger database warmup exactly once`() =
+        runTest {
+            createViewModel()
+
+            verifySuspend { databaseRepository.warmup() }
         }
 
     @Test

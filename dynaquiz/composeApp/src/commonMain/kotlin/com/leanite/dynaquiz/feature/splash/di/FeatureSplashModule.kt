@@ -7,6 +7,9 @@ import org.koin.dsl.module
 val featureSplashModule =
     module {
         viewModel {
-            SplashViewModel(warmupServerUseCase = get())
+            SplashViewModel(
+                warmupServerUseCase = get(),
+                warmupDatabaseUseCase = get(),
+            )
         }
     }

@@ -13,11 +13,13 @@ import com.leanite.dynaquiz.core.data.datasource.QuizSessionLocalDataSource
 import com.leanite.dynaquiz.core.data.datasource.QuizSessionLocalDataSourceImpl
 import com.leanite.dynaquiz.core.data.network.buildHttpClient
 import com.leanite.dynaquiz.core.data.repository.ChallengeModeRepositoryImpl
+import com.leanite.dynaquiz.core.data.repository.DatabaseRepositoryImpl
 import com.leanite.dynaquiz.core.data.repository.PlayerRepositoryImpl
 import com.leanite.dynaquiz.core.data.repository.QuizRepositoryImpl
 import com.leanite.dynaquiz.core.data.repository.RankingRepositoryImpl
 import com.leanite.dynaquiz.core.data.repository.UserRepositoryImpl
 import com.leanite.dynaquiz.core.domain.repository.ChallengeModeRepository
+import com.leanite.dynaquiz.core.domain.repository.DatabaseRepository
 import com.leanite.dynaquiz.core.domain.repository.PlayerRepository
 import com.leanite.dynaquiz.core.domain.repository.QuizRepository
 import com.leanite.dynaquiz.core.domain.repository.RankingRepository
@@ -32,6 +34,7 @@ import com.leanite.dynaquiz.core.domain.usecase.SaveQuizSessionUseCase
 import com.leanite.dynaquiz.core.domain.usecase.SetLastChallengeModeUseCase
 import com.leanite.dynaquiz.core.domain.usecase.SetLastNicknameUseCase
 import com.leanite.dynaquiz.core.domain.usecase.SubmitAnswerUseCase
+import com.leanite.dynaquiz.core.domain.usecase.WarmupDatabaseUseCase
 import com.leanite.dynaquiz.core.domain.usecase.WarmupServerUseCase
 import com.leanite.dynaquiz.database.DynaquizDatabase
 import com.leanite.dynaquiz.database.QuizSessionEntity
@@ -134,8 +137,16 @@ val coreModule =
             )
         }
 
-        // Splash use case
+        single<DatabaseRepository> {
+            DatabaseRepositoryImpl(
+                databaseProvider = { get<DynaquizDatabase>() },
+                ioDispatcher = get(named("io")),
+            )
+        }
+
+        // Splash use cases
         factory { WarmupServerUseCase(repository = get()) }
+        factory { WarmupDatabaseUseCase(repository = get()) }
 
         // Home use cases
         factory { GetLastNicknameUseCase(repository = get()) }

@@ -60,6 +60,8 @@ Tive que, explicitamente, adicionar a `libsqlite3` pelo XCode em `iosApp > TARGE
 
 Para travar a orientação em portrair, ir pelo XCode em target > General > Deployment Info > seção Device Orientation e desmarcar as opções alternativas a portrair no iPhone
 
+Aparentemente, existe um problema com a primeira interação com um TextField no seu primeiro após uma instalação fresh ao app. O iOS bloqueia a main thread por um tempo enquanto inicializa serviços per-app do subsistema de texto. Esses caches são mantidos em diretórios privados do app dentro de ~/Library/Keyboard/ no sandbox, então sobrevivem ao kill do processo (não reproduz após swipe-up no app switcher) mas são apagados em uma reinstalação.
+
 ## Aprendizagem futura:
 
 1. Como se comporta um projeto multi módulo no KMP?
