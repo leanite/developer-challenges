@@ -19,6 +19,16 @@ internal fun ComposeUiTest.clickOnText(text: String) {
 }
 
 @OptIn(ExperimentalTestApi::class)
+internal fun ComposeUiTest.assertTextExists(text: String) {
+    onNodeWithText(text, substring = false, ignoreCase = false).assertExists()
+}
+
+@OptIn(ExperimentalTestApi::class)
+internal fun ComposeUiTest.assertTextContainingExists(substring: String) {
+    onNodeWithText(substring, substring = true).assertExists()
+}
+
+@OptIn(ExperimentalTestApi::class)
 internal fun ComposeUiTest.clickOnTextContaining(substring: String) {
     onNodeWithText(substring, substring = true, ignoreCase = false).performClick()
 }
