@@ -58,6 +58,8 @@ A cor de background da ViewController launcher tem seu próprio asset em`LaunchB
 
 Tive que, explicitamente, adicionar a `libsqlite3` pelo XCode em `iosApp > TARGETS > General > Frameworks, Libraries, and Embedded Content` para poder compilar o projeto no iOS.
 
+Para travar a orientação em portrair, ir pelo XCode em target > General > Deployment Info > seção Device Orientation e desmarcar as opções alternativas a portrair no iPhone
+
 ## Aprendizagem futura:
 
 1. Como se comporta um projeto multi módulo no KMP?

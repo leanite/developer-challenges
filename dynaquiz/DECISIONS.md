@@ -20,3 +20,6 @@ Optei por usar commonTest tendo consciência do trade-off entre ter testes de UI
 
 ## Detekt fora do projeto
 A compatibilidade do detekt com Kotlin 2.x só veio nas versões alpha. As versões estáveis não possuem esse suporte, então opto por deixar de fora essa lib e manter apenas o ktlint.
+
+## Usar portrait no AndroidManifest
+Decidi manter a definição de portrait na MainActivity pelo AndroidManifest mesmo com o warning novo do Android Studio/Lint indicando que travar orientação dessa forma deixou de ser a direção recomendada por causa das mudanças do Android 16 em telas grandes.
