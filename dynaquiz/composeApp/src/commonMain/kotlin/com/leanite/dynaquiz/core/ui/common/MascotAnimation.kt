@@ -22,12 +22,12 @@ import org.jetbrains.compose.resources.DrawableResource
 fun MascotAnimation(
     mascotMood: MascotMood,
     shouldAnimate: Boolean = true,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val idleSprite: DrawableResource
     val activeSprite: DrawableResource
 
-    when(mascotMood) {
+    when (mascotMood) {
         MascotMood.Relaxed -> {
             idleSprite = Res.drawable.anim_relaxed_1
             activeSprite = Res.drawable.anim_relaxed_2
@@ -50,7 +50,7 @@ fun MascotAnimation(
         idle = idleSprite,
         active = activeSprite,
         shouldAnimate = shouldAnimate,
-        modifier = modifier.size(SPRITE_SIZE)
+        modifier = modifier.size(SPRITE_SIZE),
     )
 }
 

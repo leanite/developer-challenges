@@ -45,108 +45,111 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import kotlin.time.Clock
 
-val coreModule = module { //TODO: melhorar, todos estao aqui
-    // Clock
-    single<Clock> { Clock.System }
+val coreModule =
+    module {
+        // TODO: melhorar, todos estao aqui
+        // Clock
+        single<Clock> { Clock.System }
 
-    // Serialization
-    single<Json> {
-        Json {
-            ignoreUnknownKeys = true
-            explicitNulls = false
+        // Serialization
+        single<Json> {
+            Json {
+                ignoreUnknownKeys = true
+                explicitNulls = false
+            }
         }
+
+        // Multiplatform Settings
+        single<Settings> {
+            Settings()
+        }
+
+        // Dispatchers
+        single<CoroutineDispatcher>(named("io")) { Dispatchers.IO }
+        single<CoroutineDispatcher>(named("default")) { Dispatchers.Default }
+
+        // Banco local (SQLDelight)
+        single<DynaquizDatabase> {
+            DynaquizDatabase(
+                driver = get<DatabaseDriverFactory>().create(),
+                // Adapter pra coluna challengeMode de TEXT para class ChallengeMode
+                QuizSessionEntityAdapter =
+                    QuizSessionEntity.Adapter(
+                        challengeModeAdapter = ChallengeModeAdapter,
+                    ),
+            )
+        }
+
+        // Http Client
+        single<HttpClient> { buildHttpClient(jsonConfig = get()) }
+
+        // Data layer
+        single<PlayerLocalDataSource> { PlayerLocalDataSourceImpl(database = get()) }
+        single<PlayerRepository> {
+            PlayerRepositoryImpl(
+                localDataSource = get(),
+                clock = get(),
+                ioDispatcher = get(named("io")),
+            )
+        }
+
+        single<QuizRemoteDataSource> {
+            QuizRemoteDataSourceImpl(
+                httpClient = get(),
+                baseUrl = BuildKonfig.DYNAMOX_QUIZ_BASE_URL,
+                jsonConfig = get(),
+            )
+        }
+        single<QuizRepository> {
+            QuizRepositoryImpl(
+                remoteDataSource = get(),
+                ioDispatcher = get(named("io")),
+            )
+        }
+
+        single<UserRepository> {
+            UserRepositoryImpl(
+                settings = get(),
+            )
+        }
+
+        single<ChallengeModeLocalDataSource> {
+            ChallengeModeLocalDataSourceImpl(
+                settings = get(),
+            )
+        }
+        single<ChallengeModeRepository> {
+            ChallengeModeRepositoryImpl(
+                dataSource = get(),
+            )
+        }
+
+        single<QuizSessionLocalDataSource> { QuizSessionLocalDataSourceImpl(database = get()) }
+        single<RankingRepository> {
+            RankingRepositoryImpl(
+                quizSessionDataSource = get(),
+                playerDataSource = get(),
+                clock = get(),
+                ioDispatcher = get(named("io")),
+            )
+        }
+
+        // Splash use case
+        factory { WarmupServerUseCase(repository = get()) }
+
+        // Home use cases
+        factory { GetLastNicknameUseCase(repository = get()) }
+        factory { SetLastNicknameUseCase(repository = get()) }
+        factory { RegisterOrFetchPlayerUseCase(repository = get()) }
+        factory { GetLastChallengeModeUseCase(repository = get()) }
+        factory { SetLastChallengeModeUseCase(repository = get()) }
+
+        // Quiz use cases
+        factory { GetRandomQuestionUseCase(repository = get()) }
+        factory { SubmitAnswerUseCase(repository = get()) }
+
+        // Ranking use cases
+        factory { SaveQuizSessionUseCase(repository = get()) }
+        factory { GetRankingUseCase(repository = get()) }
+        factory { GetMyRankingUseCase(repository = get()) }
     }
-
-    // Multiplatform Settings
-    single<Settings> {
-        Settings()
-    }
-
-    // Dispatchers
-    single<CoroutineDispatcher>(named("io")) { Dispatchers.IO }
-    single<CoroutineDispatcher>(named("default")) { Dispatchers.Default }
-
-    // Banco local (SQLDelight)
-    single<DynaquizDatabase> {
-        DynaquizDatabase(
-            driver = get<DatabaseDriverFactory>().create(),
-            // Adapter pra coluna challengeMode de TEXT para class ChallengeMode
-            QuizSessionEntityAdapter = QuizSessionEntity.Adapter(
-                challengeModeAdapter = ChallengeModeAdapter,
-            ),
-        )
-    }
-
-    // Http Client
-    single<HttpClient> { buildHttpClient(jsonConfig = get()) }
-
-    // Data layer
-    single<PlayerLocalDataSource> { PlayerLocalDataSourceImpl(database = get()) }
-    single<PlayerRepository> {
-        PlayerRepositoryImpl(
-            localDataSource = get(),
-            clock = get(),
-            ioDispatcher = get(named("io")),
-        )
-    }
-
-    single<QuizRemoteDataSource> {
-        QuizRemoteDataSourceImpl(
-            httpClient = get(),
-            baseUrl = BuildKonfig.DYNAMOX_QUIZ_BASE_URL,
-            jsonConfig = get(),
-        )
-    }
-    single<QuizRepository> {
-        QuizRepositoryImpl(
-            remoteDataSource = get(),
-            ioDispatcher = get(named("io")),
-        )
-    }
-
-    single<UserRepository> {
-        UserRepositoryImpl(
-            settings = get()
-        )
-    }
-
-    single<ChallengeModeLocalDataSource>{
-        ChallengeModeLocalDataSourceImpl(
-            settings = get()
-        )
-    }
-    single<ChallengeModeRepository> {
-        ChallengeModeRepositoryImpl(
-            dataSource = get()
-        )
-    }
-
-    single<QuizSessionLocalDataSource> { QuizSessionLocalDataSourceImpl(database = get()) }
-    single<RankingRepository> {
-        RankingRepositoryImpl(
-            quizSessionDataSource = get(),
-            playerDataSource = get(),
-            clock = get(),
-            ioDispatcher = get(named("io")),
-        )
-    }
-
-    // Splash use case
-    factory { WarmupServerUseCase(repository = get()) }
-
-    // Home use cases
-    factory { GetLastNicknameUseCase(repository = get()) }
-    factory { SetLastNicknameUseCase(repository = get()) }
-    factory { RegisterOrFetchPlayerUseCase(repository = get()) }
-    factory { GetLastChallengeModeUseCase(repository = get()) }
-    factory { SetLastChallengeModeUseCase(repository = get()) }
-
-    // Quiz use cases
-    factory { GetRandomQuestionUseCase(repository = get()) }
-    factory { SubmitAnswerUseCase(repository = get()) }
-
-    // Ranking use cases
-    factory { SaveQuizSessionUseCase(repository = get()) }
-    factory { GetRankingUseCase(repository = get()) }
-    factory { GetMyRankingUseCase(repository = get()) }
-}

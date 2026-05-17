@@ -5,7 +5,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ChallengeModeAdapterTest {
-
     @Test
     fun `encode should return the serializedName of each mode`() {
         assertEquals("RELAXED", ChallengeModeAdapter.encode(ChallengeMode.Relaxed))
@@ -24,12 +23,13 @@ class ChallengeModeAdapterTest {
 
     @Test
     fun `decode roundtrip with encode should return the original mode`() {
-        val modes = listOf(
-            ChallengeMode.Relaxed,
-            ChallengeMode.Timed.Easy,
-            ChallengeMode.Timed.Medium,
-            ChallengeMode.Timed.Hard,
-        )
+        val modes =
+            listOf(
+                ChallengeMode.Relaxed,
+                ChallengeMode.Timed.Easy,
+                ChallengeMode.Timed.Medium,
+                ChallengeMode.Timed.Hard,
+            )
 
         modes.forEach { mode ->
             assertEquals(mode, ChallengeModeAdapter.decode(ChallengeModeAdapter.encode(mode)))

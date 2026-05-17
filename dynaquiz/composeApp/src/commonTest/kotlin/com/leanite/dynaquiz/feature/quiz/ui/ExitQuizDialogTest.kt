@@ -11,49 +11,51 @@ import kotlin.test.assertEquals
 
 @OptIn(ExperimentalTestApi::class)
 class ExitQuizDialogTest : UiTest() {
-
     @Test
-    fun `should render title body and both action buttons`() = runComposeUiTest {
-        setContent {
-            DynaquizTheme {
-                ExitQuizDialog(onConfirm = {}, onDismiss = {})
+    fun `should render title body and both action buttons`() =
+        runComposeUiTest {
+            setContent {
+                DynaquizTheme {
+                    ExitQuizDialog(onConfirm = {}, onDismiss = {})
+                }
             }
+
+            assertTextIsDisplayed("Opa! Vai mesmo?")
+            assertTextIsDisplayed("Sair")
+            assertTextIsDisplayed("Continuar")
         }
 
-        assertTextIsDisplayed("Opa! Vai mesmo?")
-        assertTextIsDisplayed("Sair")
-        assertTextIsDisplayed("Continuar")
-    }
-
     @Test
-    fun `should call onConfirm when user taps the exit action`() = runComposeUiTest {
-        var confirmed = 0
-        var dismissed = 0
-        setContent {
-            DynaquizTheme {
-                ExitQuizDialog(onConfirm = { confirmed++ }, onDismiss = { dismissed++ })
+    fun `should call onConfirm when user taps the exit action`() =
+        runComposeUiTest {
+            var confirmed = 0
+            var dismissed = 0
+            setContent {
+                DynaquizTheme {
+                    ExitQuizDialog(onConfirm = { confirmed++ }, onDismiss = { dismissed++ })
+                }
             }
+
+            clickOnText("Sair")
+
+            assertEquals(1, confirmed)
+            assertEquals(0, dismissed)
         }
 
-        clickOnText("Sair")
-
-        assertEquals(1, confirmed)
-        assertEquals(0, dismissed)
-    }
-
     @Test
-    fun `should call onDismiss when user taps the continue action`() = runComposeUiTest {
-        var confirmed = 0
-        var dismissed = 0
-        setContent {
-            DynaquizTheme {
-                ExitQuizDialog(onConfirm = { confirmed++ }, onDismiss = { dismissed++ })
+    fun `should call onDismiss when user taps the continue action`() =
+        runComposeUiTest {
+            var confirmed = 0
+            var dismissed = 0
+            setContent {
+                DynaquizTheme {
+                    ExitQuizDialog(onConfirm = { confirmed++ }, onDismiss = { dismissed++ })
+                }
             }
+
+            clickOnText("Continuar")
+
+            assertEquals(0, confirmed)
+            assertEquals(1, dismissed)
         }
-
-        clickOnText("Continuar")
-
-        assertEquals(0, confirmed)
-        assertEquals(1, dismissed)
-    }
 }

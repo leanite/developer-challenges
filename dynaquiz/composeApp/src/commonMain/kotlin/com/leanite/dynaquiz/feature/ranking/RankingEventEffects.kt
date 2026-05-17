@@ -18,9 +18,10 @@ fun RankingEventEffects(
             when (event) {
                 RankingEvent.NavigateBack -> onNavigateBack()
                 is RankingEvent.ShowMessage -> {
-                    val text = when (event.type) {
-                        RankingMessage.LoadFailed -> getString(RankingRes.MsgLoadFailed)
-                    }
+                    val text =
+                        when (event.type) {
+                            RankingMessage.LoadFailed -> getString(RankingRes.MsgLoadFailed)
+                        }
                     snackbarHostState.showSnackbar(text)
                 }
             }

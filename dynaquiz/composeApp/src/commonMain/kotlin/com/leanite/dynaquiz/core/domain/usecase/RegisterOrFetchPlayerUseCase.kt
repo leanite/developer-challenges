@@ -7,6 +7,5 @@ import com.leanite.dynaquiz.core.domain.result.AppResult
 class RegisterOrFetchPlayerUseCase(
     private val repository: PlayerRepository,
 ) {
-    suspend operator fun invoke(name: String): AppResult<Player> =
-        repository.registerOrFetch(name)
+    suspend operator fun invoke(name: String): AppResult<Player> = repository.registerOrFetch(name)
 }

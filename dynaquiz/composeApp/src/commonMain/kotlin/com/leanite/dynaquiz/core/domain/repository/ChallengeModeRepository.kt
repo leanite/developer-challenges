@@ -5,5 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface ChallengeModeRepository {
     fun getMode(): Flow<ChallengeMode>
+
     suspend fun setMode(mode: ChallengeMode)
 }

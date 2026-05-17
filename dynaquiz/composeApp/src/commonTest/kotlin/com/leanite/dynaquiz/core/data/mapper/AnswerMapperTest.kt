@@ -6,7 +6,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class AnswerMapperTest {
-
     @Test
     fun `toDomain should map result true to Answer correct true`() {
         val dto = AnswerResultDTO(result = true)

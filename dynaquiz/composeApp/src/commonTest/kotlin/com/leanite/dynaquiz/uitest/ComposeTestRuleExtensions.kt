@@ -44,12 +44,18 @@ internal fun ComposeUiTest.clickOnContentDescription(description: String) {
 }
 
 @OptIn(ExperimentalTestApi::class)
-internal fun ComposeUiTest.typeOnField(label: String, text: String) {
+internal fun ComposeUiTest.typeOnField(
+    label: String,
+    text: String,
+) {
     onNodeWithText(label).performTextInput(text)
 }
 
 @OptIn(ExperimentalTestApi::class)
-internal fun ComposeUiTest.typeOnTag(tag: String, text: String) {
+internal fun ComposeUiTest.typeOnTag(
+    tag: String,
+    text: String,
+) {
     onNodeWithTag(tag).performTextInput(text)
 }
 

@@ -15,15 +15,17 @@ import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
 @Composable
 fun BackgroundGradient(modifier: Modifier = Modifier) {
     Box(
-        modifier = modifier
-            .background(
-                brush = Brush.verticalGradient(
-                    0f to DynamoxPurple,
-                    0.40f to Color.Transparent,
-                    0.60f to Color.Transparent,
-                    1f to DynamoxPurpleDeep,
+        modifier =
+            modifier
+                .background(
+                    brush =
+                        Brush.verticalGradient(
+                            0f to DynamoxPurple,
+                            0.40f to Color.Transparent,
+                            0.60f to Color.Transparent,
+                            1f to DynamoxPurpleDeep,
+                        ),
                 ),
-            ),
     )
 }
 

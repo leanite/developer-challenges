@@ -8,7 +8,6 @@ import dynaquiz.composeapp.generated.resources.core_mode_medium
 import dynaquiz.composeapp.generated.resources.core_mode_relaxed
 
 internal object CoreRes {
-
     object Strings {
         val ModeRelaxed = Res.string.core_mode_relaxed
         val ModeEasy = Res.string.core_mode_easy

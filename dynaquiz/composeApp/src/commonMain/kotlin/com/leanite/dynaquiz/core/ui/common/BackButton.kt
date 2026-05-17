@@ -27,8 +27,9 @@ fun BackButton(
         Spacer(Modifier.width(16.dp))
         IconButton(
             onClick = onClick,
-            modifier = modifier
-                .size(24.dp)
+            modifier =
+                modifier
+                    .size(24.dp),
         ) {
             Image(
                 painter = painterResource(Res.drawable.ic_arrow_back),

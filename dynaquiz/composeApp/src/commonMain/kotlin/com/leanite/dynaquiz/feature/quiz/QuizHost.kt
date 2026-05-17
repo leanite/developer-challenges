@@ -10,15 +10,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
 import com.leanite.dynaquiz.core.domain.model.QuizSessionResult
-import com.leanite.dynaquiz.core.domain.model.Score
 import com.leanite.dynaquiz.core.ui.common.BackHandler
 import com.leanite.dynaquiz.core.ui.common.DynaquizTopBar
 import com.leanite.dynaquiz.feature.quiz.res.QuizRes
-import com.leanite.dynaquiz.feature.quiz.ui.TimerRing
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -30,9 +27,10 @@ fun QuizHost(
     onNavigateToResult: (result: QuizSessionResult) -> Unit,
     onNavigateBack: () -> Unit,
 ) {
-    val viewModel: QuizViewModel = koinViewModel {
-        parametersOf(playerName, challengeMode)
-    }
+    val viewModel: QuizViewModel =
+        koinViewModel {
+            parametersOf(playerName, challengeMode)
+        }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -56,11 +54,12 @@ fun QuizHost(
             DynaquizTopBar(
                 title = {
                     Text(
-                        text = stringResource(
-                            QuizRes.TopBarProgress,
-                            uiState.questionNumber,
-                            QuizRules.TOTAL_QUESTIONS,
-                        ),
+                        text =
+                            stringResource(
+                                QuizRes.TopBarProgress,
+                                uiState.questionNumber,
+                                QuizRules.TOTAL_QUESTIONS,
+                            ),
                     )
                 },
                 showNavigation = true,

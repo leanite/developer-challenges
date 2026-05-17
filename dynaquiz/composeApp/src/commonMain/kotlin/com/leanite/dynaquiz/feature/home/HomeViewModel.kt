@@ -27,7 +27,6 @@ class HomeViewModel(
     private val registerOrFetchPlayerUseCase: RegisterOrFetchPlayerUseCase,
     private val saveNicknameDelay: Duration = DEFAULT_NICKNAME_DELAY,
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
@@ -62,9 +61,10 @@ class HomeViewModel(
 
     private fun getLastNickname() {
         viewModelScope.launch {
-            val lastNickname = getLastNicknameUseCase()
-                .orEmpty()
-                .take(HomeValidation.MAX_NICKNAME_LENGTH)
+            val lastNickname =
+                getLastNicknameUseCase()
+                    .orEmpty()
+                    .take(HomeValidation.MAX_NICKNAME_LENGTH)
             _uiState.update { it.copy(nickname = lastNickname) }
         }
     }
@@ -75,10 +75,11 @@ class HomeViewModel(
 
         // Cancela o job anterior, agenda um novo pra 1s
         saveNicknameJob?.cancel()
-        saveNicknameJob = viewModelScope.launch {
-            delay(saveNicknameDelay)
-            setLastNicknameUseCase(safeValue)
-        }
+        saveNicknameJob =
+            viewModelScope.launch {
+                delay(saveNicknameDelay)
+                setLastNicknameUseCase(safeValue)
+            }
     }
 
     private fun onChallengeModeSelected(mode: ChallengeMode) {
@@ -93,10 +94,12 @@ class HomeViewModel(
             _uiState.update { it.copy(isStarting = true) }
             when (val result = registerOrFetchPlayerUseCase(state.nickname.trim())) {
                 is AppResult.Success -> {
-                    _events.send(HomeEvent.NavigateToQuiz(
-                        playerName = result.data.name,
-                        challengeMode = state.challengeMode,
-                    ))
+                    _events.send(
+                        HomeEvent.NavigateToQuiz(
+                            playerName = result.data.name,
+                            challengeMode = state.challengeMode,
+                        ),
+                    )
                 }
                 is AppResult.Error -> {
                     _events.send(HomeEvent.ShowMessage(HomeMessage.PlayerSaveError(result.error)))

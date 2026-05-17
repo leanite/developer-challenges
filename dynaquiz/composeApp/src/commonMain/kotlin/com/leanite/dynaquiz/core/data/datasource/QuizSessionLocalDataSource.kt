@@ -14,14 +14,15 @@ internal interface QuizSessionLocalDataSource {
         totalQuestions: Long,
         finishedAt: Long,
     )
+
     fun selectRanking(): List<SelectRanking>
+
     fun selectRankingByPlayerName(playerName: String): List<SelectRankingByPlayerName>
 }
 
 internal class QuizSessionLocalDataSourceImpl(
     private val database: DynaquizDatabase,
 ) : QuizSessionLocalDataSource {
-
     private val queries get() = database.quizSessionQueries
 
     override fun insertSession(
@@ -42,8 +43,7 @@ internal class QuizSessionLocalDataSourceImpl(
         )
     }
 
-    override fun selectRanking(): List<SelectRanking> =
-        queries.selectRanking().executeAsList()
+    override fun selectRanking(): List<SelectRanking> = queries.selectRanking().executeAsList()
 
     override fun selectRankingByPlayerName(playerName: String): List<SelectRankingByPlayerName> =
         queries.selectRankingByPlayerName(playerName).executeAsList()

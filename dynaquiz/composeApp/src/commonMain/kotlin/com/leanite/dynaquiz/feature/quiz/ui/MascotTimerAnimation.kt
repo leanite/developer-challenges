@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.leanite.dynaquiz.core.domain.model.MascotMood
 import com.leanite.dynaquiz.core.ui.common.SimpleSpriteAnimator
 import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
@@ -23,12 +22,12 @@ import org.jetbrains.compose.resources.DrawableResource
 @Composable
 fun MascotTimerAnimation(
     mascotMood: MascotMood,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val idleSprite: DrawableResource
     val activeSprite: DrawableResource
 
-    when(mascotMood) {
+    when (mascotMood) {
         MascotMood.Relaxed -> {
             idleSprite = Res.drawable.anim_relaxed_1
             activeSprite = Res.drawable.anim_relaxed_2
@@ -50,7 +49,7 @@ fun MascotTimerAnimation(
     SimpleSpriteAnimator(
         idle = idleSprite,
         active = activeSprite,
-        modifier = modifier.size(SPRITE_SIZE)
+        modifier = modifier.size(SPRITE_SIZE),
     )
 }
 

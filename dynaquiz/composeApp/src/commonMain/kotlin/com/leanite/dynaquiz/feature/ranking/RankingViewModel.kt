@@ -18,7 +18,6 @@ class RankingViewModel(
     private val getRankingUseCase: GetRankingUseCase,
     private val getMyRankingUseCase: GetMyRankingUseCase,
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow(RankingUiState())
     val uiState: StateFlow<RankingUiState> = _uiState.asStateFlow()
 
@@ -42,14 +41,16 @@ class RankingViewModel(
     private fun loadCurrentTab() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            val result = when (_uiState.value.selectedTab) {
-                RankingTab.All -> getRankingUseCase()
-                RankingTab.Mine -> getMyRankingUseCase(playerName)
-            }
-            when (result) {
-                is AppResult.Success -> _uiState.update {
-                    it.copy(entries = result.data, isLoading = false)
+            val result =
+                when (_uiState.value.selectedTab) {
+                    RankingTab.All -> getRankingUseCase()
+                    RankingTab.Mine -> getMyRankingUseCase(playerName)
                 }
+            when (result) {
+                is AppResult.Success ->
+                    _uiState.update {
+                        it.copy(entries = result.data, isLoading = false)
+                    }
                 is AppResult.Error -> {
                     _uiState.update { it.copy(isLoading = false, entries = emptyList()) }
                     _events.send(RankingEvent.ShowMessage(RankingMessage.LoadFailed))

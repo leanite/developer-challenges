@@ -12,7 +12,6 @@ import dynaquiz.composeapp.generated.resources.difficulty_mode_relaxed_descripti
 import dynaquiz.composeapp.generated.resources.difficulty_mode_relaxed_label
 import dynaquiz.composeapp.generated.resources.difficulty_title
 
-
 internal object DifficultyRes {
     val Title = Res.string.difficulty_title
     val ModeRelaxedLabel = Res.string.difficulty_mode_relaxed_label

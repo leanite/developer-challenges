@@ -2,7 +2,6 @@ package com.leanite.dynaquiz.feature.home
 
 import androidx.compose.runtime.Immutable
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
-import com.leanite.dynaquiz.core.domain.model.PlayerId
 import com.leanite.dynaquiz.core.domain.result.AppError
 
 @Immutable
@@ -18,9 +17,15 @@ data class HomeUiState(
 @Immutable
 sealed interface HomeIntent {
     data object Load : HomeIntent
-    data class NicknameChanged(val value: String) : HomeIntent
+
+    data class NicknameChanged(
+        val value: String,
+    ) : HomeIntent
+
     data object StartQuizClicked : HomeIntent
+
     data object DifficultyClicked : HomeIntent
+
     data object RankingClicked : HomeIntent
 }
 
@@ -30,14 +35,23 @@ sealed interface HomeEvent {
         val playerName: String,
         val challengeMode: ChallengeMode,
     ) : HomeEvent
+
     data object NavigateToDifficulty : HomeEvent
-    data class NavigateToRanking(val playerName: String) : HomeEvent
-    data class ShowMessage(val type: HomeMessage) : HomeEvent
+
+    data class NavigateToRanking(
+        val playerName: String,
+    ) : HomeEvent
+
+    data class ShowMessage(
+        val type: HomeMessage,
+    ) : HomeEvent
 }
 
 @Immutable
 sealed interface HomeMessage {
-    data class PlayerSaveError(val error: AppError) : HomeMessage
+    data class PlayerSaveError(
+        val error: AppError,
+    ) : HomeMessage
 }
 
 internal object HomeValidation {

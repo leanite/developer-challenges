@@ -12,7 +12,6 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
@@ -28,7 +27,7 @@ import com.leanite.dynaquiz.feature.home.res.HomeRes
 fun ProfileInput(
     nickname: String,
     onNicknameChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val isNicknameValid = isNicknameValid(nickname)
 
@@ -50,13 +49,14 @@ fun ProfileInput(
             supportingText = {
                 ValidationSupportText(
                     nickname = nickname,
-                    isNicknameValid = isNicknameValid
+                    isNicknameValid = isNicknameValid,
                 )
             },
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.Words,
-                imeAction = ImeAction.Done,
-            ),
+            keyboardOptions =
+                KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Words,
+                    imeAction = ImeAction.Done,
+                ),
             shape = RoundedCornerShape(12.dp),
             colors = profileInputColors(),
             modifier = Modifier.fillMaxWidth(),
@@ -64,20 +64,19 @@ fun ProfileInput(
     }
 }
 
-private fun isNicknameValid(nickname: String): Boolean {
-    return nickname.length >= HomeValidation.MIN_NICKNAME_LENGTH
-}
+private fun isNicknameValid(nickname: String): Boolean = nickname.length >= HomeValidation.MIN_NICKNAME_LENGTH
 
 @Composable
 private fun ValidationSupportText(
     nickname: String,
-    isNicknameValid: Boolean
+    isNicknameValid: Boolean,
 ) {
-    val counterColor = if (!isNicknameValid) {
-        MaterialTheme.colorScheme.error
-    } else {
-        Color.White
-    }
+    val counterColor =
+        if (!isNicknameValid) {
+            MaterialTheme.colorScheme.error
+        } else {
+            Color.White
+        }
     Text(
         text = "${nickname.length}/${HomeValidation.MAX_NICKNAME_LENGTH} caracteres",
         color = counterColor,
@@ -85,8 +84,8 @@ private fun ValidationSupportText(
 }
 
 @Composable
-private fun profileInputColors() : TextFieldColors {
-    return OutlinedTextFieldDefaults.colors(
+private fun profileInputColors(): TextFieldColors =
+    OutlinedTextFieldDefaults.colors(
         focusedTextColor = Color.White,
         unfocusedTextColor = Color.White,
         focusedBorderColor = MaterialTheme.colorScheme.secondary,
@@ -98,7 +97,6 @@ private fun profileInputColors() : TextFieldColors {
         errorSupportingTextColor = MaterialTheme.colorScheme.error,
         errorCursorColor = MaterialTheme.colorScheme.error,
     )
-}
 
 @Preview
 @Composable

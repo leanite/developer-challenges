@@ -32,15 +32,17 @@ fun RankingScreen(
 
             Box(modifier = Modifier.fillMaxSize()) {
                 when {
-                    uiState.isLoading -> CircularProgressIndicator(
-                        color = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier.align(Alignment.Center),
-                    )
+                    uiState.isLoading ->
+                        CircularProgressIndicator(
+                            color = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.align(Alignment.Center),
+                        )
 
-                    uiState.entries.isEmpty() -> EmptyRankingState(
-                        tab = uiState.selectedTab,
-                        modifier = Modifier.align(Alignment.Center),
-                    )
+                    uiState.entries.isEmpty() ->
+                        EmptyRankingState(
+                            tab = uiState.selectedTab,
+                            modifier = Modifier.align(Alignment.Center),
+                        )
 
                     else -> RankingList(entries = uiState.entries)
                 }
@@ -55,7 +57,7 @@ private fun RankingScreenPreview() {
     DynaquizTheme {
         RankingScreen(
             uiState = RankingUiState(),
-            onIntent = {}
+            onIntent = {},
         )
     }
 }

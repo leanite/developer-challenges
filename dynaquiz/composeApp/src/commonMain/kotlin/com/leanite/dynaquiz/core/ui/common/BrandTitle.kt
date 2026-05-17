@@ -69,18 +69,21 @@ private data class BrandTitleSpec(
 )
 
 @Composable
-private fun BrandTitleSize.spec(): BrandTitleSpec = when (this) {
-    BrandTitleSize.LARGE -> BrandTitleSpec(
-        logoHeight = 48.dp,
-        textStyle = MaterialTheme.typography.displayMedium,
-        cursorHeight = 40.dp,
-    )
-    BrandTitleSize.NORMAL -> BrandTitleSpec(
-        logoHeight = 28.dp,
-        textStyle = MaterialTheme.typography.titleLarge,
-        cursorHeight = 22.dp,
-    )
-}
+private fun BrandTitleSize.spec(): BrandTitleSpec =
+    when (this) {
+        BrandTitleSize.LARGE ->
+            BrandTitleSpec(
+                logoHeight = 48.dp,
+                textStyle = MaterialTheme.typography.displayMedium,
+                cursorHeight = 40.dp,
+            )
+        BrandTitleSize.NORMAL ->
+            BrandTitleSpec(
+                logoHeight = 28.dp,
+                textStyle = MaterialTheme.typography.titleLarge,
+                cursorHeight = 22.dp,
+            )
+    }
 
 private val SPACING = 12.dp
 

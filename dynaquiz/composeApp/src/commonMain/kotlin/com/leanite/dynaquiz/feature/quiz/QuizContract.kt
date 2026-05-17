@@ -9,13 +9,18 @@ import com.leanite.dynaquiz.core.domain.model.QuizSessionResult
 
 @Immutable
 sealed interface QuizPhase {
-    data class Countdown(val countdownSecondsRemaining: Int) : QuizPhase
+    data class Countdown(
+        val countdownSecondsRemaining: Int,
+    ) : QuizPhase
+
     data object Loading : QuizPhase
+
     data class Playing(
         val question: Question,
         val selectedAnswer: String? = null,
         val isSubmitting: Boolean = false,
     ) : QuizPhase
+
     data object Completed : QuizPhase
 }
 
@@ -38,22 +43,35 @@ data class QuizUiState(
 @Immutable
 sealed interface QuizIntent {
     data object Started : QuizIntent
-    data class AnswerSelected(val answer: String) : QuizIntent
+
+    data class AnswerSelected(
+        val answer: String,
+    ) : QuizIntent
+
     data object BackPressed : QuizIntent
+
     data object ExitConfirmed : QuizIntent
+
     data object ExitCancelled : QuizIntent
 }
 
 @Immutable
 sealed interface QuizEvent {
-    data class NavigateToResult(val result: QuizSessionResult) : QuizEvent
+    data class NavigateToResult(
+        val result: QuizSessionResult,
+    ) : QuizEvent
+
     data object NavigateBack : QuizEvent
-    data class ShowMessage(val type: QuizMessage) : QuizEvent
+
+    data class ShowMessage(
+        val type: QuizMessage,
+    ) : QuizEvent
 }
 
 @Immutable
 sealed interface QuizMessage {
     data object QuestionLoadFailed : QuizMessage
+
     data object AnswerSubmitFailed : QuizMessage
 }
 

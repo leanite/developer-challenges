@@ -9,7 +9,7 @@ class DynaquizApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         initKoin(
-            extraModules = listOf(androidModule)
+            extraModules = listOf(androidModule),
         ) {
             androidContext(this@DynaquizApplication)
         }

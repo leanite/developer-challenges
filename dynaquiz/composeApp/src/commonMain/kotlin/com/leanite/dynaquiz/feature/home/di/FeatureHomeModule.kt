@@ -4,13 +4,14 @@ import com.leanite.dynaquiz.feature.home.HomeViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
-val featureHomeModule = module {
-    viewModel {
-        HomeViewModel(
-            getLastNicknameUseCase = get(),
-            setLastNicknameUseCase = get(),
-            getLastChallengeModeUseCase = get(),
-            registerOrFetchPlayerUseCase = get(),
-        )
+val featureHomeModule =
+    module {
+        viewModel {
+            HomeViewModel(
+                getLastNicknameUseCase = get(),
+                setLastNicknameUseCase = get(),
+                getLastChallengeModeUseCase = get(),
+                registerOrFetchPlayerUseCase = get(),
+            )
+        }
     }
-}

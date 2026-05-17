@@ -42,13 +42,13 @@ fun RankingEntryCard(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(
-                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f),
-                shape = RoundedCornerShape(14.dp),
-            )
-            .padding(horizontal = 14.dp, vertical = 12.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .background(
+                    color = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f),
+                    shape = RoundedCornerShape(14.dp),
+                ).padding(horizontal = 14.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
@@ -62,7 +62,8 @@ fun RankingEntryCard(
                 fontWeight = FontWeight.SemiBold,
             )
             Text(
-                text = "${entry.challengeMode.label()} · " +
+                text =
+                    "${entry.challengeMode.label()} · " +
                         "${stringResource(RankingRes.CorrectFormat, entry.correctAnswers, entry.totalQuestions)} · " +
                         formatFinishedAt(entry.finishedAt),
                 style = MaterialTheme.typography.bodySmall,
@@ -81,24 +82,26 @@ fun RankingEntryCard(
 
 @Composable
 private fun PositionBadge(position: Int) {
-    val imageResource = when (position) {
-        1 -> RankingRes.Drawable.Top1
-        2 -> RankingRes.Drawable.Top2
-        3 -> RankingRes.Drawable.Top3
-        else -> null
-    }
+    val imageResource =
+        when (position) {
+            1 -> RankingRes.Drawable.Top1
+            2 -> RankingRes.Drawable.Top2
+            3 -> RankingRes.Drawable.Top3
+            else -> null
+        }
 
     if (imageResource != null) {
         Image(
             painter = painterResource(imageResource),
             contentDescription = null,
-            modifier = Modifier.width(36.dp)
+            modifier = Modifier.width(36.dp),
         )
     } else {
         Box(
-            modifier = Modifier
-                .size(36.dp)
-                .background(DynamoxLightPurple, CircleShape),
+            modifier =
+                Modifier
+                    .size(36.dp)
+                    .background(DynamoxLightPurple, CircleShape),
             contentAlignment = Alignment.Center,
         ) {
             Text(
@@ -114,7 +117,10 @@ private fun PositionBadge(position: Int) {
 private fun formatFinishedAt(instant: Instant): String {
     val dt = instant.toLocalDateTime(TimeZone.currentSystemDefault())
     val dd = dt.day.toString().padStart(2, '0')
-    val mm = dt.month.number.toString().padStart(2, '0')
+    val mm =
+        dt.month.number
+            .toString()
+            .padStart(2, '0')
     val hh = dt.hour.toString().padStart(2, '0')
     val mi = dt.minute.toString().padStart(2, '0')
     return "$dd/$mm $hh:$mi"
@@ -126,14 +132,15 @@ private fun RankingEntryCardTopPreview() {
     DynaquizTheme {
         RankingEntryCard(
             position = 1,
-            entry = RankingEntry(
-                playerName = "Leandro",
-                challengeMode = ChallengeMode.Timed.Hard,
-                score = Score(420),
-                correctAnswers = 9,
-                totalQuestions = 10,
-                finishedAt = Instant.fromEpochSeconds(1_700_000_000),
-            ),
+            entry =
+                RankingEntry(
+                    playerName = "Leandro",
+                    challengeMode = ChallengeMode.Timed.Hard,
+                    score = Score(420),
+                    correctAnswers = 9,
+                    totalQuestions = 10,
+                    finishedAt = Instant.fromEpochSeconds(1_700_000_000),
+                ),
         )
     }
 }
@@ -144,14 +151,15 @@ private fun RankingEntryCardRegularPreview() {
     DynaquizTheme {
         RankingEntryCard(
             position = 12,
-            entry = RankingEntry(
-                playerName = "Player",
-                challengeMode = ChallengeMode.Timed.Easy,
-                score = Score(80),
-                correctAnswers = 6,
-                totalQuestions = 10,
-                finishedAt = Instant.fromEpochSeconds(1_700_000_000),
-            ),
+            entry =
+                RankingEntry(
+                    playerName = "Player",
+                    challengeMode = ChallengeMode.Timed.Easy,
+                    score = Score(80),
+                    correctAnswers = 6,
+                    totalQuestions = 10,
+                    finishedAt = Instant.fromEpochSeconds(1_700_000_000),
+                ),
         )
     }
 }

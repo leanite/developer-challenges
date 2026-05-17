@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 class ResultViewModel(
     private val sessionResult: QuizSessionResult,
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow(ResultUiState(result = sessionResult))
     val uiState: StateFlow<ResultUiState> = _uiState.asStateFlow()
 
@@ -21,9 +20,10 @@ class ResultViewModel(
     fun onIntent(intent: ResultIntent) {
         when (intent) {
             ResultIntent.HomeClicked -> _events.trySend(ResultEvent.NavigateToHome)
-            ResultIntent.RankingClicked -> _events.trySend(
-                ResultEvent.NavigateToRanking(playerName = sessionResult.playerName)
-            )
+            ResultIntent.RankingClicked ->
+                _events.trySend(
+                    ResultEvent.NavigateToRanking(playerName = sessionResult.playerName),
+                )
         }
     }
 }

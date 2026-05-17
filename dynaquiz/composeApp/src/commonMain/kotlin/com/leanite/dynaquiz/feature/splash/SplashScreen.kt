@@ -1,7 +1,5 @@
 package com.leanite.dynaquiz.feature.splash
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,7 +21,7 @@ import com.leanite.dynaquiz.feature.splash.anim.SplashAnimation
 fun SplashScreen(
     titleModifier: Modifier = Modifier,
     purpleSurfaceModifier: Modifier = Modifier,
-    onAnimationFinished: () -> Unit
+    onAnimationFinished: () -> Unit,
 ) {
     var displayedText by remember { mutableStateOf(SplashAnimation.INITIAL_TEXT) }
     var showCursor by remember { mutableStateOf(true) }
@@ -40,16 +38,17 @@ fun SplashScreen(
     }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .then(purpleSurfaceModifier)
-            .background(MaterialTheme.colorScheme.primary),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .then(purpleSurfaceModifier)
+                .background(MaterialTheme.colorScheme.primary),
         contentAlignment = Alignment.Center,
     ) {
         BrandTitle(
             text = displayedText,
             showCursor = showCursor,
-            modifier = titleModifier
+            modifier = titleModifier,
         )
     }
 }

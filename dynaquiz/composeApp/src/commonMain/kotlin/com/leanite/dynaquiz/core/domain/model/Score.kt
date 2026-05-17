@@ -3,8 +3,11 @@ package com.leanite.dynaquiz.core.domain.model
 import kotlin.jvm.JvmInline
 
 @JvmInline
-value class Score(val points: Int) : Comparable<Score> {
+value class Score(
+    val points: Int,
+) : Comparable<Score> {
     operator fun plus(other: Score): Score = Score(points + other.points)
+
     override fun compareTo(other: Score): Int = points.compareTo(other.points)
 
     companion object {
@@ -23,6 +26,9 @@ fun List<AnswerLog>.computeScore(mode: ChallengeMode): Score =
     fold(Score.Zero) { acc, log ->
         val confirmedCorrect = (log.outcome as? AnswerOutcome.Confirmed)?.correct == true
 
-        if (confirmedCorrect) acc + mode.scoreForCorrectAnswer(log.timeRemainingSec)
-        else acc
+        if (confirmedCorrect) {
+            acc + mode.scoreForCorrectAnswer(log.timeRemainingSec)
+        } else {
+            acc
+        }
     }

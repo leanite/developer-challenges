@@ -11,11 +11,15 @@ data class ResultUiState(
 @Immutable
 sealed interface ResultIntent {
     data object HomeClicked : ResultIntent
+
     data object RankingClicked : ResultIntent
 }
 
 @Immutable
 sealed interface ResultEvent {
     data object NavigateToHome : ResultEvent
-    data class NavigateToRanking(val playerName: String) : ResultEvent
+
+    data class NavigateToRanking(
+        val playerName: String,
+    ) : ResultEvent
 }

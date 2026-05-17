@@ -33,15 +33,20 @@ fun CountdownDisplay(
             transitionSpec = {
                 (
                     fadeIn(
-                        tween(200)) +
-                            scaleIn(initialScale = 1.6f, animationSpec = tween(400)
+                        tween(200),
+                    ) +
+                        scaleIn(
+                            initialScale = 1.6f,
+                            animationSpec = tween(400),
                         )
-                )
-                .togetherWith(
+                ).togetherWith(
                     fadeOut(
-                        tween(200)) +
-                            scaleOut(targetScale = 0.4f, animationSpec = tween(400)
-                        )
+                        tween(200),
+                    ) +
+                        scaleOut(
+                            targetScale = 0.4f,
+                            animationSpec = tween(400),
+                        ),
                 )
             },
             label = "countdown",

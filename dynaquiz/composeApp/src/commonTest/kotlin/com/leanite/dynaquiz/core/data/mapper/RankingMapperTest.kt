@@ -9,18 +9,18 @@ import kotlin.test.assertEquals
 import kotlin.time.Instant
 
 class RankingMapperTest {
-
     @Test
     fun `SelectRanking toDomain should convert score and counts to Int wrapping score in Score`() {
-        val row = SelectRanking(
-            playerId = 1L,
-            playerName = "Leandro",
-            challengeMode = ChallengeMode.Timed.Hard,
-            scorePoints = 420L,
-            correctCount = 9L,
-            totalQuestions = 10L,
-            finishedAt = 1_700_000_000_000L,
-        )
+        val row =
+            SelectRanking(
+                playerId = 1L,
+                playerName = "Leandro",
+                challengeMode = ChallengeMode.Timed.Hard,
+                scorePoints = 420L,
+                correctCount = 9L,
+                totalQuestions = 10L,
+                finishedAt = 1_700_000_000_000L,
+            )
 
         val entry = row.toDomain()
 
@@ -33,15 +33,16 @@ class RankingMapperTest {
 
     @Test
     fun `SelectRanking toDomain should convert finishedAt epoch millis to Instant`() {
-        val row = SelectRanking(
-            playerId = 1L,
-            playerName = "P",
-            challengeMode = ChallengeMode.Relaxed,
-            scorePoints = 0L,
-            correctCount = 0L,
-            totalQuestions = 0L,
-            finishedAt = 1_700_000_000_000L,
-        )
+        val row =
+            SelectRanking(
+                playerId = 1L,
+                playerName = "P",
+                challengeMode = ChallengeMode.Relaxed,
+                scorePoints = 0L,
+                correctCount = 0L,
+                totalQuestions = 0L,
+                finishedAt = 1_700_000_000_000L,
+            )
 
         assertEquals(
             Instant.fromEpochMilliseconds(1_700_000_000_000L),
@@ -51,15 +52,16 @@ class RankingMapperTest {
 
     @Test
     fun `SelectRankingByPlayerName toDomain should mirror the SelectRanking mapping`() {
-        val row = SelectRankingByPlayerName(
-            playerId = 2L,
-            playerName = "Bruno",
-            challengeMode = ChallengeMode.Timed.Medium,
-            scorePoints = 100L,
-            correctCount = 5L,
-            totalQuestions = 10L,
-            finishedAt = 1_700_000_000_000L,
-        )
+        val row =
+            SelectRankingByPlayerName(
+                playerId = 2L,
+                playerName = "Bruno",
+                challengeMode = ChallengeMode.Timed.Medium,
+                scorePoints = 100L,
+                correctCount = 5L,
+                totalQuestions = 10L,
+                finishedAt = 1_700_000_000_000L,
+            )
 
         val entry = row.toDomain()
 

@@ -7,7 +7,11 @@ import com.leanite.dynaquiz.core.domain.result.AppResult
 
 interface QuizRepository {
     suspend fun getRandomQuestion(): AppResult<Question>
-    suspend fun submitAnswer(questionId: QuestionId, answer: String): AppResult<Answer>
+
+    suspend fun submitAnswer(
+        questionId: QuestionId,
+        answer: String,
+    ): AppResult<Answer>
 
     //  Bate no servidor somente pra acordar de cold start
     suspend fun warmupServer()

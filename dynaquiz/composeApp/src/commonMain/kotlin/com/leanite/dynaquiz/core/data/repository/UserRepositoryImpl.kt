@@ -9,11 +9,9 @@ import com.russhwolf.settings.coroutines.toSuspendSettings
 internal class UserRepositoryImpl(
     settings: Settings,
 ) : UserRepository {
-
     private val suspendSettings = settings.toSuspendSettings()
 
-    override suspend fun getLastNickname(): String? =
-        suspendSettings.getStringOrNull(KEY_LAST_NICKNAME)
+    override suspend fun getLastNickname(): String? = suspendSettings.getStringOrNull(KEY_LAST_NICKNAME)
 
     override suspend fun setLastNickname(nickname: String) {
         suspendSettings.putString(KEY_LAST_NICKNAME, nickname)

@@ -37,4 +37,6 @@ data class Result(
 
 @Immutable
 @Serializable
-data class Ranking(val playerName: String) : QuizNavKey
+data class Ranking(
+    val playerName: String,
+) : QuizNavKey

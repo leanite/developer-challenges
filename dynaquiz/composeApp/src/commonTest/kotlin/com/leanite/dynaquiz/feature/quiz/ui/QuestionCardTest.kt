@@ -14,93 +14,98 @@ import kotlin.test.assertEquals
 
 @OptIn(ExperimentalTestApi::class)
 class QuestionCardTest : UiTest() {
-
-    private val sampleQuestion = Question(
-        id = QuestionId("q-1"),
-        statement = "Qual a capital do Brasil?",
-        options = listOf("São Paulo", "Brasília", "Rio de Janeiro", "Salvador"),
-    )
-
-    @Test
-    fun `should render the question statement`() = runComposeUiTest {
-        setContent {
-            DynaquizTheme {
-                QuestionCard(
-                    question = sampleQuestion,
-                    selectedAnswer = null,
-                    isSubmitting = false,
-                    onOptionSelected = {},
-                )
-            }
-        }
-
-        assertTextIsDisplayed("Qual a capital do Brasil?")
-    }
+    private val sampleQuestion =
+        Question(
+            id = QuestionId("q-1"),
+            statement = "Qual a capital do Brasil?",
+            options = listOf("São Paulo", "Brasília", "Rio de Janeiro", "Salvador"),
+        )
 
     @Test
-    fun `should render one OptionButton per option in the question`() = runComposeUiTest {
-        setContent {
-            DynaquizTheme {
-                QuestionCard(
-                    question = sampleQuestion,
-                    selectedAnswer = null,
-                    isSubmitting = false,
-                    onOptionSelected = {},
-                )
+    fun `should render the question statement`() =
+        runComposeUiTest {
+            setContent {
+                DynaquizTheme {
+                    QuestionCard(
+                        question = sampleQuestion,
+                        selectedAnswer = null,
+                        isSubmitting = false,
+                        onOptionSelected = {},
+                    )
+                }
             }
-        }
 
-        sampleQuestion.options.forEach { assertTextIsDisplayed(it) }
-    }
+            assertTextIsDisplayed("Qual a capital do Brasil?")
+        }
 
     @Test
-    fun `should call onOptionSelected with the tapped option text`() = runComposeUiTest {
-        val captured = mutableListOf<String>()
-        setContent {
-            DynaquizTheme {
-                QuestionCard(
-                    question = sampleQuestion,
-                    selectedAnswer = null,
-                    isSubmitting = false,
-                    onOptionSelected = { captured += it },
-                )
+    fun `should render one OptionButton per option in the question`() =
+        runComposeUiTest {
+            setContent {
+                DynaquizTheme {
+                    QuestionCard(
+                        question = sampleQuestion,
+                        selectedAnswer = null,
+                        isSubmitting = false,
+                        onOptionSelected = {},
+                    )
+                }
             }
+
+            sampleQuestion.options.forEach { assertTextIsDisplayed(it) }
         }
-
-        clickOnText("Brasília")
-
-        assertEquals(listOf("Brasília"), captured)
-    }
 
     @Test
-    fun `should disable all options once selectedAnswer is not null`() = runComposeUiTest {
-        setContent {
-            DynaquizTheme {
-                QuestionCard(
-                    question = sampleQuestion,
-                    selectedAnswer = "Brasília",
-                    isSubmitting = false,
-                    onOptionSelected = {},
-                )
+    fun `should call onOptionSelected with the tapped option text`() =
+        runComposeUiTest {
+            val captured = mutableListOf<String>()
+            setContent {
+                DynaquizTheme {
+                    QuestionCard(
+                        question = sampleQuestion,
+                        selectedAnswer = null,
+                        isSubmitting = false,
+                        onOptionSelected = { captured += it },
+                    )
+                }
             }
-        }
 
-        sampleQuestion.options.forEach { assertTextIsNotEnabled(it) }
-    }
+            clickOnText("Brasília")
+
+            assertEquals(listOf("Brasília"), captured)
+        }
 
     @Test
-    fun `should disable all options while isSubmitting is true`() = runComposeUiTest {
-        setContent {
-            DynaquizTheme {
-                QuestionCard(
-                    question = sampleQuestion,
-                    selectedAnswer = null,
-                    isSubmitting = true,
-                    onOptionSelected = {},
-                )
+    fun `should disable all options once selectedAnswer is not null`() =
+        runComposeUiTest {
+            setContent {
+                DynaquizTheme {
+                    QuestionCard(
+                        question = sampleQuestion,
+                        selectedAnswer = "Brasília",
+                        isSubmitting = false,
+                        onOptionSelected = {},
+                    )
+                }
             }
+
+            sampleQuestion.options.forEach { assertTextIsNotEnabled(it) }
         }
 
-        sampleQuestion.options.forEach { assertTextIsNotEnabled(it) }
-    }
+    @Test
+    fun `should disable all options while isSubmitting is true`() =
+        runComposeUiTest {
+            setContent {
+                DynaquizTheme {
+                    QuestionCard(
+                        question = sampleQuestion,
+                        selectedAnswer = null,
+                        isSubmitting = true,
+                        onOptionSelected = {},
+                    )
+                }
+            }
+
+            sampleQuestion.options.forEach { assertTextIsNotEnabled(it) }
+        }
 }

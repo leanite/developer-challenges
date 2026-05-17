@@ -27,6 +27,7 @@ sealed interface ChallengeMode {
             override val basePoints: Int = 2
             override val timeBonusPerSecond: Int = 1
         }
+
         data object Medium : Timed {
             override val perQuestionSeconds = 20
             override val serializedName: String = "MEDIUM"
@@ -34,6 +35,7 @@ sealed interface ChallengeMode {
             override val basePoints: Int = 4
             override val timeBonusPerSecond: Int = 2
         }
+
         data object Hard : Timed {
             override val perQuestionSeconds = 10
             override val serializedName: String = "HARD"
@@ -44,12 +46,13 @@ sealed interface ChallengeMode {
     }
 
     companion object {
-        fun fromSerializedName(name: String): ChallengeMode = when (name) {
-            Relaxed.serializedName -> Relaxed
-            Timed.Easy.serializedName -> Timed.Easy
-            Timed.Medium.serializedName -> Timed.Medium
-            Timed.Hard.serializedName -> Timed.Hard
-            else -> Timed.Easy
-        }
+        fun fromSerializedName(name: String): ChallengeMode =
+            when (name) {
+                Relaxed.serializedName -> Relaxed
+                Timed.Easy.serializedName -> Timed.Easy
+                Timed.Medium.serializedName -> Timed.Medium
+                Timed.Hard.serializedName -> Timed.Hard
+                else -> Timed.Easy
+            }
     }
 }

@@ -1,5 +1,5 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Properties
 
 plugins {
@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinxSerialization)
+    alias(libs.plugins.ktlint)
     alias(libs.plugins.mokkery)
     alias(libs.plugins.sqldelight)
 }
@@ -19,10 +20,10 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosArm64(),
-        iosSimulatorArm64()
+        iosSimulatorArm64(),
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
@@ -30,7 +31,7 @@ kotlin {
             linkerOpts.add("-lsqlite3")
         }
     }
-    
+
     sourceSets {
         androidMain.dependencies {
             implementation(libs.androidx.activity.compose)
@@ -91,12 +92,21 @@ kotlin {
 
 android {
     namespace = "com.leanite.dynaquiz"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileSdk =
+        libs.versions.android.compileSdk
+            .get()
+            .toInt()
 
     defaultConfig {
         applicationId = "com.leanite.dynaquiz"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
+        targetSdk =
+            libs.versions.android.targetSdk
+                .get()
+                .toInt()
         versionCode = 1
         versionName = "1.0"
     }
@@ -127,12 +137,13 @@ sqldelight {
     }
 }
 
-val localProperties = Properties().apply {
-    val file = rootProject.file("local.properties")
-    if (file.exists()) {
-        load(file.inputStream())
+val localProperties =
+    Properties().apply {
+        val file = rootProject.file("local.properties")
+        if (file.exists()) {
+            load(file.inputStream())
+        }
     }
-}
 
 buildkonfig {
     packageName = "com.leanite.dynaquiz.config"
@@ -140,15 +151,15 @@ buildkonfig {
         buildConfigField(
             STRING,
             "SENTRY_DSN",
-            localProperties.getProperty("sentry.dsn", "")
+            localProperties.getProperty("sentry.dsn", ""),
         )
         buildConfigField(
             STRING,
             "DYNAMOX_QUIZ_BASE_URL",
             localProperties.getProperty(
                 "dynamox.baseUrl",
-                "https://quiz-api-bwi5hjqyaq-uc.a.run.app"
-            )
+                "https://quiz-api-bwi5hjqyaq-uc.a.run.app",
+            ),
         )
     }
 }
@@ -160,3 +171,16 @@ dependencies {
     debugImplementation(libs.androidx.compose.uiTestManifest)
 }
 
+ktlint {
+    version.set("1.3.1")
+    android.set(false)
+    ignoreFailures.set(false)
+    reporters {
+        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.PLAIN)
+        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.HTML)
+    }
+    filter {
+        exclude { it.file.path.contains("/build/") }
+        exclude { it.file.path.contains("/generated/") }
+    }
+}

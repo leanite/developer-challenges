@@ -10,4 +10,6 @@ enum class MascotMood {
 }
 
 @Immutable
-data class Mascot(val mood: MascotMood)
+data class Mascot(
+    val mood: MascotMood,
+)

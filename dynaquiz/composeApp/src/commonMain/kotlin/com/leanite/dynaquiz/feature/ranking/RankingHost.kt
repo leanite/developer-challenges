@@ -10,9 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.leanite.dynaquiz.core.ui.common.BackButton
 import com.leanite.dynaquiz.core.ui.common.DynaquizTopBar
 import com.leanite.dynaquiz.feature.ranking.res.RankingRes
 import org.jetbrains.compose.resources.stringResource

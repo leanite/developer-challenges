@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -17,12 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
 import com.leanite.dynaquiz.core.ui.common.MascotAnimation
-import com.leanite.dynaquiz.core.ui.common.SimpleSpriteAnimator
 import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
 import com.leanite.dynaquiz.feature.difficulty.res.DifficultyRes
-import dynaquiz.composeapp.generated.resources.Res
-import dynaquiz.composeapp.generated.resources.anim_expert_1
-import dynaquiz.composeapp.generated.resources.anim_expert_2
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -47,11 +42,11 @@ fun ChallengeModeOption(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
         ) {
             MascotAnimation(
                 mascotMood = mode.mascot.mood,
-                shouldAnimate = isSelected
+                shouldAnimate = isSelected,
             )
             Column {
                 Text(text = label, style = MaterialTheme.typography.headlineMedium)

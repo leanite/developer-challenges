@@ -5,7 +5,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ScoreTest {
-
     @Test
     fun `plus should sum points of both Scores`() {
         val result = Score(10) + Score(15)
@@ -38,10 +37,11 @@ class ScoreTest {
 
     @Test
     fun `computeScore should sum points only from confirmed correct answers`() {
-        val logs = listOf(
-            AnswerLogFixtures.confirmedCorrectWithTimeRemaining(seconds = 10),
-            AnswerLogFixtures.confirmedCorrectWithTimeRemaining(seconds = 5),
-        )
+        val logs =
+            listOf(
+                AnswerLogFixtures.confirmedCorrectWithTimeRemaining(seconds = 10),
+                AnswerLogFixtures.confirmedCorrectWithTimeRemaining(seconds = 5),
+            )
 
         val result = logs.computeScore(ChallengeMode.Timed.Easy)
 
@@ -51,11 +51,12 @@ class ScoreTest {
 
     @Test
     fun `computeScore should ignore TimedOut and SubmitFailed outcomes`() {
-        val logs = listOf(
-            AnswerLogFixtures.confirmedCorrectNoTimeBonus,
-            AnswerLogFixtures.timedOut,
-            AnswerLogFixtures.submitFailed,
-        )
+        val logs =
+            listOf(
+                AnswerLogFixtures.confirmedCorrectNoTimeBonus,
+                AnswerLogFixtures.timedOut,
+                AnswerLogFixtures.submitFailed,
+            )
 
         val result = logs.computeScore(ChallengeMode.Relaxed)
 
@@ -64,10 +65,11 @@ class ScoreTest {
 
     @Test
     fun `computeScore should ignore confirmed incorrect answers`() {
-        val logs = listOf(
-            AnswerLogFixtures.confirmedCorrectNoTimeBonus,
-            AnswerLogFixtures.confirmedIncorrect,
-        )
+        val logs =
+            listOf(
+                AnswerLogFixtures.confirmedCorrectNoTimeBonus,
+                AnswerLogFixtures.confirmedIncorrect,
+            )
 
         val result = logs.computeScore(ChallengeMode.Relaxed)
 

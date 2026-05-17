@@ -2,7 +2,6 @@ package com.leanite.dynaquiz.core.ui.common
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.snap
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

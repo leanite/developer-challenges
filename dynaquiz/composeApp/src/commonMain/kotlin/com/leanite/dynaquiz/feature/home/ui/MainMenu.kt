@@ -24,7 +24,6 @@ import dynaquiz.composeapp.generated.resources.ic_button_difficulty
 import dynaquiz.composeapp.generated.resources.ic_button_play
 import dynaquiz.composeapp.generated.resources.ic_button_ranking
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun MainMenu(
@@ -34,13 +33,13 @@ fun MainMenu(
     onRankingClick: () -> Unit,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth(0.85f)
-            .background(
-                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.85f),
-                shape = RoundedCornerShape(20.dp),
-            )
-            .padding(16.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth(0.85f)
+                .background(
+                    color = MaterialTheme.colorScheme.surface.copy(alpha = 0.85f),
+                    shape = RoundedCornerShape(20.dp),
+                ).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -53,9 +52,9 @@ fun MainMenu(
                 Image(
                     painter = painterResource(Res.drawable.ic_button_play),
                     contentDescription = null,
-                    Modifier.size(36.dp)
+                    Modifier.size(36.dp),
                 )
-            }
+            },
         )
 
         GameButton(
@@ -66,9 +65,9 @@ fun MainMenu(
                 Image(
                     painter = painterResource(Res.drawable.ic_button_difficulty),
                     contentDescription = null,
-                    Modifier.size(36.dp)
+                    Modifier.size(36.dp),
                 )
-            }
+            },
         )
 
         GameButton(
@@ -79,9 +78,9 @@ fun MainMenu(
                 Image(
                     painter = painterResource(Res.drawable.ic_button_ranking),
                     contentDescription = null,
-                    Modifier.size(36.dp)
+                    Modifier.size(36.dp),
                 )
-            }
+            },
         )
     }
 }

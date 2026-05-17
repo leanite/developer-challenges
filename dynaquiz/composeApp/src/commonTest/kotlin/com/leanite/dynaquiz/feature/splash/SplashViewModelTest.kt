@@ -21,7 +21,6 @@ import kotlin.test.assertEquals
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SplashViewModelTest {
-
     private val testDispatcher = UnconfinedTestDispatcher()
     private val quizRepository = mock<QuizRepository>(MockMode.autofill)
     private val warmupServerUseCase = WarmupServerUseCase(quizRepository)
@@ -40,20 +39,22 @@ class SplashViewModelTest {
     private fun createViewModel() = SplashViewModel(warmupServerUseCase = warmupServerUseCase)
 
     @Test
-    fun `init should trigger server warmup exactly once`() = runTest {
-        createViewModel()
+    fun `init should trigger server warmup exactly once`() =
+        runTest {
+            createViewModel()
 
-        verifySuspend { quizRepository.warmupServer() }
-    }
+            verifySuspend { quizRepository.warmupServer() }
+        }
 
     @Test
-    fun `AnimationFinished should emit NavigateToNext`() = runTest {
-        val viewModel = createViewModel()
+    fun `AnimationFinished should emit NavigateToNext`() =
+        runTest {
+            val viewModel = createViewModel()
 
-        viewModel.events.test {
-            viewModel.onIntent(SplashIntent.AnimationFinished)
+            viewModel.events.test {
+                viewModel.onIntent(SplashIntent.AnimationFinished)
 
-            assertEquals(SplashEvent.NavigateToNext, awaitItem())
+                assertEquals(SplashEvent.NavigateToNext, awaitItem())
+            }
         }
-    }
 }

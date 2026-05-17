@@ -40,16 +40,18 @@ fun DynaquizAppNavigation() {
                             popUpTo(Splash) { inclusive = true }
                         }
                     },
-                    titleModifier = Modifier.sharedBounds(
-                        sharedContentState = rememberSharedContentState(key = BRAND_TITLE_KEY),
-                        animatedVisibilityScope = this@composable,
-                        boundsTransform = { _, _ -> tween(durationMillis = BRAND_LOCKUP_DURATION) },
-                    ),
-                    purpleSurfaceModifier = Modifier.sharedBounds(
-                        sharedContentState = rememberSharedContentState(key = PURPLE_SURFACE_KEY),
-                        animatedVisibilityScope = this@composable,
-                        boundsTransform = { _, _ -> tween(durationMillis = BRAND_LOCKUP_DURATION) },
-                    ),
+                    titleModifier =
+                        Modifier.sharedBounds(
+                            sharedContentState = rememberSharedContentState(key = BRAND_TITLE_KEY),
+                            animatedVisibilityScope = this@composable,
+                            boundsTransform = { _, _ -> tween(durationMillis = BRAND_LOCKUP_DURATION) },
+                        ),
+                    purpleSurfaceModifier =
+                        Modifier.sharedBounds(
+                            sharedContentState = rememberSharedContentState(key = PURPLE_SURFACE_KEY),
+                            animatedVisibilityScope = this@composable,
+                            boundsTransform = { _, _ -> tween(durationMillis = BRAND_LOCKUP_DURATION) },
+                        ),
                 )
             }
 
@@ -63,23 +65,25 @@ fun DynaquizAppNavigation() {
                             Quiz(
                                 playerName = playerName,
                                 challengeMode = challengeMode.serializedName,
-                            )
+                            ),
                         )
                     },
                     onNavigateToDifficulty = { navController.navigate(Difficulty) },
                     onNavigateToRanking = { playerName ->
                         navController.navigate(Ranking(playerName = playerName))
                     },
-                    titleModifier = Modifier.sharedBounds(
-                        sharedContentState = rememberSharedContentState(key = BRAND_TITLE_KEY),
-                        animatedVisibilityScope = this@composable,
-                        boundsTransform = { _, _ -> tween(durationMillis = BRAND_LOCKUP_DURATION) },
-                    ),
-                    purpleSurfaceModifier = Modifier.sharedBounds(
-                        sharedContentState = rememberSharedContentState(key = PURPLE_SURFACE_KEY),
-                        animatedVisibilityScope = this@composable,
-                        boundsTransform = { _, _ -> tween(durationMillis = BRAND_LOCKUP_DURATION) },
-                    ),
+                    titleModifier =
+                        Modifier.sharedBounds(
+                            sharedContentState = rememberSharedContentState(key = BRAND_TITLE_KEY),
+                            animatedVisibilityScope = this@composable,
+                            boundsTransform = { _, _ -> tween(durationMillis = BRAND_LOCKUP_DURATION) },
+                        ),
+                    purpleSurfaceModifier =
+                        Modifier.sharedBounds(
+                            sharedContentState = rememberSharedContentState(key = PURPLE_SURFACE_KEY),
+                            animatedVisibilityScope = this@composable,
+                            boundsTransform = { _, _ -> tween(durationMillis = BRAND_LOCKUP_DURATION) },
+                        ),
                 )
             }
 
@@ -102,7 +106,7 @@ fun DynaquizAppNavigation() {
                                 scorePoints = result.score.points,
                                 correctAnswers = result.correctAnswers,
                                 totalQuestions = result.totalQuestions,
-                            )
+                            ),
                         ) {
                             // Remove o Quiz do back stack para não voltar pro quiz já terminado
                             popUpTo<Quiz> { inclusive = true }
@@ -114,13 +118,14 @@ fun DynaquizAppNavigation() {
 
             composable<Result> { entry ->
                 val args = entry.toRoute<Result>()
-                val sessionResult = QuizSessionResult(
-                    playerName = args.playerName,
-                    challengeMode = ChallengeMode.fromSerializedName(args.challengeMode),
-                    score = Score(args.scorePoints),
-                    correctAnswers = args.correctAnswers,
-                    totalQuestions = args.totalQuestions,
-                )
+                val sessionResult =
+                    QuizSessionResult(
+                        playerName = args.playerName,
+                        challengeMode = ChallengeMode.fromSerializedName(args.challengeMode),
+                        score = Score(args.scorePoints),
+                        correctAnswers = args.correctAnswers,
+                        totalQuestions = args.totalQuestions,
+                    )
                 ResultHost(
                     sessionResult = sessionResult,
                     onNavigateToHome = {

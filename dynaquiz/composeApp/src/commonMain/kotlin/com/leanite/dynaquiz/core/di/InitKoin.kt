@@ -13,7 +13,7 @@ import org.koin.mp.KoinPlatformTools
 
 fun initKoin(
     extraModules: List<Module> = emptyList(),
-    appDeclaration: KoinApplication.() -> Unit = {}
+    appDeclaration: KoinApplication.() -> Unit = {},
 ) {
     if (KoinPlatformTools.defaultContext().getOrNull() != null) return
 
@@ -27,7 +27,8 @@ fun initKoin(
                 featureDifficultyModule,
                 featureQuizModule,
                 featureResultModule,
-                featureRankingModule
-            ) + extraModules)
+                featureRankingModule,
+            ) + extraModules,
+        )
     }
 }

@@ -5,8 +5,9 @@ import com.leanite.dynaquiz.core.domain.model.PlayerId
 import com.leanite.dynaquiz.database.PlayerEntity
 import kotlin.time.Instant
 
-internal fun PlayerEntity.toDomain(): Player = Player(
-    id = PlayerId(id),
-    name = name,
-    createdAt = Instant.fromEpochMilliseconds(createdAt),
-)
+internal fun PlayerEntity.toDomain(): Player =
+    Player(
+        id = PlayerId(id),
+        name = name,
+        createdAt = Instant.fromEpochMilliseconds(createdAt),
+    )

@@ -6,7 +6,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class QuestionMapperTest {
-
     @Test
     fun `toDomain should preserve id wrapping it in QuestionId`() {
         val dto = QuestionDTO(id = "q-42", statement = "Hi?", options = emptyList())
@@ -16,11 +15,12 @@ class QuestionMapperTest {
 
     @Test
     fun `toDomain should preserve statement and options as is`() {
-        val dto = QuestionDTO(
-            id = "q-1",
-            statement = "Qual a capital?",
-            options = listOf("A", "B", "C", "D"),
-        )
+        val dto =
+            QuestionDTO(
+                id = "q-1",
+                statement = "Qual a capital?",
+                options = listOf("A", "B", "C", "D"),
+            )
 
         val domain = dto.toDomain()
 

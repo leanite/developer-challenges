@@ -5,6 +5,4 @@ import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun StringResource.usableString(): String {
-    return stringResource(this)
-}
+internal fun StringResource.usableString(): String = stringResource(this)

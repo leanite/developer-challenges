@@ -65,7 +65,7 @@ fun TimerRing(
         }
         Text(
             text = timeRemainingSec.toString(),
-            fontSize = (size/2).value.sp,
+            fontSize = (size / 2).value.sp,
             fontWeight = FontWeight.SemiBold,
             color = animatedColor,
         )
@@ -78,7 +78,7 @@ private fun TimeRingPreview() {
     DynaquizTheme {
         TimerRing(
             timeRemainingSec = 9,
-            totalSec = 20
+            totalSec = 20,
         )
     }
 }

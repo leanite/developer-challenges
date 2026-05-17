@@ -4,7 +4,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ChallengeModeTest {
-
     @Test
     fun `fromSerializedName should map RELAXED to Relaxed`() {
         assertEquals(ChallengeMode.Relaxed, ChallengeMode.fromSerializedName("RELAXED"))

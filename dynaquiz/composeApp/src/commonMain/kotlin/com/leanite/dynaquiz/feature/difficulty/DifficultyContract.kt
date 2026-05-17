@@ -12,8 +12,13 @@ data class DifficultyUiState(
 @Immutable
 sealed interface DifficultyIntent {
     data object Load : DifficultyIntent
-    data class ModeSelected(val mode: ChallengeMode) : DifficultyIntent
+
+    data class ModeSelected(
+        val mode: ChallengeMode,
+    ) : DifficultyIntent
+
     data object ConfirmClicked : DifficultyIntent
+
     data object BackClicked : DifficultyIntent
 }
 

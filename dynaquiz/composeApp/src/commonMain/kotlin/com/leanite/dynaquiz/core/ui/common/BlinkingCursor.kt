@@ -34,16 +34,18 @@ fun BlinkingCursor(
     }
 
     Box(
-        modifier = modifier
-            .width(CURSOR_WIDTH)
-            .height(height)
-            .background(
-                color = if (visible) {
-                    MaterialTheme.colorScheme.onPrimary
-                } else {
-                    Color.Transparent
-                },
-            ),
+        modifier =
+            modifier
+                .width(CURSOR_WIDTH)
+                .height(height)
+                .background(
+                    color =
+                        if (visible) {
+                            MaterialTheme.colorScheme.onPrimary
+                        } else {
+                            Color.Transparent
+                        },
+                ),
     )
 }
 

@@ -17,8 +17,10 @@ import kotlin.time.Instant
 
 @OptIn(ExperimentalTestApi::class)
 class RankingScreenTest : UiTest() {
-
-    private fun entry(name: String, score: Int) = RankingEntry(
+    private fun entry(
+        name: String,
+        score: Int,
+    ) = RankingEntry(
         playerName = name,
         challengeMode = ChallengeMode.Timed.Easy,
         score = Score(score),
@@ -28,94 +30,102 @@ class RankingScreenTest : UiTest() {
     )
 
     @Test
-    fun `should render the All tab as selected by default`() = runComposeUiTest {
-        setContent {
-            DynaquizTheme {
-                RankingScreen(uiState = RankingUiState(), onIntent = {})
+    fun `should render the All tab as selected by default`() =
+        runComposeUiTest {
+            setContent {
+                DynaquizTheme {
+                    RankingScreen(uiState = RankingUiState(), onIntent = {})
+                }
             }
-        }
 
-        assertTextIsSelected("Todos")
-    }
+            assertTextIsSelected("Todos")
+        }
 
     @Test
-    fun `should render the entries list when uiState has entries`() = runComposeUiTest {
-        setContent {
-            DynaquizTheme {
-                RankingScreen(
-                    uiState = RankingUiState(
-                        entries = listOf(entry("Leandro", 200), entry("Bruno", 100)),
-                    ),
-                    onIntent = {},
-                )
+    fun `should render the entries list when uiState has entries`() =
+        runComposeUiTest {
+            setContent {
+                DynaquizTheme {
+                    RankingScreen(
+                        uiState =
+                            RankingUiState(
+                                entries = listOf(entry("Leandro", 200), entry("Bruno", 100)),
+                            ),
+                        onIntent = {},
+                    )
+                }
             }
-        }
 
-        assertTextIsDisplayed("Leandro")
-        assertTextIsDisplayed("Bruno")
-    }
+            assertTextIsDisplayed("Leandro")
+            assertTextIsDisplayed("Bruno")
+        }
 
     @Test
-    fun `should render All tab empty copy when entries is empty and tab is All`() = runComposeUiTest {
-        setContent {
-            DynaquizTheme {
-                RankingScreen(
-                    uiState = RankingUiState(selectedTab = RankingTab.All, entries = emptyList()),
-                    onIntent = {},
-                )
+    fun `should render All tab empty copy when entries is empty and tab is All`() =
+        runComposeUiTest {
+            setContent {
+                DynaquizTheme {
+                    RankingScreen(
+                        uiState = RankingUiState(selectedTab = RankingTab.All, entries = emptyList()),
+                        onIntent = {},
+                    )
+                }
             }
-        }
 
-        assertTextIsDisplayed("Nenhum jogo registrado ainda")
-    }
+            assertTextIsDisplayed("Nenhum jogo registrado ainda")
+        }
 
     @Test
-    fun `should render Mine tab empty copy when entries is empty and tab is Mine`() = runComposeUiTest {
-        setContent {
-            DynaquizTheme {
-                RankingScreen(
-                    uiState = RankingUiState(selectedTab = RankingTab.Mine, entries = emptyList()),
-                    onIntent = {},
-                )
+    fun `should render Mine tab empty copy when entries is empty and tab is Mine`() =
+        runComposeUiTest {
+            setContent {
+                DynaquizTheme {
+                    RankingScreen(
+                        uiState = RankingUiState(selectedTab = RankingTab.Mine, entries = emptyList()),
+                        onIntent = {},
+                    )
+                }
             }
-        }
 
-        assertTextIsDisplayed("Você ainda não jogou")
-    }
+            assertTextIsDisplayed("Você ainda não jogou")
+        }
 
     @Test
-    fun `should not render empty state copy while isLoading is true`() = runComposeUiTest {
-        setContent {
-            DynaquizTheme {
-                RankingScreen(
-                    uiState = RankingUiState(
-                        selectedTab = RankingTab.All,
-                        entries = emptyList(),
-                        isLoading = true,
-                    ),
-                    onIntent = {},
-                )
+    fun `should not render empty state copy while isLoading is true`() =
+        runComposeUiTest {
+            setContent {
+                DynaquizTheme {
+                    RankingScreen(
+                        uiState =
+                            RankingUiState(
+                                selectedTab = RankingTab.All,
+                                entries = emptyList(),
+                                isLoading = true,
+                            ),
+                        onIntent = {},
+                    )
+                }
             }
-        }
 
-        onNodeWithText("Nenhum jogo registrado ainda").assertDoesNotExist()
-    }
+            onNodeWithText("Nenhum jogo registrado ainda").assertDoesNotExist()
+        }
 
     @Test
-    fun `should emit TabSelected Mine when user taps the Mine tab`() = runComposeUiTest {
-        val captured = mutableListOf<RankingIntent>()
-        setContent {
-            DynaquizTheme {
-                RankingScreen(
-                    uiState = RankingUiState(),
-                    onIntent = { captured += it },
-                )
+    fun `should emit TabSelected Mine when user taps the Mine tab`() =
+        runComposeUiTest {
+            val captured = mutableListOf<RankingIntent>()
+            setContent {
+                DynaquizTheme {
+                    RankingScreen(
+                        uiState = RankingUiState(),
+                        onIntent = { captured += it },
+                    )
+                }
             }
+
+            clickOnText("Meus jogos")
+
+            assertEquals(1, captured.size)
+            assertEquals(RankingIntent.TabSelected(RankingTab.Mine), captured.single())
         }
-
-        clickOnText("Meus jogos")
-
-        assertEquals(1, captured.size)
-        assertEquals(RankingIntent.TabSelected(RankingTab.Mine), captured.single())
-    }
 }

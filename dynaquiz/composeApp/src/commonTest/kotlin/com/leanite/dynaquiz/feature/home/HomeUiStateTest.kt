@@ -5,7 +5,6 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class HomeUiStateTest {
-
     @Test
     fun `canStart should be false when nickname is shorter than minimum length`() {
         val state = HomeUiState(nickname = "ab")

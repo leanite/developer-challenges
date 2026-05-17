@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -20,17 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.leanite.dynaquiz.core.domain.model.Mascot
 import com.leanite.dynaquiz.core.domain.model.MascotMood
 import com.leanite.dynaquiz.core.ui.common.MascotAnimation
-import com.leanite.dynaquiz.core.ui.common.SimpleSpriteAnimator
 import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
-import dynaquiz.composeapp.generated.resources.Res
-import dynaquiz.composeapp.generated.resources.anim_expert_1
-import dynaquiz.composeapp.generated.resources.anim_expert_2
-import dynaquiz.composeapp.generated.resources.anim_noob_1
-import dynaquiz.composeapp.generated.resources.anim_noob_2
-import dynaquiz.composeapp.generated.resources.anim_normal_1
-import dynaquiz.composeapp.generated.resources.anim_normal_2
-import dynaquiz.composeapp.generated.resources.anim_relaxed_1
-import dynaquiz.composeapp.generated.resources.anim_relaxed_2
 
 @Composable
 fun ProfileCard(
@@ -39,27 +28,28 @@ fun ProfileCard(
     onNicknameChange: (String) -> Unit,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                brush = Brush.verticalGradient(
-                    0f to MaterialTheme.colorScheme.primary,
-                    0.20f to Color.Transparent,
-                    0.50f to Color.Transparent,
-                    1f to MaterialTheme.colorScheme.tertiary.copy(alpha = 0.95f),
-                ),
-                shape = RoundedCornerShape(26.dp),
-            )
-            .padding(8.dp),
-    ) {
-        Row(
-            modifier = Modifier
+        modifier =
+            Modifier
                 .fillMaxWidth()
                 .background(
-                    color = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f),
-                    shape = RoundedCornerShape(18.dp),
-                )
-                .padding(16.dp),
+                    brush =
+                        Brush.verticalGradient(
+                            0f to MaterialTheme.colorScheme.primary,
+                            0.20f to Color.Transparent,
+                            0.50f to Color.Transparent,
+                            1f to MaterialTheme.colorScheme.tertiary.copy(alpha = 0.95f),
+                        ),
+                    shape = RoundedCornerShape(26.dp),
+                ).padding(8.dp),
+    ) {
+        Row(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f),
+                        shape = RoundedCornerShape(18.dp),
+                    ).padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             MascotAnimation(mascotMood = mascot.mood)
@@ -69,7 +59,7 @@ fun ProfileCard(
             ProfileInput(
                 nickname = nickname,
                 onNicknameChange = onNicknameChange,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
         }
     }

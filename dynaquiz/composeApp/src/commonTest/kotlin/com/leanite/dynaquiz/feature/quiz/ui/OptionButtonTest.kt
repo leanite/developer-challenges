@@ -14,74 +14,77 @@ import kotlin.test.assertTrue
 
 @OptIn(ExperimentalTestApi::class)
 class OptionButtonTest : UiTest() {
-
     @Test
-    fun `should render the option text`() = runComposeUiTest {
-        setContent {
-            DynaquizTheme {
-                OptionButton(
-                    text = "Brasília",
-                    isSelected = false,
-                    enabled = true,
-                    onClick = {},
-                )
+    fun `should render the option text`() =
+        runComposeUiTest {
+            setContent {
+                DynaquizTheme {
+                    OptionButton(
+                        text = "Brasília",
+                        isSelected = false,
+                        enabled = true,
+                        onClick = {},
+                    )
+                }
             }
+
+            assertTextIsDisplayed("Brasília")
         }
 
-        assertTextIsDisplayed("Brasília")
-    }
-
     @Test
-    fun `should mark as selected when isSelected is true`() = runComposeUiTest {
-        setContent {
-            DynaquizTheme {
-                OptionButton(
-                    text = "Brasília",
-                    isSelected = true,
-                    enabled = true,
-                    onClick = {},
-                )
+    fun `should mark as selected when isSelected is true`() =
+        runComposeUiTest {
+            setContent {
+                DynaquizTheme {
+                    OptionButton(
+                        text = "Brasília",
+                        isSelected = true,
+                        enabled = true,
+                        onClick = {},
+                    )
+                }
             }
+
+            assertTextIsSelected("Brasília")
         }
 
-        assertTextIsSelected("Brasília")
-    }
-
     @Test
-    fun `should call onClick when enabled and tapped`() = runComposeUiTest {
-        var clicks = 0
-        setContent {
-            DynaquizTheme {
-                OptionButton(
-                    text = "Brasília",
-                    isSelected = false,
-                    enabled = true,
-                    onClick = { clicks++ },
-                )
+    fun `should call onClick when enabled and tapped`() =
+        runComposeUiTest {
+            var clicks = 0
+            setContent {
+                DynaquizTheme {
+                    OptionButton(
+                        text = "Brasília",
+                        isSelected = false,
+                        enabled = true,
+                        onClick = { clicks++ },
+                    )
+                }
             }
+
+            clickOnText("Brasília")
+
+            assertEquals(1, clicks)
         }
 
-        clickOnText("Brasília")
-
-        assertEquals(1, clicks)
-    }
-
     @Test
-    fun `should not call onClick when disabled and tapped`() = runComposeUiTest {
-        var clicks = 0
-        setContent {
-            DynaquizTheme {
-                OptionButton(
-                    text = "Brasília",
-                    isSelected = false,
-                    enabled = false,
-                    onClick = { clicks++ },
-                )
+    fun `should not call onClick when disabled and tapped`() =
+        runComposeUiTest {
+            var clicks = 0
+            setContent {
+                DynaquizTheme {
+                    OptionButton(
+                        text = "Brasília",
+                        isSelected = false,
+                        enabled = false,
+                        onClick = { clicks++ },
+                    )
+                }
             }
-        }
 
-        assertTextIsNotEnabled("Brasília")
-        runCatching { clickOnText("Brasília") }
-        assertTrue(clicks == 0)
-    }
+            assertTextIsNotEnabled("Brasília")
+            runCatching { clickOnText("Brasília") }
+            assertTrue(clicks == 0)
+        }
 }

@@ -33,25 +33,25 @@ fun ExitQuizDialog(
 ) {
     Dialog(
         onDismissRequest = onDismiss,
-        properties = DialogProperties(
-            dismissOnBackPress = true,
-            dismissOnClickOutside = true,
-            usePlatformDefaultWidth = false,    // permite controlar a largura
-        ),
+        properties =
+            DialogProperties(
+                dismissOnBackPress = true,
+                dismissOnClickOutside = true,
+                usePlatformDefaultWidth = false, // permite controlar a largura
+            ),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth(0.88f)
-                .background(
-                    color = MaterialTheme.colorScheme.surface,
-                    shape = RoundedCornerShape(24.dp),
-                )
-                .border(
-                    width = 2.dp,
-                    color = MaterialTheme.colorScheme.secondary,
-                    shape = RoundedCornerShape(24.dp),
-                )
-                .padding(horizontal = 24.dp, vertical = 28.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth(0.88f)
+                    .background(
+                        color = MaterialTheme.colorScheme.surface,
+                        shape = RoundedCornerShape(24.dp),
+                    ).border(
+                        width = 2.dp,
+                        color = MaterialTheme.colorScheme.secondary,
+                        shape = RoundedCornerShape(24.dp),
+                    ).padding(horizontal = 24.dp, vertical = 28.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
@@ -99,7 +99,7 @@ private fun ExitQuizDialogPreview() {
     DynaquizTheme {
         ExitQuizDialog(
             onConfirm = {},
-            onDismiss = {}
+            onDismiss = {},
         )
     }
 }

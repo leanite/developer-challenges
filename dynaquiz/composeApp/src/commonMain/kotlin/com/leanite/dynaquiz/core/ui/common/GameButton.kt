@@ -43,34 +43,39 @@ fun GameButton(
     enabled: Boolean = true,
     leadingContent: @Composable (() -> Unit)? = null,
 ) {
-    val containerColor = when (style) {
-        GameButtonStyle.Primary -> MaterialTheme.colorScheme.secondary
-        GameButtonStyle.Secondary -> Color.White.copy(alpha = 0.95f)
-    }
-    val contentColor = when (style) {
-        GameButtonStyle.Primary -> MaterialTheme.colorScheme.onSecondary
-        GameButtonStyle.Secondary -> MaterialTheme.colorScheme.primary
-    }
-    val border = when (style) {
-        GameButtonStyle.Primary -> BorderStroke(2.dp, MaterialTheme.colorScheme.onSecondary)
-        GameButtonStyle.Secondary -> BorderStroke(2.dp, MaterialTheme.colorScheme.secondary)
-    }
+    val containerColor =
+        when (style) {
+            GameButtonStyle.Primary -> MaterialTheme.colorScheme.secondary
+            GameButtonStyle.Secondary -> Color.White.copy(alpha = 0.95f)
+        }
+    val contentColor =
+        when (style) {
+            GameButtonStyle.Primary -> MaterialTheme.colorScheme.onSecondary
+            GameButtonStyle.Secondary -> MaterialTheme.colorScheme.primary
+        }
+    val border =
+        when (style) {
+            GameButtonStyle.Primary -> BorderStroke(2.dp, MaterialTheme.colorScheme.onSecondary)
+            GameButtonStyle.Secondary -> BorderStroke(2.dp, MaterialTheme.colorScheme.secondary)
+        }
 
     Button(
         onClick = onClick,
         enabled = enabled,
         shape = RoundedCornerShape(16.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = containerColor,
-            contentColor = contentColor,
-            disabledContainerColor = containerColor.copy(alpha = 0.5f),
-            disabledContentColor = contentColor.copy(alpha = 0.5f),
-        ),
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = containerColor,
+                contentColor = contentColor,
+                disabledContainerColor = containerColor.copy(alpha = 0.5f),
+                disabledContentColor = contentColor.copy(alpha = 0.5f),
+            ),
         border = border,
         contentPadding = ButtonDefaults.ContentPadding,
-        modifier = modifier
-            .fillMaxWidth()
-            .height(CoreRes.Dimensions.ButtonHeight),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(CoreRes.Dimensions.ButtonHeight),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -78,9 +83,12 @@ fun GameButton(
         ) {
             if (leadingContent != null) {
                 Box(
-                    modifier = if (!enabled) {
-                        Modifier.alpha(0.5f)
-                    } else Modifier
+                    modifier =
+                        if (!enabled) {
+                            Modifier.alpha(0.5f)
+                        } else {
+                            Modifier
+                        },
                 ) {
                     leadingContent.invoke()
                 }
@@ -90,7 +98,7 @@ fun GameButton(
                 text = text,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
         }
     }
@@ -108,9 +116,9 @@ fun GameButtonPreview() {
                 Image(
                     painter = painterResource(Res.drawable.ic_button_ranking),
                     contentDescription = null,
-                    Modifier.size(36.dp)
+                    Modifier.size(36.dp),
                 )
-            }
+            },
         )
     }
 }

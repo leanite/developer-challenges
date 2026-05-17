@@ -17,7 +17,6 @@ class DifficultyViewModel(
     private val getLastChallengeMode: GetLastChallengeModeUseCase,
     private val setLastChallengeMode: SetLastChallengeModeUseCase,
 ) : ViewModel() {
-
     private val _uiState = MutableStateFlow(DifficultyUiState())
     val uiState: StateFlow<DifficultyUiState> = _uiState.asStateFlow()
 

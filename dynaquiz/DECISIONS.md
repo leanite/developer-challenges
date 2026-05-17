@@ -14,3 +14,9 @@ val events = _events.receiveAsFlow()
  ## Apenas um PNG com resolução suficiente em `drawable`
  
  Para facilitar a geração de resources, vou usar apenas um *.png com resolução suficiente para funcionar bem na aparesentação/uso da maioria dos dispositivos
+
+## Uso de commonTest
+Optei por usar commonTest tendo consciência do trade-off entre ter testes de UI rodando em nível unit e não instrumentado vs ter testes de UI rodando instrumentado apenas no Android. Minha ideia é ter validação de qualidade de forma automática também no iOS e apoiar qualquer verificação instrumentada utilizando testes manuais direto nos aparelhos Google Pixel 7 Pro e iPhone Air 17.
+
+## Detekt fora do projeto
+A compatibilidade do detekt com Kotlin 2.x só veio nas versões alpha. As versões estáveis não possuem esse suporte, então opto por deixar de fora essa lib e manter apenas o ktlint.

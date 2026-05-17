@@ -7,6 +7,5 @@ import com.leanite.dynaquiz.core.domain.result.AppResult
 class SaveQuizSessionUseCase(
     private val repository: RankingRepository,
 ) {
-    suspend operator fun invoke(result: QuizSessionResult): AppResult<Unit> =
-        repository.saveSession(result)
+    suspend operator fun invoke(result: QuizSessionResult): AppResult<Unit> = repository.saveSession(result)
 }

@@ -13,7 +13,9 @@ data class AnswerLog(
 @Immutable
 sealed interface AnswerOutcome {
     // Backend confirmou certo ou errado
-    data class Confirmed(val correct: Boolean) : AnswerOutcome
+    data class Confirmed(
+        val correct: Boolean,
+    ) : AnswerOutcome
 
     // Tempo estourou, nem enviou ao backend
     data object TimedOut : AnswerOutcome

@@ -9,13 +9,13 @@ import kotlinx.coroutines.flow.asStateFlow
 
 internal interface ChallengeModeLocalDataSource {
     val storedMode: Flow<String?>
+
     suspend fun setStoredMode(value: String)
 }
 
 internal class ChallengeModeLocalDataSourceImpl(
     settings: Settings,
 ) : ChallengeModeLocalDataSource {
-
     @OptIn(ExperimentalSettingsApi::class)
     private val suspendSettings = settings.toSuspendSettings()
 

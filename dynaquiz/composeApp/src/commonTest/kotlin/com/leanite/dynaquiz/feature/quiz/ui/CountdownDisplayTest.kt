@@ -9,26 +9,27 @@ import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
 class CountdownDisplayTest : UiTest() {
-
     @Test
-    fun `should render the seconds remaining number`() = runComposeUiTest {
-        setContent {
-            DynaquizTheme {
-                CountdownDisplay(secondsRemaining = 3)
+    fun `should render the seconds remaining number`() =
+        runComposeUiTest {
+            setContent {
+                DynaquizTheme {
+                    CountdownDisplay(secondsRemaining = 3)
+                }
             }
+
+            assertTextIsDisplayed("3")
         }
 
-        assertTextIsDisplayed("3")
-    }
-
     @Test
-    fun `should render zero when secondsRemaining is zero`() = runComposeUiTest {
-        setContent {
-            DynaquizTheme {
-                CountdownDisplay(secondsRemaining = 0)
+    fun `should render zero when secondsRemaining is zero`() =
+        runComposeUiTest {
+            setContent {
+                DynaquizTheme {
+                    CountdownDisplay(secondsRemaining = 0)
+                }
             }
-        }
 
-        assertTextIsDisplayed("0")
-    }
+            assertTextIsDisplayed("0")
+        }
 }

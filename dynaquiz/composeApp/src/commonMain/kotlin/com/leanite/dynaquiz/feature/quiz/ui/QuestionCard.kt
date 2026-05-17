@@ -30,13 +30,13 @@ fun QuestionCard(
     ) {
         // Statement
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    color = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f),
-                    shape = RoundedCornerShape(20.dp),
-                )
-                .padding(20.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f),
+                        shape = RoundedCornerShape(20.dp),
+                    ).padding(20.dp),
         ) {
             Text(
                 text = question.statement,
@@ -65,11 +65,12 @@ fun QuestionCard(
 private fun QuestionCardPreview() {
     DynaquizTheme {
         QuestionCard(
-            question = Question(
-                id = QuestionId("1"),
-                statement = "Qual é a capital do Brasil?",
-                options = listOf("São Paulo", "Brasília", "Rio de Janeiro", "Salvador"),
-            ),
+            question =
+                Question(
+                    id = QuestionId("1"),
+                    statement = "Qual é a capital do Brasil?",
+                    options = listOf("São Paulo", "Brasília", "Rio de Janeiro", "Salvador"),
+                ),
             selectedAnswer = null,
             isSubmitting = false,
             onOptionSelected = {},

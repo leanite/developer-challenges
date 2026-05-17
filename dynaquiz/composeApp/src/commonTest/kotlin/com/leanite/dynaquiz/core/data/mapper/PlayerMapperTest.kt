@@ -7,7 +7,6 @@ import kotlin.test.assertEquals
 import kotlin.time.Instant
 
 class PlayerMapperTest {
-
     @Test
     fun `toDomain should wrap id in PlayerId and preserve name`() {
         val entity = PlayerEntity(id = 7L, name = "Leandro", createdAt = 0L)

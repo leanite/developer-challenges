@@ -7,32 +7,34 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
 class UserRepositoryImplTest {
-
     private val settings = MapSettings()
 
     private fun createRepository() = UserRepositoryImpl(settings = settings)
 
     @Test
-    fun `getLastNickname should return null when no nickname has been saved`() = runTest {
-        assertNull(createRepository().getLastNickname())
-    }
+    fun `getLastNickname should return null when no nickname has been saved`() =
+        runTest {
+            assertNull(createRepository().getLastNickname())
+        }
 
     @Test
-    fun `setLastNickname should persist value so a following getLastNickname returns it`() = runTest {
-        val repository = createRepository()
+    fun `setLastNickname should persist value so a following getLastNickname returns it`() =
+        runTest {
+            val repository = createRepository()
 
-        repository.setLastNickname("Leandro")
+            repository.setLastNickname("Leandro")
 
-        assertEquals("Leandro", repository.getLastNickname())
-    }
+            assertEquals("Leandro", repository.getLastNickname())
+        }
 
     @Test
-    fun `setLastNickname should overwrite the previous value`() = runTest {
-        val repository = createRepository()
+    fun `setLastNickname should overwrite the previous value`() =
+        runTest {
+            val repository = createRepository()
 
-        repository.setLastNickname("Leandro")
-        repository.setLastNickname("Carla")
+            repository.setLastNickname("Leandro")
+            repository.setLastNickname("Carla")
 
-        assertEquals("Carla", repository.getLastNickname())
-    }
+            assertEquals("Carla", repository.getLastNickname())
+        }
 }

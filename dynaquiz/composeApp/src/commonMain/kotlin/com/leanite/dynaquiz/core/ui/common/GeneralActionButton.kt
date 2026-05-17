@@ -28,35 +28,39 @@ fun GeneralActionButton(
     style: GeneralActionButtonStyle = GeneralActionButtonStyle.Primary,
     enabled: Boolean = true,
 ) {
-
-    val containerColor = when (style) {
-        GeneralActionButtonStyle.Primary -> MaterialTheme.colorScheme.secondary
-        GeneralActionButtonStyle.Secondary -> Color.White.copy(alpha = 0.95f)
-    }
-    val contentColor = when (style) {
-        GeneralActionButtonStyle.Primary -> MaterialTheme.colorScheme.onSecondary
-        GeneralActionButtonStyle.Secondary -> MaterialTheme.colorScheme.primary
-    }
-    val border = when (style) {
-        GeneralActionButtonStyle.Primary -> BorderStroke(0.dp, MaterialTheme.colorScheme.secondary)
-        GeneralActionButtonStyle.Secondary -> BorderStroke(2.dp, MaterialTheme.colorScheme.secondary)
-    }
+    val containerColor =
+        when (style) {
+            GeneralActionButtonStyle.Primary -> MaterialTheme.colorScheme.secondary
+            GeneralActionButtonStyle.Secondary -> Color.White.copy(alpha = 0.95f)
+        }
+    val contentColor =
+        when (style) {
+            GeneralActionButtonStyle.Primary -> MaterialTheme.colorScheme.onSecondary
+            GeneralActionButtonStyle.Secondary -> MaterialTheme.colorScheme.primary
+        }
+    val border =
+        when (style) {
+            GeneralActionButtonStyle.Primary -> BorderStroke(0.dp, MaterialTheme.colorScheme.secondary)
+            GeneralActionButtonStyle.Secondary -> BorderStroke(2.dp, MaterialTheme.colorScheme.secondary)
+        }
 
     Button(
         onClick = onClick,
         enabled = enabled,
         shape = RoundedCornerShape(16.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = containerColor,
-            contentColor = contentColor,
-            disabledContainerColor = containerColor.copy(alpha = 0.5f),
-            disabledContentColor = contentColor.copy(alpha = 0.5f),
-        ),
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = containerColor,
+                contentColor = contentColor,
+                disabledContainerColor = containerColor.copy(alpha = 0.5f),
+                disabledContentColor = contentColor.copy(alpha = 0.5f),
+            ),
         border = border,
         contentPadding = ButtonDefaults.ContentPadding,
-        modifier = modifier
-            .fillMaxWidth()
-            .height(CoreRes.Dimensions.ButtonHeight),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(CoreRes.Dimensions.ButtonHeight),
     ) {
         Text(
             text = text,
@@ -85,7 +89,7 @@ fun GeneralActionButtonSecondaryPreview() {
         GeneralActionButton(
             text = "SALVAR",
             onClick = {},
-            style = GeneralActionButtonStyle.Secondary
+            style = GeneralActionButtonStyle.Secondary,
         )
     }
 }

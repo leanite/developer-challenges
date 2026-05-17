@@ -7,7 +7,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ThrowableMapperTest {
-
     @Test
     fun `SerializationException should map to InvalidData`() {
         val throwable: Throwable = SerializationException("bad json")

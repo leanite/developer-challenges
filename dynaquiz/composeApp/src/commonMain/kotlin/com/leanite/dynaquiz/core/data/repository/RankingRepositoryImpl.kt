@@ -18,16 +18,16 @@ internal class RankingRepositoryImpl(
     private val clock: Clock,
     private val ioDispatcher: CoroutineDispatcher,
 ) : RankingRepository {
-
     override suspend fun saveSession(result: QuizSessionResult): AppResult<Unit> =
         withContext(ioDispatcher) {
             try {
                 val now = clock.now().toEpochMilliseconds()
                 // Garante que o player existe e cria como fallback improvável
-                val player = playerDataSource.findOrInsert(
-                    name = result.playerName,
-                    createdAt = now,
-                )
+                val player =
+                    playerDataSource.findOrInsert(
+                        name = result.playerName,
+                        createdAt = now,
+                    )
                 quizSessionDataSource.insertSession(
                     playerId = player.id,
                     challengeMode = result.challengeMode,
@@ -55,9 +55,10 @@ internal class RankingRepositoryImpl(
     override suspend fun getTopRankingByPlayerName(playerName: String): AppResult<List<RankingEntry>> =
         withContext(ioDispatcher) {
             try {
-                val entries = quizSessionDataSource
-                    .selectRankingByPlayerName(playerName)
-                    .map { it.toDomain() }
+                val entries =
+                    quizSessionDataSource
+                        .selectRankingByPlayerName(playerName)
+                        .map { it.toDomain() }
                 AppResult.Success(entries)
             } catch (throwable: Throwable) {
                 AppResult.Error(throwable.toAppError())

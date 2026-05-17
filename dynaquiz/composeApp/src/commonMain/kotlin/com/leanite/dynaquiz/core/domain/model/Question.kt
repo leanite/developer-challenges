@@ -9,4 +9,6 @@ data class Question(
 )
 
 @JvmInline
-value class QuestionId(val value: String)
+value class QuestionId(
+    val value: String,
+)

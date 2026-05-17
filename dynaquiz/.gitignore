@@ -1,6 +1,7 @@
 *.iml
 .kotlin
 .gradle
+.editorconfig
 **/build/
 xcuserdata
 !src/**/build/

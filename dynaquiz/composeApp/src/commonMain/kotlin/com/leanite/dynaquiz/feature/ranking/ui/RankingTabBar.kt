@@ -41,12 +41,13 @@ fun RankingTabBar(
                 onClick = { onTabSelected(tab) },
                 text = {
                     Text(
-                        text = stringResource(
-                            when (tab) {
-                                RankingTab.All -> RankingRes.TabAll
-                                RankingTab.Mine -> RankingRes.TabMine
-                            }
-                        ),
+                        text =
+                            stringResource(
+                                when (tab) {
+                                    RankingTab.All -> RankingRes.TabAll
+                                    RankingTab.Mine -> RankingRes.TabMine
+                                },
+                            ),
                     )
                 },
             )

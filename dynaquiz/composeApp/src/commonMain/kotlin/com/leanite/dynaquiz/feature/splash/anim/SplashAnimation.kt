@@ -13,9 +13,7 @@ internal object SplashAnimation {
      * 4. Escreve "q, u, i, z" -> "Dynaquiz"
      * 5. Hold final
      */
-    suspend fun runTypingSequence(
-        onTextChanged: (String) -> Unit,
-    ) {
+    suspend fun runTypingSequence(onTextChanged: (String) -> Unit) {
         delay(HOLD_INITIAL_MS)
 
         ERASE_SEQUENCE.forEach { text ->

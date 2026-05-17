@@ -35,22 +35,23 @@ fun QuizScreen(
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
-
         GameBackground()
 
         when (val phase = uiState.phase) {
-            is QuizPhase.Countdown -> CountdownDisplay(
-                secondsRemaining = phase.countdownSecondsRemaining,
-            )
+            is QuizPhase.Countdown ->
+                CountdownDisplay(
+                    secondsRemaining = phase.countdownSecondsRemaining,
+                )
 
             QuizPhase.Loading -> LoadingPlaceholder()
 
-            is QuizPhase.Playing -> PlayingContent(
-                phase = phase,
-                challengeMode = uiState.challengeMode,
-                timeRemainingSec = uiState.timeRemainingSec,
-                onOptionSelected = { onIntent(QuizIntent.AnswerSelected(it)) },
-            )
+            is QuizPhase.Playing ->
+                PlayingContent(
+                    phase = phase,
+                    challengeMode = uiState.challengeMode,
+                    timeRemainingSec = uiState.timeRemainingSec,
+                    onOptionSelected = { onIntent(QuizIntent.AnswerSelected(it)) },
+                )
 
             QuizPhase.Completed -> LoadingPlaceholder()
         }
@@ -82,9 +83,10 @@ private fun PlayingContent(
     onOptionSelected: (String) -> Unit,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp, vertical = 24.dp),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 20.dp, vertical = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
@@ -103,7 +105,7 @@ private fun PlayingContent(
                     totalSec = challengeMode.perQuestionSeconds,
                     size = QuizRes.Dimensions.TimerHeight,
                     strokeWidth = 6.dp,
-                    modifier = Modifier.padding(end = QuizRes.Dimensions.TimerHeight)
+                    modifier = Modifier.padding(end = QuizRes.Dimensions.TimerHeight),
                 )
             }
         }
@@ -122,19 +124,21 @@ private fun PlayingContent(
 private fun QuizScreenPreview() {
     DynaquizTheme {
         QuizScreen(
-            uiState = QuizUiState(
-                timeRemainingSec = 10,
-                phase = QuizPhase.Playing(
-                    question =
-                        Question(
-                            QuestionId("48"),
-                            "Hello?",
-                            listOf("A", "B", "C", "D", "E")
-                        )
+            uiState =
+                QuizUiState(
+                    timeRemainingSec = 10,
+                    phase =
+                        QuizPhase.Playing(
+                            question =
+                                Question(
+                                    QuestionId("48"),
+                                    "Hello?",
+                                    listOf("A", "B", "C", "D", "E"),
+                                ),
+                        ),
+                    challengeMode = ChallengeMode.Timed.Easy,
                 ),
-                challengeMode = ChallengeMode.Timed.Easy
-            ),
-            onIntent = {}
+            onIntent = {},
         )
     }
 }

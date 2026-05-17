@@ -1,6 +1,5 @@
 package com.leanite.dynaquiz.feature.home.res
 
-import androidx.compose.runtime.Composable
 import dynaquiz.composeapp.generated.resources.Res
 import dynaquiz.composeapp.generated.resources.home_button_difficulty
 import dynaquiz.composeapp.generated.resources.home_button_ranking
@@ -10,7 +9,6 @@ import dynaquiz.composeapp.generated.resources.home_profile_title
 import dynaquiz.composeapp.generated.resources.home_save_error_generic
 import dynaquiz.composeapp.generated.resources.home_title
 import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.stringResource
 
 internal object HomeRes {
     val Title: StringResource = Res.string.home_title

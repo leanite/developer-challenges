@@ -13,53 +13,56 @@ import kotlin.test.assertTrue
 
 @OptIn(ExperimentalTestApi::class)
 class GameButtonTest : UiTest() {
-
     @Test
-    fun `should render the provided text`() = runComposeUiTest {
-        setContent {
-            DynaquizTheme {
-                GameButton(text = "PLAY", onClick = {})
+    fun `should render the provided text`() =
+        runComposeUiTest {
+            setContent {
+                DynaquizTheme {
+                    GameButton(text = "PLAY", onClick = {})
+                }
             }
+
+            assertTextIsDisplayed("PLAY")
         }
 
-        assertTextIsDisplayed("PLAY")
-    }
-
     @Test
-    fun `should call onClick when tapped while enabled`() = runComposeUiTest {
-        var clicks = 0
-        setContent {
-            DynaquizTheme {
-                GameButton(text = "PLAY", onClick = { clicks++ })
+    fun `should call onClick when tapped while enabled`() =
+        runComposeUiTest {
+            var clicks = 0
+            setContent {
+                DynaquizTheme {
+                    GameButton(text = "PLAY", onClick = { clicks++ })
+                }
             }
+
+            clickOnText("PLAY")
+
+            assertEquals(1, clicks)
         }
 
-        clickOnText("PLAY")
-
-        assertEquals(1, clicks)
-    }
-
     @Test
-    fun `should be disabled when enabled is false`() = runComposeUiTest {
-        setContent {
-            DynaquizTheme {
-                GameButton(text = "PLAY", onClick = {}, enabled = false)
+    fun `should be disabled when enabled is false`() =
+        runComposeUiTest {
+            setContent {
+                DynaquizTheme {
+                    GameButton(text = "PLAY", onClick = {}, enabled = false)
+                }
             }
+
+            assertTextIsNotEnabled("PLAY")
         }
 
-        assertTextIsNotEnabled("PLAY")
-    }
-
     @Test
-    fun `should not call onClick when disabled and tapped`() = runComposeUiTest {
-        var clicks = 0
-        setContent {
-            DynaquizTheme {
-                GameButton(text = "PLAY", onClick = { clicks++ }, enabled = false)
+    fun `should not call onClick when disabled and tapped`() =
+        runComposeUiTest {
+            var clicks = 0
+            setContent {
+                DynaquizTheme {
+                    GameButton(text = "PLAY", onClick = { clicks++ }, enabled = false)
+                }
             }
-        }
 
-        runCatching { clickOnText("PLAY") }
-        assertTrue(clicks == 0)
-    }
+            runCatching { clickOnText("PLAY") }
+            assertTrue(clicks == 0)
+        }
 }

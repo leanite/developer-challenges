@@ -9,6 +9,10 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 @Suppress("DEPRECATION")
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun BackHandler(enabled: Boolean = true, onBack: () -> Unit) {
-    androidx.compose.ui.backhandler.BackHandler(enabled = enabled, onBack = onBack)
+fun BackHandler(
+    enabled: Boolean = true,
+    onBack: () -> Unit,
+) {
+    androidx.compose.ui.backhandler
+        .BackHandler(enabled = enabled, onBack = onBack)
 }

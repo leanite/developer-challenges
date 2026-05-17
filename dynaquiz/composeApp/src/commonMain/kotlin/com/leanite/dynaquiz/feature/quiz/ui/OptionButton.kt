@@ -21,16 +21,18 @@ fun OptionButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val containerColor = if (isSelected) {
-        MaterialTheme.colorScheme.primary
-    } else {
-        Color.White.copy(alpha = 0.95f)
-    }
-    val contentColor = if (isSelected) {
-        Color.White
-    } else {
-        MaterialTheme.colorScheme.primary
-    }
+    val containerColor =
+        if (isSelected) {
+            MaterialTheme.colorScheme.primary
+        } else {
+            Color.White.copy(alpha = 0.95f)
+        }
+    val contentColor =
+        if (isSelected) {
+            Color.White
+        } else {
+            MaterialTheme.colorScheme.primary
+        }
 
     Surface(
         onClick = onClick,

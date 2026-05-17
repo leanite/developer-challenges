@@ -7,6 +7,5 @@ import com.leanite.dynaquiz.core.domain.result.AppResult
 class GetRankingUseCase(
     private val repository: RankingRepository,
 ) {
-    suspend operator fun invoke(): AppResult<List<RankingEntry>> =
-        repository.getTopRanking()
+    suspend operator fun invoke(): AppResult<List<RankingEntry>> = repository.getTopRanking()
 }

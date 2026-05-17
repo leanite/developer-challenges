@@ -13,43 +13,45 @@ import kotlin.test.assertTrue
 
 @OptIn(ExperimentalTestApi::class)
 class GeneralActionButtonTest : UiTest() {
-
     @Test
-    fun `should render the provided text`() = runComposeUiTest {
-        setContent {
-            DynaquizTheme {
-                GeneralActionButton(text = "SAVE", onClick = {})
+    fun `should render the provided text`() =
+        runComposeUiTest {
+            setContent {
+                DynaquizTheme {
+                    GeneralActionButton(text = "SAVE", onClick = {})
+                }
             }
+
+            assertTextIsDisplayed("SAVE")
         }
 
-        assertTextIsDisplayed("SAVE")
-    }
-
     @Test
-    fun `should call onClick when tapped while enabled`() = runComposeUiTest {
-        var clicks = 0
-        setContent {
-            DynaquizTheme {
-                GeneralActionButton(text = "SAVE", onClick = { clicks++ })
+    fun `should call onClick when tapped while enabled`() =
+        runComposeUiTest {
+            var clicks = 0
+            setContent {
+                DynaquizTheme {
+                    GeneralActionButton(text = "SAVE", onClick = { clicks++ })
+                }
             }
+
+            clickOnText("SAVE")
+
+            assertEquals(1, clicks)
         }
 
-        clickOnText("SAVE")
-
-        assertEquals(1, clicks)
-    }
-
     @Test
-    fun `should not call onClick when disabled and tapped`() = runComposeUiTest {
-        var clicks = 0
-        setContent {
-            DynaquizTheme {
-                GeneralActionButton(text = "SAVE", onClick = { clicks++ }, enabled = false)
+    fun `should not call onClick when disabled and tapped`() =
+        runComposeUiTest {
+            var clicks = 0
+            setContent {
+                DynaquizTheme {
+                    GeneralActionButton(text = "SAVE", onClick = { clicks++ }, enabled = false)
+                }
             }
-        }
 
-        assertTextIsNotEnabled("SAVE")
-        runCatching { clickOnText("SAVE") }
-        assertTrue(clicks == 0)
-    }
+            assertTextIsNotEnabled("SAVE")
+            runCatching { clickOnText("SAVE") }
+            assertTrue(clicks == 0)
+        }
 }

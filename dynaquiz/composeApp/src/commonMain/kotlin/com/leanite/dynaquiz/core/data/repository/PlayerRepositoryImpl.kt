@@ -15,14 +15,16 @@ internal class PlayerRepositoryImpl(
     private val clock: Clock,
     private val ioDispatcher: CoroutineDispatcher,
 ) : PlayerRepository {
-    override suspend fun registerOrFetch(name: String): AppResult<Player> = withContext(ioDispatcher) {
-        try {
-            val player = localDataSource
-                .findOrInsert(name = name, createdAt = clock.now().toEpochMilliseconds())
-                .toDomain()
-            AppResult.Success(player)
-        } catch (throwable: Throwable) {
-            AppResult.Error(throwable.toAppError())
+    override suspend fun registerOrFetch(name: String): AppResult<Player> =
+        withContext(ioDispatcher) {
+            try {
+                val player =
+                    localDataSource
+                        .findOrInsert(name = name, createdAt = clock.now().toEpochMilliseconds())
+                        .toDomain()
+                AppResult.Success(player)
+            } catch (throwable: Throwable) {
+                AppResult.Error(throwable.toAppError())
+            }
         }
-    }
 }

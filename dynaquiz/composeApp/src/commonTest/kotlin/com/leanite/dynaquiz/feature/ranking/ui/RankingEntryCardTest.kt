@@ -14,8 +14,10 @@ import kotlin.time.Instant
 
 @OptIn(ExperimentalTestApi::class)
 class RankingEntryCardTest : UiTest() {
-
-    private fun entry(player: String = "Leandro", scorePoints: Int = 200) = RankingEntry(
+    private fun entry(
+        player: String = "Leandro",
+        scorePoints: Int = 200,
+    ) = RankingEntry(
         playerName = player,
         challengeMode = ChallengeMode.Timed.Hard,
         score = Score(scorePoints),
@@ -25,47 +27,51 @@ class RankingEntryCardTest : UiTest() {
     )
 
     @Test
-    fun `should render player name`() = runComposeUiTest {
-        setContent {
-            DynaquizTheme {
-                RankingEntryCard(position = 1, entry = entry("Leandro"))
+    fun `should render player name`() =
+        runComposeUiTest {
+            setContent {
+                DynaquizTheme {
+                    RankingEntryCard(position = 1, entry = entry("Leandro"))
+                }
             }
-        }
 
-        assertTextIsDisplayed("Leandro")
-    }
+            assertTextIsDisplayed("Leandro")
+        }
 
     @Test
-    fun `should render score using PointsFormat`() = runComposeUiTest {
-        setContent {
-            DynaquizTheme {
-                RankingEntryCard(position = 5, entry = entry(scorePoints = 420))
+    fun `should render score using PointsFormat`() =
+        runComposeUiTest {
+            setContent {
+                DynaquizTheme {
+                    RankingEntryCard(position = 5, entry = entry(scorePoints = 420))
+                }
             }
-        }
 
-        assertTextIsDisplayed("420 pts")
-    }
+            assertTextIsDisplayed("420 pts")
+        }
 
     @Test
-    fun `should render correct count using CorrectFormat and the mode label`() = runComposeUiTest {
-        setContent {
-            DynaquizTheme {
-                RankingEntryCard(position = 5, entry = entry())
+    fun `should render correct count using CorrectFormat and the mode label`() =
+        runComposeUiTest {
+            setContent {
+                DynaquizTheme {
+                    RankingEntryCard(position = 5, entry = entry())
+                }
             }
-        }
 
-        assertTextContainingIsDisplayed("Difícil")
-        assertTextContainingIsDisplayed("8/10 acertos")
-    }
+            assertTextContainingIsDisplayed("Difícil")
+            assertTextContainingIsDisplayed("8/10 acertos")
+        }
 
     @Test
-    fun `should render numeric position badge for positions beyond top three`() = runComposeUiTest {
-        setContent {
-            DynaquizTheme {
-                RankingEntryCard(position = 12, entry = entry())
+    fun `should render numeric position badge for positions beyond top three`() =
+        runComposeUiTest {
+            setContent {
+                DynaquizTheme {
+                    RankingEntryCard(position = 12, entry = entry())
+                }
             }
-        }
 
-        assertTextIsDisplayed("12")
-    }
+            assertTextIsDisplayed("12")
+        }
 }

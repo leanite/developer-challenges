@@ -3,9 +3,7 @@ package com.leanite.dynaquiz.feature.quiz
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import com.leanite.dynaquiz.core.domain.model.ChallengeMode
 import com.leanite.dynaquiz.core.domain.model.QuizSessionResult
-import com.leanite.dynaquiz.core.domain.model.Score
 import com.leanite.dynaquiz.feature.quiz.res.QuizRes
 import kotlinx.coroutines.flow.Flow
 import org.jetbrains.compose.resources.getString
@@ -25,10 +23,11 @@ fun QuizEventEffects(
                 QuizEvent.NavigateBack -> onNavigateBack()
 
                 is QuizEvent.ShowMessage -> {
-                    val text = when (event.type) {
-                        QuizMessage.QuestionLoadFailed -> getString(QuizRes.MsgQuestionLoadFailed)
-                        QuizMessage.AnswerSubmitFailed -> getString(QuizRes.MsgAnswerSubmitFailed)
-                    }
+                    val text =
+                        when (event.type) {
+                            QuizMessage.QuestionLoadFailed -> getString(QuizRes.MsgQuestionLoadFailed)
+                            QuizMessage.AnswerSubmitFailed -> getString(QuizRes.MsgAnswerSubmitFailed)
+                        }
                     snackbarHostState.showSnackbar(text)
                 }
             }

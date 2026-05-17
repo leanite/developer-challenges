@@ -3,7 +3,6 @@ package com.leanite.dynaquiz.feature.result.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,19 +26,19 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun FinalScorePanel(
     result: QuizSessionResult,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .background(
-                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.85f),
-                shape = RoundedCornerShape(20.dp),
-            )
-            .padding(16.dp),
+        modifier =
+            modifier
+                .background(
+                    color = MaterialTheme.colorScheme.surface.copy(alpha = 0.85f),
+                    shape = RoundedCornerShape(20.dp),
+                ).padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         MascotWinAnimation(
-            mascotMood = result.challengeMode.mascot.mood
+            mascotMood = result.challengeMode.mascot.mood,
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -68,12 +67,13 @@ fun FinalScorePanel(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = stringResource(
-                ResultRes.Details,
-                result.correctAnswers,
-                result.totalQuestions,
-                result.challengeMode.label(),
-            ),
+            text =
+                stringResource(
+                    ResultRes.Details,
+                    result.correctAnswers,
+                    result.totalQuestions,
+                    result.challengeMode.label(),
+                ),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center,
@@ -86,13 +86,14 @@ fun FinalScorePanel(
 private fun FinalScorePanelPreview() {
     DynaquizTheme {
         FinalScorePanel(
-            result = QuizSessionResult(
-                playerName = "Leandro",
-                challengeMode = ChallengeMode.Timed.Medium,
-                score = Score(180),
-                correctAnswers = 8,
-                totalQuestions = 10,
-            ),
+            result =
+                QuizSessionResult(
+                    playerName = "Leandro",
+                    challengeMode = ChallengeMode.Timed.Medium,
+                    score = Score(180),
+                    correctAnswers = 8,
+                    totalQuestions = 10,
+                ),
         )
     }
 }

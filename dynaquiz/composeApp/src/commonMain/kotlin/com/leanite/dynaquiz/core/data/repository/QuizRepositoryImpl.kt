@@ -15,7 +15,6 @@ internal class QuizRepositoryImpl(
     private val remoteDataSource: QuizRemoteDataSource,
     private val ioDispatcher: CoroutineDispatcher,
 ) : QuizRepository {
-
     override suspend fun getRandomQuestion(): AppResult<Question> =
         withContext(ioDispatcher) {
             try {
@@ -25,7 +24,10 @@ internal class QuizRepositoryImpl(
             }
         }
 
-    override suspend fun submitAnswer(questionId: QuestionId, answer: String): AppResult<Answer> =
+    override suspend fun submitAnswer(
+        questionId: QuestionId,
+        answer: String,
+    ): AppResult<Answer> =
         withContext(ioDispatcher) {
             try {
                 AppResult.Success(remoteDataSource.submitAnswer(questionId.value, answer).toDomain())
@@ -38,7 +40,8 @@ internal class QuizRepositoryImpl(
         withContext(ioDispatcher) {
             try {
                 remoteDataSource.fetchRandomQuestion()
-            } catch (_: Throwable) { }
+            } catch (_: Throwable) {
+            }
         }
     }
 }
