@@ -126,6 +126,7 @@ val coreModule = module { //TODO: melhorar, todos estao aqui
         RankingRepositoryImpl(
             quizSessionDataSource = get(),
             playerDataSource = get(),
+            clock = get(),
             ioDispatcher = get(named("io")),
         )
     }

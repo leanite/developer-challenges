@@ -15,13 +15,14 @@ import kotlin.time.Clock
 internal class RankingRepositoryImpl(
     private val quizSessionDataSource: QuizSessionLocalDataSource,
     private val playerDataSource: PlayerLocalDataSource,
+    private val clock: Clock,
     private val ioDispatcher: CoroutineDispatcher,
 ) : RankingRepository {
 
     override suspend fun saveSession(result: QuizSessionResult): AppResult<Unit> =
         withContext(ioDispatcher) {
             try {
-                val now = Clock.System.now().toEpochMilliseconds()
+                val now = clock.now().toEpochMilliseconds()
                 // Garante que o player existe e cria como fallback improvável
                 val player = playerDataSource.findOrInsert(
                     name = result.playerName,
