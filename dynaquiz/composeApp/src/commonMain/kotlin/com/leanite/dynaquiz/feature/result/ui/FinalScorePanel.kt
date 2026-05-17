@@ -14,9 +14,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.leanite.dynaquiz.core.domain.model.ChallengeMode
 import com.leanite.dynaquiz.core.domain.model.QuizSessionResult
+import com.leanite.dynaquiz.core.domain.model.Score
 import com.leanite.dynaquiz.core.ui.common.label
+import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
 import com.leanite.dynaquiz.feature.result.res.ResultRes
 import org.jetbrains.compose.resources.stringResource
 
@@ -73,6 +77,22 @@ fun FinalScorePanel(
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun FinalScorePanelPreview() {
+    DynaquizTheme {
+        FinalScorePanel(
+            result = QuizSessionResult(
+                playerName = "Leandro",
+                challengeMode = ChallengeMode.Timed.Medium,
+                score = Score(180),
+                correctAnswers = 8,
+                totalQuestions = 10,
+            ),
         )
     }
 }

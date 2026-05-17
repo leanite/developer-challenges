@@ -7,8 +7,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import com.leanite.dynaquiz.core.ui.theme.DynamoxPurple
 import com.leanite.dynaquiz.core.ui.theme.DynamoxPurpleDeep
+import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
 
 @Composable
 fun BackgroundGradient(modifier: Modifier = Modifier) {
@@ -23,4 +25,12 @@ fun BackgroundGradient(modifier: Modifier = Modifier) {
                 ),
             ),
     )
+}
+
+@Preview
+@Composable
+private fun BackgroundGradientPreview() {
+    DynaquizTheme {
+        BackgroundGradient(modifier = Modifier.fillMaxSize())
+    }
 }

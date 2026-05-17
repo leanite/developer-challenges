@@ -11,9 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leanite.dynaquiz.core.domain.model.MascotMood
 import com.leanite.dynaquiz.core.ui.common.MascotAnimation
+import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
 import com.leanite.dynaquiz.feature.ranking.RankingTab
 import com.leanite.dynaquiz.feature.ranking.res.RankingRes
 import dynaquiz.composeapp.generated.resources.Res
@@ -43,5 +45,13 @@ fun EmptyRankingState(
             color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center,
         )
+    }
+}
+
+@Preview
+@Composable
+private fun EmptyRankingStatePreview() {
+    DynaquizTheme {
+        EmptyRankingState(tab = RankingTab.Mine)
     }
 }

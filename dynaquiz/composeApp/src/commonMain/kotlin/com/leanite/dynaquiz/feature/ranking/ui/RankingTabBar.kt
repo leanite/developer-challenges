@@ -7,6 +7,8 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
 import com.leanite.dynaquiz.feature.ranking.RankingTab
 import com.leanite.dynaquiz.feature.ranking.res.RankingRes
 import org.jetbrains.compose.resources.stringResource
@@ -49,5 +51,16 @@ fun RankingTabBar(
                 },
             )
         }
+    }
+}
+
+@Preview
+@Composable
+private fun RankingTabBarPreview() {
+    DynaquizTheme {
+        RankingTabBar(
+            selectedTab = RankingTab.All,
+            onTabSelected = {},
+        )
     }
 }

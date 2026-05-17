@@ -14,7 +14,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.leanite.dynaquiz.core.ui.common.BrandTitle
+import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
 import com.leanite.dynaquiz.feature.splash.anim.SplashAnimation
 
 @Composable
@@ -49,5 +51,13 @@ fun SplashScreen(
             showCursor = showCursor,
             modifier = titleModifier
         )
+    }
+}
+
+@Preview
+@Composable
+private fun SplashScreenPreview() {
+    DynaquizTheme {
+        SplashScreen(onAnimationFinished = {})
     }
 }

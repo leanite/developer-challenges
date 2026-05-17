@@ -9,7 +9,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
 
 @Composable
 fun OptionButton(
@@ -43,6 +45,32 @@ fun OptionButton(
             text = text,
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp),
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun OptionButtonUnselectedPreview() {
+    DynaquizTheme {
+        OptionButton(
+            text = "Resposta A",
+            isSelected = false,
+            enabled = true,
+            onClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun OptionButtonSelectedPreview() {
+    DynaquizTheme {
+        OptionButton(
+            text = "Resposta A",
+            isSelected = true,
+            enabled = false,
+            onClick = {},
         )
     }
 }

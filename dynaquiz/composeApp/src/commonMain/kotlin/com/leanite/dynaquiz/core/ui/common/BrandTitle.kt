@@ -1,7 +1,9 @@
 package com.leanite.dynaquiz.core.ui.common
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
@@ -11,8 +13,11 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.leanite.dynaquiz.core.ui.theme.DynamoxPurple
+import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
 import dynaquiz.composeapp.generated.resources.Res
 import dynaquiz.composeapp.generated.resources.mascot_logo_quiz
 import org.jetbrains.compose.resources.painterResource
@@ -78,3 +83,30 @@ private fun BrandTitleSize.spec(): BrandTitleSpec = when (this) {
 }
 
 private val SPACING = 12.dp
+
+@Preview
+@Composable
+private fun BrandTitleLargePreview() {
+    DynaquizTheme {
+        Box(modifier = Modifier.background(DynamoxPurple)) {
+            BrandTitle(
+                text = "DYNAQUIZ",
+                showCursor = true,
+                size = BrandTitleSize.LARGE,
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun BrandTitleNormalPreview() {
+    DynaquizTheme {
+        Box(modifier = Modifier.background(DynamoxPurple)) {
+            BrandTitle(
+                text = "DYNAQUIZ",
+                size = BrandTitleSize.NORMAL,
+            )
+        }
+    }
+}

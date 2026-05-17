@@ -19,11 +19,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
 import com.leanite.dynaquiz.core.domain.model.RankingEntry
+import com.leanite.dynaquiz.core.domain.model.Score
 import com.leanite.dynaquiz.core.ui.common.label
 import com.leanite.dynaquiz.core.ui.theme.DynamoxLightPurple
+import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
 import com.leanite.dynaquiz.feature.ranking.res.RankingRes
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.number
@@ -115,4 +118,40 @@ private fun formatFinishedAt(instant: Instant): String {
     val hh = dt.hour.toString().padStart(2, '0')
     val mi = dt.minute.toString().padStart(2, '0')
     return "$dd/$mm $hh:$mi"
+}
+
+@Preview
+@Composable
+private fun RankingEntryCardTopPreview() {
+    DynaquizTheme {
+        RankingEntryCard(
+            position = 1,
+            entry = RankingEntry(
+                playerName = "Leandro",
+                challengeMode = ChallengeMode.Timed.Hard,
+                score = Score(420),
+                correctAnswers = 9,
+                totalQuestions = 10,
+                finishedAt = Instant.fromEpochSeconds(1_700_000_000),
+            ),
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun RankingEntryCardRegularPreview() {
+    DynaquizTheme {
+        RankingEntryCard(
+            position = 12,
+            entry = RankingEntry(
+                playerName = "Player",
+                challengeMode = ChallengeMode.Timed.Easy,
+                score = Score(80),
+                correctAnswers = 6,
+                totalQuestions = 10,
+                finishedAt = Instant.fromEpochSeconds(1_700_000_000),
+            ),
+        )
+    }
 }

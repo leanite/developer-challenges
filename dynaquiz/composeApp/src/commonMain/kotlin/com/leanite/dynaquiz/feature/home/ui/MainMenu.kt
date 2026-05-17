@@ -12,10 +12,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leanite.dynaquiz.core.ext.usableString
 import com.leanite.dynaquiz.core.ui.common.GameButton
 import com.leanite.dynaquiz.core.ui.common.GameButtonStyle
+import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
 import com.leanite.dynaquiz.feature.home.res.HomeRes
 import dynaquiz.composeapp.generated.resources.Res
 import dynaquiz.composeapp.generated.resources.ic_button_difficulty
@@ -80,6 +82,19 @@ fun MainMenu(
                     Modifier.size(36.dp)
                 )
             }
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun MainMenuPreview() {
+    DynaquizTheme {
+        MainMenu(
+            isStartEnabled = true,
+            onStartClick = {},
+            onDifficultyClick = {},
+            onRankingClick = {},
         )
     }
 }

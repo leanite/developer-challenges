@@ -10,8 +10,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leanite.dynaquiz.core.domain.model.Question
+import com.leanite.dynaquiz.core.domain.model.QuestionId
+import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
 
 @Composable
 fun QuestionCard(
@@ -54,5 +57,22 @@ fun QuestionCard(
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun QuestionCardPreview() {
+    DynaquizTheme {
+        QuestionCard(
+            question = Question(
+                id = QuestionId("1"),
+                statement = "Qual é a capital do Brasil?",
+                options = listOf("São Paulo", "Brasília", "Rio de Janeiro", "Salvador"),
+            ),
+            selectedAnswer = null,
+            isSubmitting = false,
+            onOptionSelected = {},
+        )
     }
 }

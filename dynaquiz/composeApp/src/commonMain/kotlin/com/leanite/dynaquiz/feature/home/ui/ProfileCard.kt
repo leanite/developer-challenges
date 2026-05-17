@@ -15,10 +15,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leanite.dynaquiz.core.domain.model.Mascot
+import com.leanite.dynaquiz.core.domain.model.MascotMood
 import com.leanite.dynaquiz.core.ui.common.MascotAnimation
 import com.leanite.dynaquiz.core.ui.common.SimpleSpriteAnimator
+import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
 import dynaquiz.composeapp.generated.resources.Res
 import dynaquiz.composeapp.generated.resources.anim_expert_1
 import dynaquiz.composeapp.generated.resources.anim_expert_2
@@ -69,5 +72,17 @@ fun ProfileCard(
                 modifier = Modifier.weight(1f)
             )
         }
+    }
+}
+
+@Preview
+@Composable
+private fun ProfileCardPreview() {
+    DynaquizTheme {
+        ProfileCard(
+            nickname = "Leandro",
+            mascot = Mascot(MascotMood.Normal),
+            onNicknameChange = {},
+        )
     }
 }

@@ -3,9 +3,11 @@ package com.leanite.dynaquiz.feature.quiz.ui
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leanite.dynaquiz.core.domain.model.MascotMood
 import com.leanite.dynaquiz.core.ui.common.SimpleSpriteAnimator
+import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
 import com.leanite.dynaquiz.feature.quiz.res.QuizRes
 import dynaquiz.composeapp.generated.resources.Res
 import dynaquiz.composeapp.generated.resources.anim_relaxed_1
@@ -53,3 +55,11 @@ fun MascotTimerAnimation(
 }
 
 private val SPRITE_SIZE = QuizRes.Dimensions.TimerHeight
+
+@Preview
+@Composable
+private fun MascotTimerAnimationPreview() {
+    DynaquizTheme {
+        MascotTimerAnimation(mascotMood = MascotMood.Normal)
+    }
+}

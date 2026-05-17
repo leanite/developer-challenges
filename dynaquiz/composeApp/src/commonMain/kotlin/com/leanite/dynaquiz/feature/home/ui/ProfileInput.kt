@@ -17,8 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leanite.dynaquiz.core.ext.usableString
+import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
 import com.leanite.dynaquiz.feature.home.HomeValidation
 import com.leanite.dynaquiz.feature.home.res.HomeRes
 
@@ -98,3 +100,13 @@ private fun profileInputColors() : TextFieldColors {
     )
 }
 
+@Preview
+@Composable
+private fun ProfileInputPreview() {
+    DynaquizTheme {
+        ProfileInput(
+            nickname = "LEA",
+            onNicknameChange = {},
+        )
+    }
+}

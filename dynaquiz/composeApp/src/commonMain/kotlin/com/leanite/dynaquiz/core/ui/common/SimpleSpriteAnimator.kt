@@ -11,6 +11,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
+import dynaquiz.composeapp.generated.resources.Res
+import dynaquiz.composeapp.generated.resources.anim_normal_1
+import dynaquiz.composeapp.generated.resources.anim_normal_2
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -52,6 +57,18 @@ fun SimpleSpriteAnimator(
         Image(
             painter = painterResource(if (isActive) active else idle),
             contentDescription = contentDescription,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun SimpleSpriteAnimatorPreview() {
+    DynaquizTheme {
+        SimpleSpriteAnimator(
+            idle = Res.drawable.anim_normal_1,
+            active = Res.drawable.anim_normal_2,
+            shouldAnimate = false,
         )
     }
 }

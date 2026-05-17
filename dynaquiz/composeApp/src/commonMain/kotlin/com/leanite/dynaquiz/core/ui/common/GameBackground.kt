@@ -9,8 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.tooling.preview.Preview
 import com.leanite.dynaquiz.core.ui.theme.DynamoxPurple
 import com.leanite.dynaquiz.core.ui.theme.DynamoxPurpleDeep
+import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
 import dynaquiz.composeapp.generated.resources.Res
 import dynaquiz.composeapp.generated.resources.bg_factory_night
 import dynaquiz.composeapp.generated.resources.bg_factory_night_light
@@ -27,5 +29,13 @@ fun GameBackground(
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize(),
         )
+    }
+}
+
+@Preview
+@Composable
+private fun GameBackgroundPreview() {
+    DynaquizTheme {
+        GameBackground(modifier = Modifier.fillMaxSize())
     }
 }
