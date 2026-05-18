@@ -22,6 +22,8 @@ fun initKoin(
         modules(
             listOf(
                 coreModule,
+                dataModule,
+                domainModule,
                 featureSplashModule,
                 featureHomeModule,
                 featureDifficultyModule,
