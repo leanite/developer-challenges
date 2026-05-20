@@ -7,7 +7,9 @@ import com.leanite.dynaquiz.core.domain.model.AnswerLog
 import com.leanite.dynaquiz.core.domain.model.AnswerOutcome
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
 import com.leanite.dynaquiz.core.domain.model.Question
+import com.leanite.dynaquiz.core.domain.model.QuizPerformance
 import com.leanite.dynaquiz.core.domain.model.QuizSessionResult
+import com.leanite.dynaquiz.core.domain.model.QuizSetup
 import com.leanite.dynaquiz.core.domain.model.computeScore
 import com.leanite.dynaquiz.core.domain.result.AppResult
 import com.leanite.dynaquiz.core.domain.usecase.GetRandomQuestionUseCase
@@ -28,13 +30,12 @@ import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
 class QuizViewModel(
-    private val playerName: String,
-    challengeMode: ChallengeMode,
+    private val setup: QuizSetup,
     private val getRandomQuestionUseCase: GetRandomQuestionUseCase,
     private val submitAnswerUseCase: SubmitAnswerUseCase,
     private val saveQuizSessionUseCase: SaveQuizSessionUseCase,
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(QuizUiState(challengeMode = challengeMode))
+    private val _uiState = MutableStateFlow(QuizUiState(challengeMode = setup.challengeMode))
     val uiState: StateFlow<QuizUiState> = _uiState.asStateFlow()
 
     private val _events = Channel<QuizEvent>(Channel.BUFFERED)
@@ -216,11 +217,13 @@ class QuizViewModel(
                 (it.outcome as? AnswerOutcome.Confirmed)?.correct == true
             }
         return QuizSessionResult(
-            playerName = playerName,
-            challengeMode = mode,
-            score = answerLog.computeScore(mode),
-            correctAnswers = confirmedCorrect,
-            totalQuestions = QuizRules.TOTAL_QUESTIONS,
+            setup = setup,
+            performance =
+                QuizPerformance(
+                    score = answerLog.computeScore(mode),
+                    correctAnswers = confirmedCorrect,
+                    totalQuestions = QuizRules.TOTAL_QUESTIONS,
+                ),
         )
     }
 

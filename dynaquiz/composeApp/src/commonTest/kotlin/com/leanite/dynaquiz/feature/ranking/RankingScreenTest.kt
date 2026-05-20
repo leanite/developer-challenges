@@ -4,6 +4,8 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.runComposeUiTest
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
+import com.leanite.dynaquiz.core.domain.model.QuizPerformance
+import com.leanite.dynaquiz.core.domain.model.QuizSetup
 import com.leanite.dynaquiz.core.domain.model.RankingEntry
 import com.leanite.dynaquiz.core.domain.model.Score
 import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
@@ -22,11 +24,17 @@ class RankingScreenTest : UiTest() {
         name: String,
         score: Int,
     ) = RankingEntry(
-        playerName = name,
-        challengeMode = ChallengeMode.Timed.Easy,
-        score = Score(score),
-        correctAnswers = 5,
-        totalQuestions = 10,
+        setup =
+            QuizSetup(
+                playerName = name,
+                challengeMode = ChallengeMode.Timed.Easy,
+            ),
+        performance =
+            QuizPerformance(
+                score = Score(score),
+                correctAnswers = 5,
+                totalQuestions = 10,
+            ),
         finishedAt = Instant.fromEpochMilliseconds(1_700_000_000_000L),
     )
 

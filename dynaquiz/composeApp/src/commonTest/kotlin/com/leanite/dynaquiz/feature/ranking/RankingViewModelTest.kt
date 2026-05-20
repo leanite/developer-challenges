@@ -2,6 +2,8 @@ package com.leanite.dynaquiz.feature.ranking
 
 import app.cash.turbine.test
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
+import com.leanite.dynaquiz.core.domain.model.QuizPerformance
+import com.leanite.dynaquiz.core.domain.model.QuizSetup
 import com.leanite.dynaquiz.core.domain.model.RankingEntry
 import com.leanite.dynaquiz.core.domain.model.Score
 import com.leanite.dynaquiz.core.domain.repository.RankingRepository
@@ -57,11 +59,17 @@ class RankingViewModelTest {
         player: String = "Leandro",
         score: Int = 100,
     ) = RankingEntry(
-        playerName = player,
-        challengeMode = ChallengeMode.Timed.Easy,
-        score = Score(score),
-        correctAnswers = 5,
-        totalQuestions = 10,
+        setup =
+            QuizSetup(
+                playerName = player,
+                challengeMode = ChallengeMode.Timed.Easy,
+            ),
+        performance =
+            QuizPerformance(
+                score = Score(score),
+                correctAnswers = 5,
+                totalQuestions = 10,
+            ),
         finishedAt = Instant.fromEpochMilliseconds(0L),
     )
 

@@ -3,7 +3,7 @@ package com.leanite.dynaquiz.feature.home
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import com.leanite.dynaquiz.core.domain.model.ChallengeMode
+import com.leanite.dynaquiz.core.domain.model.QuizSetup
 import com.leanite.dynaquiz.feature.home.res.HomeRes
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -13,14 +13,14 @@ import org.jetbrains.compose.resources.getString
 fun HomeEventEffects(
     events: Flow<HomeEvent>,
     snackbarHostState: SnackbarHostState,
-    onNavigateToQuiz: (String, ChallengeMode) -> Unit,
+    onNavigateToQuiz: (QuizSetup) -> Unit,
     onNavigateToDifficulty: () -> Unit,
     onNavigateToRanking: (String) -> Unit,
 ) {
     LaunchedEffect(events) {
         events.collectLatest { event ->
             when (event) {
-                is HomeEvent.NavigateToQuiz -> onNavigateToQuiz(event.playerName, event.challengeMode)
+                is HomeEvent.NavigateToQuiz -> onNavigateToQuiz(event.setup)
 
                 HomeEvent.NavigateToDifficulty -> onNavigateToDifficulty()
 

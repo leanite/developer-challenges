@@ -11,7 +11,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
+import com.leanite.dynaquiz.core.domain.model.QuizPerformance
 import com.leanite.dynaquiz.core.domain.model.QuizSessionResult
+import com.leanite.dynaquiz.core.domain.model.QuizSetup
 import com.leanite.dynaquiz.core.domain.model.Score
 import com.leanite.dynaquiz.feature.difficulty.DifficultyHost
 import com.leanite.dynaquiz.feature.home.HomeHost
@@ -60,11 +62,11 @@ fun DynaquizAppNavigation() {
                 popEnterTransition = { EnterTransition.None },
             ) {
                 HomeHost(
-                    onNavigateToQuiz = { playerName, challengeMode ->
+                    onNavigateToQuiz = { setup ->
                         navController.navigate(
                             Quiz(
-                                playerName = playerName,
-                                challengeMode = challengeMode.serializedName,
+                                playerName = setup.playerName,
+                                challengeMode = setup.challengeMode.serializedName,
                             ),
                         )
                     },
@@ -96,16 +98,19 @@ fun DynaquizAppNavigation() {
             composable<Quiz> { entry ->
                 val args = entry.toRoute<Quiz>()
                 QuizHost(
-                    playerName = args.playerName,
-                    challengeMode = ChallengeMode.fromSerializedName(args.challengeMode),
+                    setup =
+                        QuizSetup(
+                            playerName = args.playerName,
+                            challengeMode = ChallengeMode.fromSerializedName(args.challengeMode),
+                        ),
                     onNavigateToResult = { result ->
                         navController.navigate(
                             Result(
-                                playerName = result.playerName,
-                                challengeMode = result.challengeMode.serializedName,
-                                scorePoints = result.score.points,
-                                correctAnswers = result.correctAnswers,
-                                totalQuestions = result.totalQuestions,
+                                playerName = result.setup.playerName,
+                                challengeMode = result.setup.challengeMode.serializedName,
+                                scorePoints = result.performance.score.points,
+                                correctAnswers = result.performance.correctAnswers,
+                                totalQuestions = result.performance.totalQuestions,
                             ),
                         ) {
                             // Remove o Quiz do back stack para não voltar pro quiz já terminado
@@ -120,11 +125,17 @@ fun DynaquizAppNavigation() {
                 val args = entry.toRoute<Result>()
                 val sessionResult =
                     QuizSessionResult(
-                        playerName = args.playerName,
-                        challengeMode = ChallengeMode.fromSerializedName(args.challengeMode),
-                        score = Score(args.scorePoints),
-                        correctAnswers = args.correctAnswers,
-                        totalQuestions = args.totalQuestions,
+                        setup =
+                            QuizSetup(
+                                playerName = args.playerName,
+                                challengeMode = ChallengeMode.fromSerializedName(args.challengeMode),
+                            ),
+                        performance =
+                            QuizPerformance(
+                                score = Score(args.scorePoints),
+                                correctAnswers = args.correctAnswers,
+                                totalQuestions = args.totalQuestions,
+                            ),
                     )
                 ResultHost(
                     sessionResult = sessionResult,

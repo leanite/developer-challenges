@@ -6,7 +6,9 @@ import com.leanite.dynaquiz.core.domain.model.AnswerOutcome
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
 import com.leanite.dynaquiz.core.domain.model.Question
 import com.leanite.dynaquiz.core.domain.model.QuestionId
+import com.leanite.dynaquiz.core.domain.model.QuizPerformance
 import com.leanite.dynaquiz.core.domain.model.QuizSessionResult
+import com.leanite.dynaquiz.core.domain.model.QuizSetup
 import com.leanite.dynaquiz.core.domain.model.Score
 import com.leanite.dynaquiz.core.domain.repository.QuizRepository
 import com.leanite.dynaquiz.core.domain.repository.RankingRepository
@@ -64,8 +66,11 @@ class QuizViewModelTest {
 
     private fun createViewModel(challengeMode: ChallengeMode = ChallengeMode.Timed.Easy) =
         QuizViewModel(
-            playerName = "Leandro",
-            challengeMode = challengeMode,
+            setup =
+                QuizSetup(
+                    playerName = "Leandro",
+                    challengeMode = challengeMode,
+                ),
             getRandomQuestionUseCase = getRandomQuestionUseCase,
             submitAnswerUseCase = submitAnswerUseCase,
             saveQuizSessionUseCase = saveQuizSessionUseCase,
@@ -407,11 +412,17 @@ class QuizViewModelTest {
             verifySuspend {
                 rankingRepository.saveSession(
                     QuizSessionResult(
-                        playerName = "Leandro",
-                        challengeMode = ChallengeMode.Relaxed,
-                        score = Score(10),
-                        correctAnswers = 10,
-                        totalQuestions = 10,
+                        setup =
+                            QuizSetup(
+                                playerName = "Leandro",
+                                challengeMode = ChallengeMode.Relaxed,
+                            ),
+                        performance =
+                            QuizPerformance(
+                                score = Score(10),
+                                correctAnswers = 10,
+                                totalQuestions = 10,
+                            ),
                     ),
                 )
             }
@@ -435,9 +446,9 @@ class QuizViewModelTest {
 
                 val event = awaitItem()
                 assertTrue(event is QuizEvent.NavigateToResult)
-                assertEquals("Leandro", event.result.playerName)
-                assertEquals(10, event.result.correctAnswers)
-                assertEquals(Score(10), event.result.score)
+                assertEquals("Leandro", event.result.setup.playerName)
+                assertEquals(10, event.result.performance.correctAnswers)
+                assertEquals(Score(10), event.result.performance.score)
             }
         }
 

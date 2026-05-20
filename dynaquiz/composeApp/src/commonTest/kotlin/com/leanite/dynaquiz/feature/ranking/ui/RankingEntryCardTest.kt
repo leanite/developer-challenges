@@ -3,6 +3,8 @@ package com.leanite.dynaquiz.feature.ranking.ui
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runComposeUiTest
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
+import com.leanite.dynaquiz.core.domain.model.QuizPerformance
+import com.leanite.dynaquiz.core.domain.model.QuizSetup
 import com.leanite.dynaquiz.core.domain.model.RankingEntry
 import com.leanite.dynaquiz.core.domain.model.Score
 import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
@@ -18,11 +20,17 @@ class RankingEntryCardTest : UiTest() {
         player: String = "Leandro",
         scorePoints: Int = 200,
     ) = RankingEntry(
-        playerName = player,
-        challengeMode = ChallengeMode.Timed.Hard,
-        score = Score(scorePoints),
-        correctAnswers = 8,
-        totalQuestions = 10,
+        setup =
+            QuizSetup(
+                playerName = player,
+                challengeMode = ChallengeMode.Timed.Hard,
+            ),
+        performance =
+            QuizPerformance(
+                score = Score(scorePoints),
+                correctAnswers = 8,
+                totalQuestions = 10,
+            ),
         finishedAt = Instant.fromEpochMilliseconds(1_700_000_000_000L),
     )
 

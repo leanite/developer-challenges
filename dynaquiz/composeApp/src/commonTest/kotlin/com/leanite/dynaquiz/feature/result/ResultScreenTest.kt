@@ -3,7 +3,9 @@ package com.leanite.dynaquiz.feature.result
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runComposeUiTest
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
+import com.leanite.dynaquiz.core.domain.model.QuizPerformance
 import com.leanite.dynaquiz.core.domain.model.QuizSessionResult
+import com.leanite.dynaquiz.core.domain.model.QuizSetup
 import com.leanite.dynaquiz.core.domain.model.Score
 import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
 import com.leanite.dynaquiz.uitest.UiTest
@@ -17,11 +19,17 @@ import kotlin.test.assertEquals
 class ResultScreenTest : UiTest() {
     private val sampleResult =
         QuizSessionResult(
-            playerName = "Leandro",
-            challengeMode = ChallengeMode.Timed.Hard,
-            score = Score(420),
-            correctAnswers = 9,
-            totalQuestions = 10,
+            setup =
+                QuizSetup(
+                    playerName = "Leandro",
+                    challengeMode = ChallengeMode.Timed.Hard,
+                ),
+            performance =
+                QuizPerformance(
+                    score = Score(420),
+                    correctAnswers = 9,
+                    totalQuestions = 10,
+                ),
         )
 
     @Test

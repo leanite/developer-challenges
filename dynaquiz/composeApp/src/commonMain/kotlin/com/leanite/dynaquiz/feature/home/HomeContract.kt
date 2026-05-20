@@ -2,6 +2,7 @@ package com.leanite.dynaquiz.feature.home
 
 import androidx.compose.runtime.Immutable
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
+import com.leanite.dynaquiz.core.domain.model.QuizSetup
 import com.leanite.dynaquiz.core.domain.result.AppError
 
 @Immutable
@@ -32,8 +33,7 @@ sealed interface HomeIntent {
 @Immutable
 sealed interface HomeEvent {
     data class NavigateToQuiz(
-        val playerName: String,
-        val challengeMode: ChallengeMode,
+        val setup: QuizSetup,
     ) : HomeEvent
 
     data object NavigateToDifficulty : HomeEvent

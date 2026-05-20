@@ -3,6 +3,7 @@ package com.leanite.dynaquiz.feature.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
+import com.leanite.dynaquiz.core.domain.model.QuizSetup
 import com.leanite.dynaquiz.core.domain.result.AppResult
 import com.leanite.dynaquiz.core.domain.usecase.GetLastChallengeModeUseCase
 import com.leanite.dynaquiz.core.domain.usecase.GetLastNicknameUseCase
@@ -96,8 +97,11 @@ class HomeViewModel(
                 is AppResult.Success -> {
                     _events.send(
                         HomeEvent.NavigateToQuiz(
-                            playerName = result.data.name,
-                            challengeMode = state.challengeMode,
+                            setup =
+                                QuizSetup(
+                                    playerName = result.data.name,
+                                    challengeMode = state.challengeMode,
+                                ),
                         ),
                     )
                 }

@@ -24,11 +24,11 @@ class RankingMapperTest {
 
         val entry = row.toDomain()
 
-        assertEquals("Leandro", entry.playerName)
-        assertEquals(ChallengeMode.Timed.Hard, entry.challengeMode)
-        assertEquals(Score(420), entry.score)
-        assertEquals(9, entry.correctAnswers)
-        assertEquals(10, entry.totalQuestions)
+        assertEquals("Leandro", entry.setup.playerName)
+        assertEquals(ChallengeMode.Timed.Hard, entry.setup.challengeMode)
+        assertEquals(Score(420), entry.performance.score)
+        assertEquals(9, entry.performance.correctAnswers)
+        assertEquals(10, entry.performance.totalQuestions)
     }
 
     @Test
@@ -65,11 +65,11 @@ class RankingMapperTest {
 
         val entry = row.toDomain()
 
-        assertEquals("Bruno", entry.playerName)
-        assertEquals(ChallengeMode.Timed.Medium, entry.challengeMode)
-        assertEquals(Score(100), entry.score)
-        assertEquals(5, entry.correctAnswers)
-        assertEquals(10, entry.totalQuestions)
+        assertEquals("Bruno", entry.setup.playerName)
+        assertEquals(ChallengeMode.Timed.Medium, entry.setup.challengeMode)
+        assertEquals(Score(100), entry.performance.score)
+        assertEquals(5, entry.performance.correctAnswers)
+        assertEquals(10, entry.performance.totalQuestions)
         assertEquals(
             Instant.fromEpochMilliseconds(1_700_000_000_000L),
             entry.finishedAt,

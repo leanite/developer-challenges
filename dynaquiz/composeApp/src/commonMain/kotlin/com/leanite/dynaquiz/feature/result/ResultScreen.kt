@@ -13,7 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
+import com.leanite.dynaquiz.core.domain.model.QuizPerformance
 import com.leanite.dynaquiz.core.domain.model.QuizSessionResult
+import com.leanite.dynaquiz.core.domain.model.QuizSetup
 import com.leanite.dynaquiz.core.domain.model.Score
 import com.leanite.dynaquiz.core.ui.common.GameBackground
 import com.leanite.dynaquiz.core.ui.common.GeneralActionButton
@@ -73,11 +75,17 @@ private fun ResultScreenPreview() {
                 ResultUiState(
                     result =
                         QuizSessionResult(
-                            playerName = "NAME",
-                            challengeMode = ChallengeMode.Timed.Easy,
-                            score = Score(100),
-                            correctAnswers = 5,
-                            totalQuestions = 10,
+                            setup =
+                                QuizSetup(
+                                    playerName = "NAME",
+                                    challengeMode = ChallengeMode.Timed.Easy,
+                                ),
+                            performance =
+                                QuizPerformance(
+                                    score = Score(100),
+                                    correctAnswers = 5,
+                                    totalQuestions = 10,
+                                ),
                         ),
                 ),
             onIntent = {},

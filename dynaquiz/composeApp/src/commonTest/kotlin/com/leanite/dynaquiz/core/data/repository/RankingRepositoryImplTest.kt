@@ -3,7 +3,9 @@ package com.leanite.dynaquiz.core.data.repository
 import com.leanite.dynaquiz.core.data.datasource.PlayerLocalDataSource
 import com.leanite.dynaquiz.core.data.datasource.QuizSessionLocalDataSource
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
+import com.leanite.dynaquiz.core.domain.model.QuizPerformance
 import com.leanite.dynaquiz.core.domain.model.QuizSessionResult
+import com.leanite.dynaquiz.core.domain.model.QuizSetup
 import com.leanite.dynaquiz.core.domain.model.Score
 import com.leanite.dynaquiz.core.domain.result.AppError
 import com.leanite.dynaquiz.core.domain.result.AppResult
@@ -46,11 +48,17 @@ class RankingRepositoryImplTest {
 
     private fun sessionResult() =
         QuizSessionResult(
-            playerName = "Leandro",
-            challengeMode = ChallengeMode.Timed.Hard,
-            score = Score(420),
-            correctAnswers = 9,
-            totalQuestions = 10,
+            setup =
+                QuizSetup(
+                    playerName = "Leandro",
+                    challengeMode = ChallengeMode.Timed.Hard,
+                ),
+            performance =
+                QuizPerformance(
+                    score = Score(420),
+                    correctAnswers = 9,
+                    totalQuestions = 10,
+                ),
         )
 
     @Test
@@ -134,9 +142,9 @@ class RankingRepositoryImplTest {
 
             assertTrue(result is AppResult.Success)
             assertEquals(2, result.data.size)
-            assertEquals("Leandro", result.data[0].playerName)
-            assertEquals(Score(420), result.data[0].score)
-            assertEquals("Bruno", result.data[1].playerName)
+            assertEquals("Leandro", result.data[0].setup.playerName)
+            assertEquals(Score(420), result.data[0].performance.score)
+            assertEquals("Bruno", result.data[1].setup.playerName)
         }
 
     @Test
@@ -182,7 +190,12 @@ class RankingRepositoryImplTest {
 
             assertTrue(result is AppResult.Success)
             assertEquals(1, result.data.size)
-            assertEquals(Score(200), result.data.single().score)
+            assertEquals(
+                Score(200),
+                result.data
+                    .single()
+                    .performance.score,
+            )
         }
 
     @Test

@@ -8,8 +8,7 @@ val featureQuizModule =
     module {
         viewModel { params ->
             QuizViewModel(
-                playerName = params.get(),
-                challengeMode = params.get(),
+                setup = params.get(),
                 getRandomQuestionUseCase = get(),
                 submitAnswerUseCase = get(),
                 saveQuizSessionUseCase = get(),

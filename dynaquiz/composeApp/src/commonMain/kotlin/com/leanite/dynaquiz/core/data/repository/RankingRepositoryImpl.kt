@@ -25,15 +25,17 @@ internal class RankingRepositoryImpl(
                 // Garante que o player existe e cria como fallback improvável
                 val player =
                     playerDataSource.findOrInsert(
-                        name = result.playerName,
+                        name = result.setup.playerName,
                         createdAt = now,
                     )
                 quizSessionDataSource.insertSession(
                     playerId = player.id,
-                    challengeMode = result.challengeMode,
-                    scorePoints = result.score.points.toLong(),
-                    correctCount = result.correctAnswers.toLong(),
-                    totalQuestions = result.totalQuestions.toLong(),
+                    challengeMode = result.setup.challengeMode,
+                    scorePoints =
+                        result.performance.score.points
+                            .toLong(),
+                    correctCount = result.performance.correctAnswers.toLong(),
+                    totalQuestions = result.performance.totalQuestions.toLong(),
                     finishedAt = now,
                 )
                 AppResult.Success(Unit)

@@ -9,6 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
+import com.leanite.dynaquiz.core.domain.model.QuizPerformance
+import com.leanite.dynaquiz.core.domain.model.QuizSetup
 import com.leanite.dynaquiz.core.domain.model.RankingEntry
 import com.leanite.dynaquiz.core.domain.model.Score
 import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
@@ -26,7 +28,7 @@ fun RankingList(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        itemsIndexed(entries, key = { _, entry -> "${entry.playerName}-${entry.finishedAt}" }) { index, entry ->
+        itemsIndexed(entries, key = { _, entry -> "${entry.setup.playerName}-${entry.finishedAt}" }) { index, entry ->
             RankingEntryCard(
                 position = index + 1,
                 entry = entry,
@@ -44,27 +46,45 @@ private fun RankingListPreview() {
             entries =
                 persistentListOf(
                     RankingEntry(
-                        playerName = "Leandro",
-                        challengeMode = ChallengeMode.Timed.Hard,
-                        score = Score(420),
-                        correctAnswers = 9,
-                        totalQuestions = 10,
+                        setup =
+                            QuizSetup(
+                                playerName = "Leandro",
+                                challengeMode = ChallengeMode.Timed.Hard,
+                            ),
+                        performance =
+                            QuizPerformance(
+                                score = Score(420),
+                                correctAnswers = 9,
+                                totalQuestions = 10,
+                            ),
                         finishedAt = baseInstant,
                     ),
                     RankingEntry(
-                        playerName = "Carla",
-                        challengeMode = ChallengeMode.Timed.Medium,
-                        score = Score(200),
-                        correctAnswers = 8,
-                        totalQuestions = 10,
+                        setup =
+                            QuizSetup(
+                                playerName = "Carla",
+                                challengeMode = ChallengeMode.Timed.Medium,
+                            ),
+                        performance =
+                            QuizPerformance(
+                                score = Score(200),
+                                correctAnswers = 8,
+                                totalQuestions = 10,
+                            ),
                         finishedAt = baseInstant,
                     ),
                     RankingEntry(
-                        playerName = "Bruno",
-                        challengeMode = ChallengeMode.Relaxed,
-                        score = Score(7),
-                        correctAnswers = 7,
-                        totalQuestions = 10,
+                        setup =
+                            QuizSetup(
+                                playerName = "Bruno",
+                                challengeMode = ChallengeMode.Relaxed,
+                            ),
+                        performance =
+                            QuizPerformance(
+                                score = Score(7),
+                                correctAnswers = 7,
+                                totalQuestions = 10,
+                            ),
                         finishedAt = baseInstant,
                     ),
                 ),

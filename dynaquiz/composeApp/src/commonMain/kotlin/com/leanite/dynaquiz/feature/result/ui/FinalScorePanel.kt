@@ -16,7 +16,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
+import com.leanite.dynaquiz.core.domain.model.QuizPerformance
 import com.leanite.dynaquiz.core.domain.model.QuizSessionResult
+import com.leanite.dynaquiz.core.domain.model.QuizSetup
 import com.leanite.dynaquiz.core.domain.model.Score
 import com.leanite.dynaquiz.core.ui.common.label
 import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
@@ -38,13 +40,13 @@ fun FinalScorePanel(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         MascotWinAnimation(
-            mascotMood = result.challengeMode.mascot.mood,
+            mascotMood = result.setup.challengeMode.mascot.mood,
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = stringResource(ResultRes.Congrats, result.playerName),
+            text = stringResource(ResultRes.Congrats, result.setup.playerName),
             style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center,
@@ -53,7 +55,9 @@ fun FinalScorePanel(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = result.score.points.toString(),
+            text =
+                result.performance.score.points
+                    .toString(),
             style = MaterialTheme.typography.displayLarge,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.secondary,
@@ -70,9 +74,9 @@ fun FinalScorePanel(
             text =
                 stringResource(
                     ResultRes.Details,
-                    result.correctAnswers,
-                    result.totalQuestions,
-                    result.challengeMode.label(),
+                    result.performance.correctAnswers,
+                    result.performance.totalQuestions,
+                    result.setup.challengeMode.label(),
                 ),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onBackground,
@@ -88,11 +92,17 @@ private fun FinalScorePanelPreview() {
         FinalScorePanel(
             result =
                 QuizSessionResult(
-                    playerName = "Leandro",
-                    challengeMode = ChallengeMode.Timed.Medium,
-                    score = Score(180),
-                    correctAnswers = 8,
-                    totalQuestions = 10,
+                    setup =
+                        QuizSetup(
+                            playerName = "Leandro",
+                            challengeMode = ChallengeMode.Timed.Medium,
+                        ),
+                    performance =
+                        QuizPerformance(
+                            score = Score(180),
+                            correctAnswers = 8,
+                            totalQuestions = 10,
+                        ),
                 ),
         )
     }

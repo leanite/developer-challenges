@@ -202,8 +202,8 @@ class HomeViewModelTest {
 
                 val event = awaitItem()
                 assertTrue(event is HomeEvent.NavigateToQuiz)
-                assertEquals("Leandro", event.playerName)
-                assertEquals(ChallengeMode.Timed.Easy, event.challengeMode)
+                assertEquals("Leandro", event.setup.playerName)
+                assertEquals(ChallengeMode.Timed.Easy, event.setup.challengeMode)
             }
         }
 

@@ -22,6 +22,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
+import com.leanite.dynaquiz.core.domain.model.QuizPerformance
+import com.leanite.dynaquiz.core.domain.model.QuizSetup
 import com.leanite.dynaquiz.core.domain.model.RankingEntry
 import com.leanite.dynaquiz.core.domain.model.Score
 import com.leanite.dynaquiz.core.ui.common.label
@@ -56,15 +58,19 @@ fun RankingEntryCard(
 
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = entry.playerName,
+                text = entry.setup.playerName,
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 fontWeight = FontWeight.SemiBold,
             )
             Text(
                 text =
-                    "${entry.challengeMode.label()} · " +
-                        "${stringResource(RankingRes.CorrectFormat, entry.correctAnswers, entry.totalQuestions)} · " +
+                    "${entry.setup.challengeMode.label()} · " +
+                        "${stringResource(
+                            RankingRes.CorrectFormat,
+                            entry.performance.correctAnswers,
+                            entry.performance.totalQuestions,
+                        )} · " +
                         formatFinishedAt(entry.finishedAt),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
@@ -72,7 +78,7 @@ fun RankingEntryCard(
         }
 
         Text(
-            text = stringResource(RankingRes.PointsFormat, entry.score.points),
+            text = stringResource(RankingRes.PointsFormat, entry.performance.score.points),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.secondary,
             fontWeight = FontWeight.Bold,
@@ -134,11 +140,17 @@ private fun RankingEntryCardTopPreview() {
             position = 1,
             entry =
                 RankingEntry(
-                    playerName = "Leandro",
-                    challengeMode = ChallengeMode.Timed.Hard,
-                    score = Score(420),
-                    correctAnswers = 9,
-                    totalQuestions = 10,
+                    setup =
+                        QuizSetup(
+                            playerName = "Leandro",
+                            challengeMode = ChallengeMode.Timed.Hard,
+                        ),
+                    performance =
+                        QuizPerformance(
+                            score = Score(420),
+                            correctAnswers = 9,
+                            totalQuestions = 10,
+                        ),
                     finishedAt = Instant.fromEpochSeconds(1_700_000_000),
                 ),
         )
@@ -153,11 +165,17 @@ private fun RankingEntryCardRegularPreview() {
             position = 12,
             entry =
                 RankingEntry(
-                    playerName = "Player",
-                    challengeMode = ChallengeMode.Timed.Easy,
-                    score = Score(80),
-                    correctAnswers = 6,
-                    totalQuestions = 10,
+                    setup =
+                        QuizSetup(
+                            playerName = "Player",
+                            challengeMode = ChallengeMode.Timed.Easy,
+                        ),
+                    performance =
+                        QuizPerformance(
+                            score = Score(80),
+                            correctAnswers = 6,
+                            totalQuestions = 10,
+                        ),
                     finishedAt = Instant.fromEpochSeconds(1_700_000_000),
                 ),
         )

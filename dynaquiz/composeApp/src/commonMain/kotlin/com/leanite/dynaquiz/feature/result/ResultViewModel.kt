@@ -22,7 +22,7 @@ class ResultViewModel(
             ResultIntent.HomeClicked -> _events.trySend(ResultEvent.NavigateToHome)
             ResultIntent.RankingClicked ->
                 _events.trySend(
-                    ResultEvent.NavigateToRanking(playerName = sessionResult.playerName),
+                    ResultEvent.NavigateToRanking(playerName = sessionResult.setup.playerName),
                 )
         }
     }
