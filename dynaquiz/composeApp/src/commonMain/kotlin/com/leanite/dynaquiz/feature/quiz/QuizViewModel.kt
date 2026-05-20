@@ -17,23 +17,21 @@ import com.leanite.dynaquiz.core.domain.usecase.SaveQuizSessionUseCase
 import com.leanite.dynaquiz.core.domain.usecase.SubmitAnswerUseCase
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.seconds
 
 class QuizViewModel(
     private val setup: QuizSetup,
     private val getRandomQuestionUseCase: GetRandomQuestionUseCase,
     private val submitAnswerUseCase: SubmitAnswerUseCase,
     private val saveQuizSessionUseCase: SaveQuizSessionUseCase,
+    private val timer: QuizTimerController,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(QuizUiState(challengeMode = setup.challengeMode))
     val uiState: StateFlow<QuizUiState> = _uiState.asStateFlow()
@@ -41,8 +39,16 @@ class QuizViewModel(
     private val _events = Channel<QuizEvent>(Channel.BUFFERED)
     val events = _events.receiveAsFlow()
 
-    private var timerJob: Job? = null
     private var prefetchedNextQuestion: Deferred<Question?>? = null
+
+    init {
+        // Reflete o timer no UiState sem o VM gerenciar a coroutine
+        viewModelScope.launch {
+            timer.timeRemaining.collect { sec ->
+                _uiState.update { it.copy(timeRemainingSec = sec) }
+            }
+        }
+    }
 
     fun onIntent(intent: QuizIntent) {
         when (intent) {
@@ -73,38 +79,23 @@ class QuizViewModel(
     }
 
     private suspend fun runCountdown() {
-        for (sec in QuizRules.INITIAL_COUNTDOWN_SECONDS downTo 1) {
+        timer.runCountdown(QuizRules.INITIAL_COUNTDOWN_SECONDS) { sec ->
             _uiState.update { it.copy(phase = QuizPhase.Countdown(sec)) }
-            delay(1.seconds)
         }
         _uiState.update { it.copy(phase = QuizPhase.Loading) }
     }
 
     private fun startPlaying(question: Question) {
         _uiState.update { it.copy(phase = QuizPhase.Playing(question = question)) }
-        startTimer()
+        startQuestionTimer()
         schedulePrefetchOfNextQuestion()
     }
 
-    private fun startTimer() {
-        timerJob?.cancel()
+    private fun startQuestionTimer() {
         val mode = _uiState.value.challengeMode
-
-        if (mode !is ChallengeMode.Timed) {
-            _uiState.update { it.copy(timeRemainingSec = null) }
-            return
+        if (mode is ChallengeMode.Timed) {
+            timer.start(viewModelScope, mode.perQuestionSeconds) { onTimeOut() }
         }
-
-        val totalSeconds = mode.perQuestionSeconds
-        timerJob =
-            viewModelScope.launch {
-                for (sec in totalSeconds downTo 1) {
-                    _uiState.update { it.copy(timeRemainingSec = sec) }
-                    delay(1.seconds)
-                }
-                _uiState.update { it.copy(timeRemainingSec = 0) }
-                onTimeOut()
-            }
     }
 
     private fun onTimeOut() {
@@ -150,7 +141,7 @@ class QuizViewModel(
         playing: QuizPhase.Playing,
         answer: String,
     ) {
-        timerJob?.cancel()
+        timer.cancel()
         _uiState.update {
             it.copy(phase = playing.copy(selectedAnswer = answer, isSubmitting = true))
         }
@@ -194,12 +185,12 @@ class QuizViewModel(
         finalIndex: Int,
     ) {
         val mode = _uiState.value.challengeMode
+        timer.stop()
         _uiState.update {
             it.copy(
                 phase = QuizPhase.Completed,
                 answerLog = answerLog.toImmutableList(),
                 currentQuestionIndex = finalIndex,
-                timeRemainingSec = null,
             )
         }
 
@@ -248,7 +239,7 @@ class QuizViewModel(
                 currentQuestionIndex = nextIndex,
             )
         }
-        startTimer()
+        startQuestionTimer()
         schedulePrefetchOfNextQuestion()
     }
 
@@ -266,7 +257,7 @@ class QuizViewModel(
     private fun currentPlaying(): QuizPhase.Playing? = _uiState.value.phase as? QuizPhase.Playing
 
     override fun onCleared() {
-        timerJob?.cancel()
+        timer.cancel()
         prefetchedNextQuestion?.cancel()
         super.onCleared()
     }

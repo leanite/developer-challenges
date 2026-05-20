@@ -74,6 +74,7 @@ class QuizViewModelTest {
             getRandomQuestionUseCase = getRandomQuestionUseCase,
             submitAnswerUseCase = submitAnswerUseCase,
             saveQuizSessionUseCase = saveQuizSessionUseCase,
+            timer = QuizTimerController(),
         )
 
     private fun question(
