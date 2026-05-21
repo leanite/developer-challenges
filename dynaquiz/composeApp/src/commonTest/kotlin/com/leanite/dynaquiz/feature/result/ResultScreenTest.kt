@@ -1,5 +1,6 @@
 package com.leanite.dynaquiz.feature.result
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runComposeUiTest
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
@@ -7,7 +8,6 @@ import com.leanite.dynaquiz.core.domain.model.QuizPerformance
 import com.leanite.dynaquiz.core.domain.model.QuizSessionResult
 import com.leanite.dynaquiz.core.domain.model.QuizSetup
 import com.leanite.dynaquiz.core.domain.model.Score
-import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
 import com.leanite.dynaquiz.uitest.UiTest
 import com.leanite.dynaquiz.uitest.assertTextContainingIsDisplayed
 import com.leanite.dynaquiz.uitest.assertTextIsDisplayed
@@ -17,6 +17,14 @@ import kotlin.test.assertEquals
 
 @OptIn(ExperimentalTestApi::class)
 class ResultScreenTest : UiTest() {
+    @Composable
+    private fun ResultScreenContent(
+        uiState: ResultUiState = ResultUiState(result = sampleResult),
+        onIntent: (ResultIntent) -> Unit = {},
+    ) {
+        ResultScreen(uiState = uiState, onIntent = onIntent)
+    }
+
     private val sampleResult =
         QuizSessionResult(
             setup =
@@ -36,9 +44,7 @@ class ResultScreenTest : UiTest() {
     fun `should render the score points number`() =
         runComposeUiTest {
             setContent {
-                DynaquizTheme {
-                    ResultScreen(uiState = ResultUiState(result = sampleResult), onIntent = {})
-                }
+                ResultScreenContent()
             }
 
             assertTextIsDisplayed("420")
@@ -48,9 +54,7 @@ class ResultScreenTest : UiTest() {
     fun `should render the points label`() =
         runComposeUiTest {
             setContent {
-                DynaquizTheme {
-                    ResultScreen(uiState = ResultUiState(result = sampleResult), onIntent = {})
-                }
+                ResultScreenContent()
             }
 
             assertTextIsDisplayed("PONTOS")
@@ -60,9 +64,7 @@ class ResultScreenTest : UiTest() {
     fun `should render the player name in the congratulations message`() =
         runComposeUiTest {
             setContent {
-                DynaquizTheme {
-                    ResultScreen(uiState = ResultUiState(result = sampleResult), onIntent = {})
-                }
+                ResultScreenContent()
             }
 
             assertTextContainingIsDisplayed("Leandro")
@@ -72,9 +74,7 @@ class ResultScreenTest : UiTest() {
     fun `should render correct answers slash total questions and mode label in details`() =
         runComposeUiTest {
             setContent {
-                DynaquizTheme {
-                    ResultScreen(uiState = ResultUiState(result = sampleResult), onIntent = {})
-                }
+                ResultScreenContent()
             }
 
             assertTextContainingIsDisplayed("9/10")
@@ -86,12 +86,7 @@ class ResultScreenTest : UiTest() {
         runComposeUiTest {
             val captured = mutableListOf<ResultIntent>()
             setContent {
-                DynaquizTheme {
-                    ResultScreen(
-                        uiState = ResultUiState(result = sampleResult),
-                        onIntent = { captured += it },
-                    )
-                }
+                ResultScreenContent(onIntent = { captured += it })
             }
 
             clickOnText("VER RANKING")
@@ -105,12 +100,7 @@ class ResultScreenTest : UiTest() {
         runComposeUiTest {
             val captured = mutableListOf<ResultIntent>()
             setContent {
-                DynaquizTheme {
-                    ResultScreen(
-                        uiState = ResultUiState(result = sampleResult),
-                        onIntent = { captured += it },
-                    )
-                }
+                ResultScreenContent(onIntent = { captured += it })
             }
 
             clickOnText("VOLTAR PARA HOME")

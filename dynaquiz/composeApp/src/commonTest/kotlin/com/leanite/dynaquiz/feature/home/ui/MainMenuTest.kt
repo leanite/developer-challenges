@@ -1,5 +1,6 @@
 package com.leanite.dynaquiz.feature.home.ui
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runComposeUiTest
 import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
@@ -9,22 +10,31 @@ import com.leanite.dynaquiz.uitest.assertTextIsNotEnabled
 import com.leanite.dynaquiz.uitest.clickOnText
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 @OptIn(ExperimentalTestApi::class)
 class MainMenuTest : UiTest() {
+    @Composable
+    private fun MainMenuContent(
+        isStartEnabled: Boolean = true,
+        onStartClick: () -> Unit = {},
+        onDifficultyClick: () -> Unit = {},
+        onRankingClick: () -> Unit = {},
+    ) {
+        DynaquizTheme {
+            MainMenu(
+                isStartEnabled = isStartEnabled,
+                onStartClick = onStartClick,
+                onDifficultyClick = onDifficultyClick,
+                onRankingClick = onRankingClick,
+            )
+        }
+    }
+
     @Test
     fun `should render start difficulty and ranking buttons`() =
         runComposeUiTest {
             setContent {
-                DynaquizTheme {
-                    MainMenu(
-                        isStartEnabled = true,
-                        onStartClick = {},
-                        onDifficultyClick = {},
-                        onRankingClick = {},
-                    )
-                }
+                MainMenuContent()
             }
 
             assertTextIsDisplayed("COMEÇAR QUIZ")
@@ -36,14 +46,9 @@ class MainMenuTest : UiTest() {
     fun `should disable start button when isStartEnabled is false`() =
         runComposeUiTest {
             setContent {
-                DynaquizTheme {
-                    MainMenu(
-                        isStartEnabled = false,
-                        onStartClick = {},
-                        onDifficultyClick = {},
-                        onRankingClick = {},
-                    )
-                }
+                MainMenuContent(
+                    isStartEnabled = false,
+                )
             }
 
             assertTextIsNotEnabled("COMEÇAR QUIZ")
@@ -54,14 +59,9 @@ class MainMenuTest : UiTest() {
         runComposeUiTest {
             var startClicks = 0
             setContent {
-                DynaquizTheme {
-                    MainMenu(
-                        isStartEnabled = true,
-                        onStartClick = { startClicks++ },
-                        onDifficultyClick = {},
-                        onRankingClick = {},
-                    )
-                }
+                MainMenuContent(
+                    onStartClick = { startClicks++ },
+                )
             }
 
             clickOnText("COMEÇAR QUIZ")
@@ -74,14 +74,9 @@ class MainMenuTest : UiTest() {
         runComposeUiTest {
             var difficultyClicks = 0
             setContent {
-                DynaquizTheme {
-                    MainMenu(
-                        isStartEnabled = true,
-                        onStartClick = {},
-                        onDifficultyClick = { difficultyClicks++ },
-                        onRankingClick = {},
-                    )
-                }
+                MainMenuContent(
+                    onDifficultyClick = { difficultyClicks++ },
+                )
             }
 
             clickOnText("DIFICULDADE")
@@ -94,14 +89,9 @@ class MainMenuTest : UiTest() {
         runComposeUiTest {
             var rankingClicks = 0
             setContent {
-                DynaquizTheme {
-                    MainMenu(
-                        isStartEnabled = true,
-                        onStartClick = {},
-                        onDifficultyClick = {},
-                        onRankingClick = { rankingClicks++ },
-                    )
-                }
+                MainMenuContent(
+                    onRankingClick = { rankingClicks++ },
+                )
             }
 
             clickOnText("VER RANKING")
@@ -114,17 +104,13 @@ class MainMenuTest : UiTest() {
         runComposeUiTest {
             var startClicks = 0
             setContent {
-                DynaquizTheme {
-                    MainMenu(
-                        isStartEnabled = false,
-                        onStartClick = { startClicks++ },
-                        onDifficultyClick = {},
-                        onRankingClick = {},
-                    )
-                }
+                MainMenuContent(
+                    isStartEnabled = false,
+                    onStartClick = { startClicks++ },
+                )
             }
 
             runCatching { clickOnText("COMEÇAR QUIZ") }
-            assertTrue(startClicks == 0)
+            assertEquals(startClicks, 0)
         }
 }

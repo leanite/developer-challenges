@@ -1,8 +1,8 @@
 package com.leanite.dynaquiz.feature.home.ui
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runComposeUiTest
-import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
 import com.leanite.dynaquiz.feature.home.HomeValidation
 import com.leanite.dynaquiz.uitest.UiTest
 import com.leanite.dynaquiz.uitest.assertTextIsDisplayed
@@ -12,13 +12,19 @@ import kotlin.test.assertEquals
 
 @OptIn(ExperimentalTestApi::class)
 class ProfileInputTest : UiTest() {
+    @Composable
+    private fun ProfileInputContent(
+        nickname: String,
+        onNicknameChange: (String) -> Unit = {},
+    ) {
+        ProfileInput(nickname = nickname, onNicknameChange = onNicknameChange)
+    }
+
     @Test
     fun `should render the nickname value in the input field`() =
         runComposeUiTest {
             setContent {
-                DynaquizTheme {
-                    ProfileInput(nickname = "Leandro", onNicknameChange = {})
-                }
+                ProfileInputContent(nickname = "Leandro")
             }
 
             assertTextIsDisplayed("Leandro")
@@ -28,9 +34,7 @@ class ProfileInputTest : UiTest() {
     fun `should render the NOME placeholder when nickname is empty`() =
         runComposeUiTest {
             setContent {
-                DynaquizTheme {
-                    ProfileInput(nickname = "", onNicknameChange = {})
-                }
+                ProfileInputContent(nickname = "")
             }
 
             assertTextIsDisplayed("NOME")
@@ -41,9 +45,7 @@ class ProfileInputTest : UiTest() {
         runComposeUiTest {
             val captured = mutableListOf<String>()
             setContent {
-                DynaquizTheme {
-                    ProfileInput(nickname = "", onNicknameChange = { captured += it })
-                }
+                ProfileInputContent(nickname = "", onNicknameChange = { captured += it })
             }
 
             typeOnField("NOME", "Lea")
@@ -55,9 +57,7 @@ class ProfileInputTest : UiTest() {
     fun `should render character count when nickname is shorter than minimum`() =
         runComposeUiTest {
             setContent {
-                DynaquizTheme {
-                    ProfileInput(nickname = "Le", onNicknameChange = {})
-                }
+                ProfileInputContent(nickname = "Le")
             }
 
             assertTextIsDisplayed("2/${HomeValidation.MAX_NICKNAME_LENGTH} caracteres")
@@ -67,9 +67,7 @@ class ProfileInputTest : UiTest() {
     fun `should render character count reflecting current length when valid`() =
         runComposeUiTest {
             setContent {
-                DynaquizTheme {
-                    ProfileInput(nickname = "Leandro", onNicknameChange = {})
-                }
+                ProfileInputContent(nickname = "Leandro")
             }
 
             assertTextIsDisplayed("7/${HomeValidation.MAX_NICKNAME_LENGTH} caracteres")

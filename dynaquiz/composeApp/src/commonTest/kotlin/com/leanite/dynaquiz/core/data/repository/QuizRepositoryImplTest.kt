@@ -14,7 +14,7 @@ import dev.mokkery.matcher.any
 import dev.mokkery.mock
 import dev.mokkery.verifySuspend
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.io.IOException
 import kotlin.test.Test
@@ -23,7 +23,7 @@ import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class QuizRepositoryImplTest {
-    private val testDispatcher = UnconfinedTestDispatcher()
+    private val testDispatcher = StandardTestDispatcher()
     private val remoteDataSource = mock<QuizRemoteDataSource>(MockMode.autofill)
 
     private fun createRepository() =
@@ -34,7 +34,7 @@ class QuizRepositoryImplTest {
 
     @Test
     fun `getRandomQuestion should return Success with mapped Question when remote responds`() =
-        runTest {
+        runTest(testDispatcher) {
             everySuspend { remoteDataSource.fetchRandomQuestion() } returns
                 QuestionDTO(
                     id = "q-42",
@@ -52,7 +52,7 @@ class QuizRepositoryImplTest {
 
     @Test
     fun `getRandomQuestion should return Error NoInternet when remote throws IOException`() =
-        runTest {
+        runTest(testDispatcher) {
             everySuspend { remoteDataSource.fetchRandomQuestion() } throws IOException("offline")
 
             val result = createRepository().getRandomQuestion()
@@ -63,7 +63,7 @@ class QuizRepositoryImplTest {
 
     @Test
     fun `getRandomQuestion should return Error Unknown when remote throws unmapped Throwable`() =
-        runTest {
+        runTest(testDispatcher) {
             everySuspend { remoteDataSource.fetchRandomQuestion() } throws RuntimeException("boom")
 
             val result = createRepository().getRandomQuestion()
@@ -74,7 +74,7 @@ class QuizRepositoryImplTest {
 
     @Test
     fun `submitAnswer should forward unwrapped questionId value and answer to remote`() =
-        runTest {
+        runTest(testDispatcher) {
             everySuspend { remoteDataSource.submitAnswer(any(), any()) } returns AnswerResultDTO(result = true)
 
             createRepository().submitAnswer(QuestionId("q-7"), answer = "B")
@@ -84,7 +84,7 @@ class QuizRepositoryImplTest {
 
     @Test
     fun `submitAnswer should return Success with mapped Answer when remote responds`() =
-        runTest {
+        runTest(testDispatcher) {
             everySuspend { remoteDataSource.submitAnswer(any(), any()) } returns AnswerResultDTO(result = true)
 
             val result = createRepository().submitAnswer(QuestionId("q-1"), "A")
@@ -95,7 +95,7 @@ class QuizRepositoryImplTest {
 
     @Test
     fun `submitAnswer should return Error NoInternet when remote throws IOException`() =
-        runTest {
+        runTest(testDispatcher) {
             everySuspend { remoteDataSource.submitAnswer(any(), any()) } throws IOException("offline")
 
             val result = createRepository().submitAnswer(QuestionId("q-1"), "A")
@@ -106,7 +106,7 @@ class QuizRepositoryImplTest {
 
     @Test
     fun `warmupServer should swallow any Throwable without propagating`() =
-        runTest {
+        runTest(testDispatcher) {
             everySuspend { remoteDataSource.fetchRandomQuestion() } throws RuntimeException("boom")
 
             createRepository().warmupServer()
@@ -114,7 +114,7 @@ class QuizRepositoryImplTest {
 
     @Test
     fun `warmupServer should call fetchRandomQuestion exactly once`() =
-        runTest {
+        runTest(testDispatcher) {
             everySuspend { remoteDataSource.fetchRandomQuestion() } returns
                 QuestionDTO(
                     id = "q-1",

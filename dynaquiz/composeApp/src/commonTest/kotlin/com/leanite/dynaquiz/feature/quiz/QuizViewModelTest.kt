@@ -23,6 +23,7 @@ import dev.mokkery.answering.returns
 import dev.mokkery.everySuspend
 import dev.mokkery.matcher.any
 import dev.mokkery.mock
+import dev.mokkery.verify.VerifyMode
 import dev.mokkery.verifySuspend
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -30,7 +31,6 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import kotlin.test.AfterTest
@@ -83,9 +83,9 @@ class QuizViewModelTest {
         options: List<String> = listOf("A", "B"),
     ) = Question(QuestionId(id), statement, options)
 
-    private fun stubQuestionsSequentially(vararg questions: Question) {
+    private fun stubQuestionsSequentially(questions: List<Question>) {
         // Returns Success(q1), Success(q2), ... Once exhausted, repeats the last one.
-        val responses = questions.toList()
+        val responses = questions
         var index = 0
         everySuspend { quizRepository.getRandomQuestion() } calls {
             val q = responses.getOrElse(index) { responses.last() }
@@ -103,29 +103,26 @@ class QuizViewModelTest {
 
     @Test
     fun `Started should start countdown at 3 and decrement each second to one`() =
-        runTest {
+        runTest(testDispatcher) {
             // Use Relaxed to avoid timer side effects after countdown
-            stubQuestionsSequentially(question())
+            stubQuestionsSequentially(listOf(question()))
             val viewModel = createViewModel(ChallengeMode.Relaxed)
 
             viewModel.onIntent(QuizIntent.Started)
-            runCurrent()
 
             assertEquals(QuizPhase.Countdown(3), viewModel.uiState.value.phase)
-            advanceTimeBy(1.seconds)
-            runCurrent()
+            advanceTimeBy(1.seconds + 100.milliseconds)
             assertEquals(QuizPhase.Countdown(2), viewModel.uiState.value.phase)
-            advanceTimeBy(1.seconds)
-            runCurrent()
+            advanceTimeBy(1.seconds + 100.milliseconds)
             assertEquals(QuizPhase.Countdown(1), viewModel.uiState.value.phase)
         }
 
     @Test
     fun `Started with successful prefetch should transition to Playing with the first question`() =
-        runTest {
+        runTest(testDispatcher) {
             // Relaxed has no timer, so advanceUntilIdle does not consume the prefetch into the current phase
             val q = question(id = "q-42")
-            stubQuestionsSequentially(q, question("q-43"))
+            stubQuestionsSequentially(listOf(q, question("q-43")))
             val viewModel = createViewModel(ChallengeMode.Relaxed)
 
             viewModel.onIntent(QuizIntent.Started)
@@ -138,7 +135,7 @@ class QuizViewModelTest {
 
     @Test
     fun `Started with failure on first question should emit QuestionLoadFailed and NavigateBack`() =
-        runTest {
+        runTest(testDispatcher) {
             everySuspend { quizRepository.getRandomQuestion() } returns AppResult.Error(AppError.NoInternet)
             val viewModel = createViewModel()
 
@@ -149,7 +146,6 @@ class QuizViewModelTest {
                 val first = awaitItem()
                 assertTrue(first is QuizEvent.ShowMessage)
                 assertEquals(QuizMessage.QuestionLoadFailed, first.type)
-
                 assertEquals(QuizEvent.NavigateBack, awaitItem())
             }
         }
@@ -158,51 +154,48 @@ class QuizViewModelTest {
 
     @Test
     fun `Playing in Timed mode should initialize timeRemainingSec with perQuestionSeconds`() =
-        runTest {
+        runTest(testDispatcher) {
             // 3 stubs: first question + prefetch + a safety extra
-            stubQuestionsSequentially(question("q-1"), question("q-2"), question("q-3"))
+            stubQuestionsSequentially(listOf(question("q-1"), question("q-2"), question("q-3")))
             val viewModel = createViewModel(ChallengeMode.Timed.Hard)
 
             viewModel.onIntent(QuizIntent.Started)
             // Advance just enough to finish countdown (3s) + small slack, without consuming timer ticks
             advanceTimeBy(3.seconds + 100.milliseconds)
-            runCurrent()
 
             assertEquals(ChallengeMode.Timed.Hard.perQuestionSeconds, viewModel.uiState.value.timeRemainingSec)
         }
 
     @Test
     fun `timer should decrement each second during Playing`() =
-        runTest {
-            stubQuestionsSequentially(question("q-1"), question("q-2"), question("q-3"))
+        runTest(testDispatcher) {
+            stubQuestionsSequentially(listOf(question("q-1"), question("q-2"), question("q-3")))
             val viewModel = createViewModel(ChallengeMode.Timed.Hard)
 
             viewModel.onIntent(QuizIntent.Started)
             advanceTimeBy(3.seconds + 100.milliseconds)
-            runCurrent()
+
             val initial = viewModel.uiState.value.timeRemainingSec!!
 
             advanceTimeBy(1.seconds)
-            runCurrent()
 
             assertEquals(initial - 1, viewModel.uiState.value.timeRemainingSec)
         }
 
     @Test
     fun `timer reaching zero should register a TimedOut log and advance to the next question`() =
-        runTest {
+        runTest(testDispatcher) {
             val q1 = question(id = "q-1")
             val q2 = question(id = "q-2")
             // q-3 to satisfy the prefetch scheduled when Playing(q-2) begins
-            stubQuestionsSequentially(q1, q2, question("q-3"))
+            stubQuestionsSequentially(listOf(q1, q2, question("q-3")))
             val viewModel = createViewModel(ChallengeMode.Timed.Hard)
 
             viewModel.onIntent(QuizIntent.Started)
             advanceTimeBy(3.seconds + 100.milliseconds)
-            runCurrent()
+
             // Drain the full per-question timer of Hard mode (10s)
             advanceTimeBy(ChallengeMode.Timed.Hard.perQuestionSeconds.seconds + 100.milliseconds)
-            runCurrent()
 
             val log = viewModel.uiState.value.answerLog
             assertEquals(1, log.size)
@@ -215,7 +208,7 @@ class QuizViewModelTest {
     @Test
     fun `Playing in Relaxed mode should keep timeRemainingSec null`() =
         runTest {
-            stubQuestionsSequentially(question(), question("q-2"))
+            stubQuestionsSequentially(listOf(question(), question("q-2")))
             val viewModel = createViewModel(ChallengeMode.Relaxed)
 
             viewModel.onIntent(QuizIntent.Started)
@@ -228,8 +221,8 @@ class QuizViewModelTest {
 
     @Test
     fun `AnswerSelected should mark selectedAnswer and isSubmitting immediately`() =
-        runTest {
-            stubQuestionsSequentially(question(), question("q-2"))
+        runTest(testDispatcher) {
+            stubQuestionsSequentially(listOf(question(), question("q-2")))
             // Submit suspends indefinitely (we never resolve it for this test)
             everySuspend { quizRepository.submitAnswer(any(), any()) } returns
                 AppResult.Success(Answer(correct = true))
@@ -247,8 +240,8 @@ class QuizViewModelTest {
 
     @Test
     fun `AnswerSelected while isSubmitting should be ignored and not trigger a second submit`() =
-        runTest {
-            stubQuestionsSequentially(question(), question("q-2"))
+        runTest(testDispatcher) {
+            stubQuestionsSequentially(listOf(question(), question("q-2")))
             stubAlwaysCorrect()
             val viewModel = createViewModel(ChallengeMode.Relaxed)
 
@@ -265,13 +258,14 @@ class QuizViewModelTest {
 
     @Test
     fun `AnswerSelected with Success Confirmed correct should register log Confirmed correct true`() =
-        runTest {
-            stubQuestionsSequentially(question(), question("q-2"))
+        runTest(testDispatcher) {
+            stubQuestionsSequentially(listOf(question(), question("q-2")))
             stubAlwaysCorrect()
             val viewModel = createViewModel(ChallengeMode.Relaxed)
 
             viewModel.onIntent(QuizIntent.Started)
             advanceUntilIdle()
+
             viewModel.onIntent(QuizIntent.AnswerSelected("A"))
             advanceUntilIdle()
 
@@ -283,8 +277,8 @@ class QuizViewModelTest {
 
     @Test
     fun `AnswerSelected with Success Confirmed incorrect should register log Confirmed correct false`() =
-        runTest {
-            stubQuestionsSequentially(question(), question("q-2"))
+        runTest(testDispatcher) {
+            stubQuestionsSequentially(listOf(question(), question("q-2")))
             everySuspend { quizRepository.submitAnswer(any(), any()) } returns
                 AppResult.Success(Answer(correct = false))
             val viewModel = createViewModel(ChallengeMode.Relaxed)
@@ -302,8 +296,8 @@ class QuizViewModelTest {
 
     @Test
     fun `AnswerSelected with Error should emit AnswerSubmitFailed and register outcome SubmitFailed`() =
-        runTest {
-            stubQuestionsSequentially(question(), question("q-2"))
+        runTest(testDispatcher) {
+            stubQuestionsSequentially(listOf(question(), question("q-2")))
             everySuspend { quizRepository.submitAnswer(any(), any()) } returns
                 AppResult.Error(AppError.NoInternet)
             val viewModel = createViewModel(ChallengeMode.Relaxed)
@@ -331,8 +325,8 @@ class QuizViewModelTest {
 
     @Test
     fun `entering Playing should prefetch the next question`() =
-        runTest {
-            stubQuestionsSequentially(question("q-1"), question("q-2"))
+        runTest(testDispatcher) {
+            stubQuestionsSequentially(listOf(question("q-1"), question("q-2")))
             stubAlwaysCorrect()
             val viewModel = createViewModel(ChallengeMode.Relaxed)
 
@@ -340,17 +334,14 @@ class QuizViewModelTest {
             advanceUntilIdle()
 
             // First fetch (question 1) + prefetch (question 2)
-            verifySuspend(
-                dev.mokkery.verify.VerifyMode
-                    .exactly(2),
-            ) { quizRepository.getRandomQuestion() }
+            verifySuspend(VerifyMode.exactly(2)) { quizRepository.getRandomQuestion() }
         }
 
     @Test
     fun `prefetch should not be scheduled on the last question`() =
-        runTest {
+        runTest(testDispatcher) {
             val questions = (1..QuizRules.TOTAL_QUESTIONS).map { question("q-$it") }
-            stubQuestionsSequentially(*questions.toTypedArray())
+            stubQuestionsSequentially(questions)
             stubAlwaysCorrect()
             val viewModel = createViewModel(ChallengeMode.Relaxed)
 
@@ -365,10 +356,7 @@ class QuizViewModelTest {
 
             // At this point all 10 questions have been fetched (1 initial + 9 prefetches).
             // Last question has no prefetch → total fetches must be exactly TOTAL_QUESTIONS.
-            verifySuspend(
-                dev.mokkery.verify.VerifyMode
-                    .exactly(QuizRules.TOTAL_QUESTIONS),
-            ) {
+            verifySuspend(VerifyMode.exactly(QuizRules.TOTAL_QUESTIONS)) {
                 quizRepository.getRandomQuestion()
             }
         }
@@ -377,9 +365,9 @@ class QuizViewModelTest {
 
     @Test
     fun `answering the tenth question should mark phase Completed and currentQuestionIndex equal to total`() =
-        runTest {
+        runTest(testDispatcher) {
             val questions = (1..QuizRules.TOTAL_QUESTIONS).map { question("q-$it") }
-            stubQuestionsSequentially(*questions.toTypedArray())
+            stubQuestionsSequentially(questions)
             stubAlwaysCorrect()
             val viewModel = createViewModel(ChallengeMode.Relaxed)
 
@@ -396,9 +384,9 @@ class QuizViewModelTest {
 
     @Test
     fun `completion should call SaveQuizSessionUseCase with score computed from the answerLog`() =
-        runTest {
+        runTest(testDispatcher) {
             val questions = (1..QuizRules.TOTAL_QUESTIONS).map { question("q-$it") }
-            stubQuestionsSequentially(*questions.toTypedArray())
+            stubQuestionsSequentially(questions)
             stubAlwaysCorrect()
             val viewModel = createViewModel(ChallengeMode.Relaxed)
 
@@ -433,7 +421,7 @@ class QuizViewModelTest {
     fun `completion should emit NavigateToResult with the QuizSessionResult`() =
         runTest {
             val questions = (1..QuizRules.TOTAL_QUESTIONS).map { question("q-$it") }
-            stubQuestionsSequentially(*questions.toTypedArray())
+            stubQuestionsSequentially(questions)
             stubAlwaysCorrect()
             val viewModel = createViewModel(ChallengeMode.Relaxed)
 
@@ -458,7 +446,7 @@ class QuizViewModelTest {
     @Test
     fun `BackPressed should open the exit dialog`() =
         runTest {
-            stubQuestionsSequentially(question(), question("q-2"))
+            stubQuestionsSequentially(listOf(question(), question("q-2")))
             val viewModel = createViewModel(ChallengeMode.Relaxed)
 
             viewModel.onIntent(QuizIntent.Started)
@@ -472,7 +460,7 @@ class QuizViewModelTest {
     @Test
     fun `ExitCancelled should close the dialog keeping the running phase`() =
         runTest {
-            stubQuestionsSequentially(question(), question("q-2"))
+            stubQuestionsSequentially(listOf(question(), question("q-2")))
             val viewModel = createViewModel(ChallengeMode.Relaxed)
 
             viewModel.onIntent(QuizIntent.Started)
@@ -488,7 +476,7 @@ class QuizViewModelTest {
     @Test
     fun `ExitConfirmed should close the dialog and emit NavigateBack`() =
         runTest {
-            stubQuestionsSequentially(question(), question("q-2"))
+            stubQuestionsSequentially(listOf(question(), question("q-2")))
             val viewModel = createViewModel(ChallengeMode.Relaxed)
 
             viewModel.onIntent(QuizIntent.Started)

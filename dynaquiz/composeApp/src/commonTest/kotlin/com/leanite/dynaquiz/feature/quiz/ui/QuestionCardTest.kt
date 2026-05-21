@@ -1,10 +1,10 @@
 package com.leanite.dynaquiz.feature.quiz.ui
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runComposeUiTest
 import com.leanite.dynaquiz.core.domain.model.Question
 import com.leanite.dynaquiz.core.domain.model.QuestionId
-import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
 import com.leanite.dynaquiz.uitest.UiTest
 import com.leanite.dynaquiz.uitest.assertTextIsDisplayed
 import com.leanite.dynaquiz.uitest.assertTextIsNotEnabled
@@ -14,6 +14,21 @@ import kotlin.test.assertEquals
 
 @OptIn(ExperimentalTestApi::class)
 class QuestionCardTest : UiTest() {
+    @Composable
+    private fun QuestionCardContent(
+        question: Question = sampleQuestion,
+        selectedAnswer: String? = null,
+        isSubmitting: Boolean = false,
+        onOptionSelected: (String) -> Unit = {},
+    ) {
+        QuestionCard(
+            question = question,
+            selectedAnswer = selectedAnswer,
+            isSubmitting = isSubmitting,
+            onOptionSelected = onOptionSelected,
+        )
+    }
+
     private val sampleQuestion =
         Question(
             id = QuestionId("q-1"),
@@ -25,14 +40,7 @@ class QuestionCardTest : UiTest() {
     fun `should render the question statement`() =
         runComposeUiTest {
             setContent {
-                DynaquizTheme {
-                    QuestionCard(
-                        question = sampleQuestion,
-                        selectedAnswer = null,
-                        isSubmitting = false,
-                        onOptionSelected = {},
-                    )
-                }
+                QuestionCardContent()
             }
 
             assertTextIsDisplayed("Qual a capital do Brasil?")
@@ -42,14 +50,7 @@ class QuestionCardTest : UiTest() {
     fun `should render one OptionButton per option in the question`() =
         runComposeUiTest {
             setContent {
-                DynaquizTheme {
-                    QuestionCard(
-                        question = sampleQuestion,
-                        selectedAnswer = null,
-                        isSubmitting = false,
-                        onOptionSelected = {},
-                    )
-                }
+                QuestionCardContent()
             }
 
             sampleQuestion.options.forEach { assertTextIsDisplayed(it) }
@@ -60,14 +61,9 @@ class QuestionCardTest : UiTest() {
         runComposeUiTest {
             val captured = mutableListOf<String>()
             setContent {
-                DynaquizTheme {
-                    QuestionCard(
-                        question = sampleQuestion,
-                        selectedAnswer = null,
-                        isSubmitting = false,
-                        onOptionSelected = { captured += it },
-                    )
-                }
+                QuestionCardContent(
+                    onOptionSelected = { captured += it },
+                )
             }
 
             clickOnText("Brasília")
@@ -79,14 +75,9 @@ class QuestionCardTest : UiTest() {
     fun `should disable all options once selectedAnswer is not null`() =
         runComposeUiTest {
             setContent {
-                DynaquizTheme {
-                    QuestionCard(
-                        question = sampleQuestion,
-                        selectedAnswer = "Brasília",
-                        isSubmitting = false,
-                        onOptionSelected = {},
-                    )
-                }
+                QuestionCardContent(
+                    selectedAnswer = "Brasília",
+                )
             }
 
             sampleQuestion.options.forEach { assertTextIsNotEnabled(it) }
@@ -96,14 +87,9 @@ class QuestionCardTest : UiTest() {
     fun `should disable all options while isSubmitting is true`() =
         runComposeUiTest {
             setContent {
-                DynaquizTheme {
-                    QuestionCard(
-                        question = sampleQuestion,
-                        selectedAnswer = null,
-                        isSubmitting = true,
-                        onOptionSelected = {},
-                    )
-                }
+                QuestionCardContent(
+                    isSubmitting = true,
+                )
             }
 
             sampleQuestion.options.forEach { assertTextIsNotEnabled(it) }

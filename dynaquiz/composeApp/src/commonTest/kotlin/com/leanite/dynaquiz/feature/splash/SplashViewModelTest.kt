@@ -12,7 +12,8 @@ import dev.mokkery.mock
 import dev.mokkery.verifySuspend
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -23,7 +24,7 @@ import kotlin.test.assertEquals
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SplashViewModelTest {
-    private val testDispatcher = UnconfinedTestDispatcher()
+    private val testDispatcher = StandardTestDispatcher()
     private val quizRepository = mock<QuizRepository>(MockMode.autofill)
     private val databaseRepository = mock<DatabaseRepository>(MockMode.autofill)
     private val warmupServerUseCase = WarmupServerUseCase(quizRepository)
@@ -49,23 +50,25 @@ class SplashViewModelTest {
 
     @Test
     fun `init should trigger server warmup exactly once`() =
-        runTest {
+        runTest(testDispatcher) {
             createViewModel()
 
+            advanceUntilIdle()
             verifySuspend { quizRepository.warmupServer() }
         }
 
     @Test
     fun `init should trigger database warmup exactly once`() =
-        runTest {
+        runTest(testDispatcher) {
             createViewModel()
 
+            advanceUntilIdle()
             verifySuspend { databaseRepository.warmup() }
         }
 
     @Test
     fun `AnimationFinished should emit NavigateToNext`() =
-        runTest {
+        runTest(testDispatcher) {
             val viewModel = createViewModel()
 
             viewModel.events.test {

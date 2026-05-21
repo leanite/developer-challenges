@@ -24,8 +24,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -38,7 +39,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModelTest {
-    private val testDispatcher = UnconfinedTestDispatcher()
+    private val testDispatcher = StandardTestDispatcher()
 
     private val userRepository = mock<UserRepository>(MockMode.autofill)
     private val playerRepository = mock<PlayerRepository>(MockMode.autofill)
@@ -54,7 +55,7 @@ class HomeViewModelTest {
     @BeforeTest
     fun setup() {
         Dispatchers.setMain(testDispatcher)
-        // Defaults: nothing stored, mode flow empty → uses default Easy
+
         everySuspend { userRepository.getLastNickname() } returns null
         everySuspend { userRepository.setLastNickname(any()) } returns Unit
         every { challengeModeRepository.getMode() } returns flowOf(ChallengeMode.Timed.Easy)
@@ -82,19 +83,21 @@ class HomeViewModelTest {
 
     @Test
     fun `Load should apply last nickname truncated to MAX_NICKNAME_LENGTH`() =
-        runTest {
+        runTest(testDispatcher) {
             val longNickname = "x".repeat(HomeValidation.MAX_NICKNAME_LENGTH + 5)
             everySuspend { userRepository.getLastNickname() } returns longNickname
 
             val viewModel = createViewModel()
             viewModel.onIntent(HomeIntent.Load)
 
+            advanceUntilIdle()
+
             assertEquals(HomeValidation.MAX_NICKNAME_LENGTH, viewModel.uiState.value.nickname.length)
         }
 
     @Test
     fun `Load should apply empty string when getLastNickname returns null`() =
-        runTest {
+        runTest(testDispatcher) {
             everySuspend { userRepository.getLastNickname() } returns null
 
             val viewModel = createViewModel()
@@ -105,33 +108,38 @@ class HomeViewModelTest {
 
     @Test
     fun `Load should observe stored challenge mode and reflect it in uiState`() =
-        runTest {
+        runTest(testDispatcher) {
             every { challengeModeRepository.getMode() } returns flowOf(ChallengeMode.Timed.Hard)
 
             val viewModel = createViewModel()
             viewModel.onIntent(HomeIntent.Load)
+
+            advanceUntilIdle()
 
             assertEquals(ChallengeMode.Timed.Hard, viewModel.uiState.value.challengeMode)
         }
 
     @Test
     fun `Load should reflect later emissions of the challenge mode flow`() =
-        runTest {
+        runTest(testDispatcher) {
             val modeFlow = MutableStateFlow<ChallengeMode>(ChallengeMode.Timed.Easy)
             every { challengeModeRepository.getMode() } returns modeFlow
 
             val viewModel = createViewModel()
             viewModel.onIntent(HomeIntent.Load)
+            advanceUntilIdle()
+
             assertEquals(ChallengeMode.Timed.Easy, viewModel.uiState.value.challengeMode)
 
             modeFlow.value = ChallengeMode.Timed.Hard
+            advanceUntilIdle()
 
             assertEquals(ChallengeMode.Timed.Hard, viewModel.uiState.value.challengeMode)
         }
 
     @Test
     fun `NicknameChanged should update uiState nickname immediately`() =
-        runTest {
+        runTest(testDispatcher) {
             val viewModel = createViewModel()
 
             viewModel.onIntent(HomeIntent.NicknameChanged("Lea"))
@@ -141,7 +149,7 @@ class HomeViewModelTest {
 
     @Test
     fun `NicknameChanged should truncate values longer than MAX_NICKNAME_LENGTH`() =
-        runTest {
+        runTest(testDispatcher) {
             val viewModel = createViewModel()
             val tooLong = "x".repeat(HomeValidation.MAX_NICKNAME_LENGTH + 10)
 
@@ -152,7 +160,7 @@ class HomeViewModelTest {
 
     @Test
     fun `repeated NicknameChanged should debounce and persist only the last value after the delay`() =
-        runTest {
+        runTest(testDispatcher) {
             val viewModel = createViewModel()
 
             viewModel.onIntent(HomeIntent.NicknameChanged("Lea"))
@@ -165,7 +173,7 @@ class HomeViewModelTest {
 
     @Test
     fun `StartQuizClicked with canStart false should be ignored`() =
-        runTest {
+        runTest(testDispatcher) {
             val viewModel = createViewModel()
             // nickname empty → canStart false
 
@@ -179,19 +187,22 @@ class HomeViewModelTest {
 
     @Test
     fun `StartQuizClicked should trim the nickname before calling RegisterOrFetchPlayer`() =
-        runTest {
+        runTest(testDispatcher) {
             everySuspend { playerRepository.registerOrFetch(any()) } returns AppResult.Success(samplePlayer())
             val viewModel = createViewModel()
+
             viewModel.onIntent(HomeIntent.NicknameChanged("  Leandro  "))
+            advanceUntilIdle()
 
             viewModel.onIntent(HomeIntent.StartQuizClicked)
+            advanceUntilIdle()
 
             verifySuspend { playerRepository.registerOrFetch("Leandro") }
         }
 
     @Test
     fun `StartQuizClicked on success should emit NavigateToQuiz with the player name returned by the repository`() =
-        runTest {
+        runTest(testDispatcher) {
             everySuspend { playerRepository.registerOrFetch(any()) } returns
                 AppResult.Success(samplePlayer(name = "Leandro"))
             val viewModel = createViewModel()
@@ -209,7 +220,7 @@ class HomeViewModelTest {
 
     @Test
     fun `StartQuizClicked on error should emit ShowMessage PlayerSaveError with the error`() =
-        runTest {
+        runTest(testDispatcher) {
             everySuspend { playerRepository.registerOrFetch(any()) } returns AppResult.Error(AppError.NoInternet)
             val viewModel = createViewModel()
             viewModel.onIntent(HomeIntent.NicknameChanged("Leandro"))
@@ -227,7 +238,7 @@ class HomeViewModelTest {
 
     @Test
     fun `StartQuizClicked should clear isStarting after success`() =
-        runTest {
+        runTest(testDispatcher) {
             everySuspend { playerRepository.registerOrFetch(any()) } returns AppResult.Success(samplePlayer())
             val viewModel = createViewModel()
             viewModel.onIntent(HomeIntent.NicknameChanged("Leandro"))
@@ -239,7 +250,7 @@ class HomeViewModelTest {
 
     @Test
     fun `StartQuizClicked should clear isStarting after error`() =
-        runTest {
+        runTest(testDispatcher) {
             everySuspend { playerRepository.registerOrFetch(any()) } returns AppResult.Error(AppError.Unknown)
             val viewModel = createViewModel()
             viewModel.onIntent(HomeIntent.NicknameChanged("Leandro"))
@@ -251,7 +262,7 @@ class HomeViewModelTest {
 
     @Test
     fun `DifficultyClicked should emit NavigateToDifficulty`() =
-        runTest {
+        runTest(testDispatcher) {
             val viewModel = createViewModel()
 
             viewModel.events.test {
@@ -263,7 +274,7 @@ class HomeViewModelTest {
 
     @Test
     fun `RankingClicked should emit NavigateToRanking with the current nickname`() =
-        runTest {
+        runTest(testDispatcher) {
             val viewModel = createViewModel()
             viewModel.onIntent(HomeIntent.NicknameChanged("Leandro"))
 

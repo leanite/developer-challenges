@@ -1,5 +1,6 @@
 package com.leanite.dynaquiz.core.ui.common
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runComposeUiTest
 import com.leanite.dynaquiz.core.ui.theme.DynaquizTheme
@@ -9,17 +10,25 @@ import com.leanite.dynaquiz.uitest.assertTextIsNotEnabled
 import com.leanite.dynaquiz.uitest.clickOnText
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 @OptIn(ExperimentalTestApi::class)
 class GameButtonTest : UiTest() {
+    @Composable
+    private fun GameButtonContent(
+        text: String,
+        onClick: () -> Unit,
+        enabled: Boolean = true,
+    ) {
+        DynaquizTheme {
+            GameButton(text = text, onClick = onClick, enabled = enabled)
+        }
+    }
+
     @Test
     fun `should render the provided text`() =
         runComposeUiTest {
             setContent {
-                DynaquizTheme {
-                    GameButton(text = "PLAY", onClick = {})
-                }
+                GameButtonContent(text = "PLAY", onClick = {})
             }
 
             assertTextIsDisplayed("PLAY")
@@ -30,9 +39,7 @@ class GameButtonTest : UiTest() {
         runComposeUiTest {
             var clicks = 0
             setContent {
-                DynaquizTheme {
-                    GameButton(text = "PLAY", onClick = { clicks++ })
-                }
+                GameButtonContent(text = "PLAY", onClick = { clicks++ })
             }
 
             clickOnText("PLAY")
@@ -44,9 +51,7 @@ class GameButtonTest : UiTest() {
     fun `should be disabled when enabled is false`() =
         runComposeUiTest {
             setContent {
-                DynaquizTheme {
-                    GameButton(text = "PLAY", onClick = {}, enabled = false)
-                }
+                GameButtonContent(text = "PLAY", onClick = {}, enabled = false)
             }
 
             assertTextIsNotEnabled("PLAY")
@@ -57,12 +62,10 @@ class GameButtonTest : UiTest() {
         runComposeUiTest {
             var clicks = 0
             setContent {
-                DynaquizTheme {
-                    GameButton(text = "PLAY", onClick = { clicks++ }, enabled = false)
-                }
+                GameButtonContent(text = "PLAY", onClick = { clicks++ }, enabled = false)
             }
 
             runCatching { clickOnText("PLAY") }
-            assertTrue(clicks == 0)
+            assertEquals(clicks, 0)
         }
 }

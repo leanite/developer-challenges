@@ -54,6 +54,7 @@ class RankingTabBarTest : UiTest() {
     fun `should emit onTabSelected with All when user taps the All tab`() =
         runComposeUiTest {
             val captured = mutableListOf<RankingTab>()
+
             setContent {
                 DynaquizTheme {
                     RankingTabBar(selectedTab = RankingTab.Mine, onTabSelected = { captured += it })
@@ -69,6 +70,7 @@ class RankingTabBarTest : UiTest() {
     fun `should emit onTabSelected with Mine when user taps the Mine tab`() =
         runComposeUiTest {
             val captured = mutableListOf<RankingTab>()
+
             setContent {
                 DynaquizTheme {
                     RankingTabBar(selectedTab = RankingTab.All, onTabSelected = { captured += it })

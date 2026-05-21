@@ -19,7 +19,8 @@ import dev.mokkery.mock
 import dev.mokkery.verifySuspend
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -32,7 +33,7 @@ import kotlin.time.Instant
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class RankingViewModelTest {
-    private val testDispatcher = UnconfinedTestDispatcher()
+    private val testDispatcher = StandardTestDispatcher()
     private val rankingRepository = mock<RankingRepository>(MockMode.autofill)
 
     private val getRankingUseCase = GetRankingUseCase(rankingRepository)
@@ -75,11 +76,12 @@ class RankingViewModelTest {
 
     @Test
     fun `Load should default to All tab and call GetRanking`() =
-        runTest {
+        runTest(testDispatcher) {
             everySuspend { rankingRepository.getTopRanking() } returns AppResult.Success(emptyList())
             val viewModel = createViewModel()
 
             viewModel.onIntent(RankingIntent.Load)
+            advanceUntilIdle()
 
             assertEquals(RankingTab.All, viewModel.uiState.value.selectedTab)
             verifySuspend { rankingRepository.getTopRanking() }
@@ -87,12 +89,13 @@ class RankingViewModelTest {
 
     @Test
     fun `Load with Success should fill entries and clear isLoading`() =
-        runTest {
+        runTest(testDispatcher) {
             val entries = listOf(entry("A", 200), entry("B", 100))
             everySuspend { rankingRepository.getTopRanking() } returns AppResult.Success(entries)
             val viewModel = createViewModel()
 
             viewModel.onIntent(RankingIntent.Load)
+            advanceUntilIdle()
 
             assertEquals(entries, viewModel.uiState.value.entries)
             assertEquals(false, viewModel.uiState.value.isLoading)
@@ -100,7 +103,7 @@ class RankingViewModelTest {
 
     @Test
     fun `Load with Error should emit LoadFailed clear entries and clear isLoading`() =
-        runTest {
+        runTest(testDispatcher) {
             everySuspend { rankingRepository.getTopRanking() } returns AppResult.Error(AppError.NoInternet)
             val viewModel = createViewModel()
 
@@ -117,11 +120,12 @@ class RankingViewModelTest {
 
     @Test
     fun `TabSelected with the same tab should be ignored`() =
-        runTest {
+        runTest(testDispatcher) {
             everySuspend { rankingRepository.getTopRanking() } returns AppResult.Success(emptyList())
+
             val viewModel = createViewModel()
             viewModel.onIntent(RankingIntent.Load)
-
+            advanceUntilIdle()
             viewModel.onIntent(RankingIntent.TabSelected(RankingTab.All))
 
             // initial Load + no extra call
@@ -130,13 +134,15 @@ class RankingViewModelTest {
 
     @Test
     fun `TabSelected Mine should call GetMyRanking with the playerName from the constructor`() =
-        runTest {
+        runTest(testDispatcher) {
             everySuspend { rankingRepository.getTopRanking() } returns AppResult.Success(emptyList())
             everySuspend { rankingRepository.getTopRankingByPlayerName(any()) } returns AppResult.Success(emptyList())
+
             val viewModel = createViewModel(playerName = "Leandro")
             viewModel.onIntent(RankingIntent.Load)
-
+            advanceUntilIdle()
             viewModel.onIntent(RankingIntent.TabSelected(RankingTab.Mine))
+            advanceUntilIdle()
 
             assertEquals(RankingTab.Mine, viewModel.uiState.value.selectedTab)
             verifySuspend { rankingRepository.getTopRankingByPlayerName("Leandro") }
@@ -144,21 +150,23 @@ class RankingViewModelTest {
 
     @Test
     fun `TabSelected to a different tab should update the tab and reload`() =
-        runTest {
+        runTest(testDispatcher) {
             everySuspend { rankingRepository.getTopRanking() } returns AppResult.Success(listOf(entry("A", 999)))
             val mineEntries = listOf(entry("Leandro", 50))
             everySuspend { rankingRepository.getTopRankingByPlayerName(any()) } returns AppResult.Success(mineEntries)
+
             val viewModel = createViewModel()
             viewModel.onIntent(RankingIntent.Load)
-
+            advanceUntilIdle()
             viewModel.onIntent(RankingIntent.TabSelected(RankingTab.Mine))
+            advanceUntilIdle()
 
             assertEquals(mineEntries, viewModel.uiState.value.entries)
         }
 
     @Test
     fun `BackPressed should emit NavigateBack`() =
-        runTest {
+        runTest(testDispatcher) {
             val viewModel = createViewModel()
 
             viewModel.events.test {

@@ -45,7 +45,7 @@ class ScoreTest {
 
         val result = logs.computeScore(ChallengeMode.Timed.Easy)
 
-        // 2 logs × (basePoints 2 + bonus 1/s): 12 + 7 = 19
+        // 2 logs * (basePoints 2 + bonus 1/s): 12 + 7 = 19
         assertEquals(Score(19), result)
     }
 

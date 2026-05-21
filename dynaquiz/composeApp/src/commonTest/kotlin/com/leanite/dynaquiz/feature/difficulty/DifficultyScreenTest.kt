@@ -1,5 +1,6 @@
 package com.leanite.dynaquiz.feature.difficulty
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.runComposeUiTest
 import com.leanite.dynaquiz.core.domain.model.ChallengeMode
@@ -15,13 +16,21 @@ import kotlin.test.assertTrue
 
 @OptIn(ExperimentalTestApi::class)
 class DifficultyScreenTest : UiTest() {
+    @Composable
+    private fun DifficultyScreenContent(
+        uiState: DifficultyUiState,
+        onIntent: (DifficultyIntent) -> Unit,
+    ) {
+        DynaquizTheme {
+            DifficultyScreen(uiState = uiState, onIntent = onIntent)
+        }
+    }
+
     @Test
     fun `should render all four challenge mode options`() =
         runComposeUiTest {
             setContent {
-                DynaquizTheme {
-                    DifficultyScreen(uiState = DifficultyUiState(), onIntent = {})
-                }
+                DifficultyScreenContent(uiState = DifficultyUiState(), onIntent = {})
             }
 
             assertTextExists("Relaxado")
@@ -34,9 +43,7 @@ class DifficultyScreenTest : UiTest() {
     fun `should render the description of each mode`() =
         runComposeUiTest {
             setContent {
-                DynaquizTheme {
-                    DifficultyScreen(uiState = DifficultyUiState(), onIntent = {})
-                }
+                DifficultyScreenContent(uiState = DifficultyUiState(), onIntent = {})
             }
 
             assertTextExists("Sem pressão, sem cronômetro")
@@ -49,12 +56,10 @@ class DifficultyScreenTest : UiTest() {
     fun `should pre-select the mode coming from uiState`() =
         runComposeUiTest {
             setContent {
-                DynaquizTheme {
-                    DifficultyScreen(
-                        uiState = DifficultyUiState(selectedMode = ChallengeMode.Timed.Hard),
-                        onIntent = {},
-                    )
-                }
+                DifficultyScreenContent(
+                    uiState = DifficultyUiState(selectedMode = ChallengeMode.Timed.Hard),
+                    onIntent = {},
+                )
             }
 
             assertTextIsSelected("Difícil")
@@ -65,12 +70,10 @@ class DifficultyScreenTest : UiTest() {
         runComposeUiTest {
             val captured = mutableListOf<DifficultyIntent>()
             setContent {
-                DynaquizTheme {
-                    DifficultyScreen(
-                        uiState = DifficultyUiState(selectedMode = ChallengeMode.Timed.Easy),
-                        onIntent = { captured += it },
-                    )
-                }
+                DifficultyScreenContent(
+                    uiState = DifficultyUiState(selectedMode = ChallengeMode.Timed.Easy),
+                    onIntent = { captured += it },
+                )
             }
 
             clickOnText("Difícil")
@@ -84,12 +87,10 @@ class DifficultyScreenTest : UiTest() {
         runComposeUiTest {
             val captured = mutableListOf<DifficultyIntent>()
             setContent {
-                DynaquizTheme {
-                    DifficultyScreen(
-                        uiState = DifficultyUiState(),
-                        onIntent = { captured += it },
-                    )
-                }
+                DifficultyScreenContent(
+                    uiState = DifficultyUiState(),
+                    onIntent = { captured += it },
+                )
             }
 
             clickOnText("CONFIRMAR")
@@ -101,12 +102,10 @@ class DifficultyScreenTest : UiTest() {
     fun `should disable confirm button while isConfirming is true`() =
         runComposeUiTest {
             setContent {
-                DynaquizTheme {
-                    DifficultyScreen(
-                        uiState = DifficultyUiState(isConfirming = true),
-                        onIntent = {},
-                    )
-                }
+                DifficultyScreenContent(
+                    uiState = DifficultyUiState(isConfirming = true),
+                    onIntent = {},
+                )
             }
 
             assertTextIsNotEnabled("CONFIRMAR")

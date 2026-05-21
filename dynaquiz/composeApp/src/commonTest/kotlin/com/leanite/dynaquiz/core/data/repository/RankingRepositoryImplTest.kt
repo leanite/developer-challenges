@@ -18,7 +18,7 @@ import dev.mokkery.matcher.any
 import dev.mokkery.mock
 import dev.mokkery.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.io.IOException
 import kotlin.test.Test
@@ -29,7 +29,7 @@ import kotlin.time.Instant
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class RankingRepositoryImplTest {
-    private val testDispatcher = UnconfinedTestDispatcher()
+    private val testDispatcher = StandardTestDispatcher()
     private val quizSessionDataSource = mock<QuizSessionLocalDataSource>(MockMode.autofill)
     private val playerDataSource = mock<PlayerLocalDataSource>(MockMode.autofill)
     private val fixedNowMillis = 1_700_000_000_000L
@@ -63,7 +63,7 @@ class RankingRepositoryImplTest {
 
     @Test
     fun `saveSession should ensure player via findOrInsert before inserting the session`() =
-        runTest {
+        runTest(testDispatcher) {
             every { playerDataSource.findOrInsert(any(), any()) } returns
                 SelectRankingFixtures.playerEntity(id = 1L, name = "Leandro")
 
@@ -74,7 +74,7 @@ class RankingRepositoryImplTest {
 
     @Test
     fun `saveSession should persist session fields using the playerId returned by findOrInsert`() =
-        runTest {
+        runTest(testDispatcher) {
             every { playerDataSource.findOrInsert(any(), any()) } returns
                 SelectRankingFixtures.playerEntity(id = 42L, name = "Leandro")
 
@@ -94,7 +94,7 @@ class RankingRepositoryImplTest {
 
     @Test
     fun `saveSession should return Success Unit on happy path`() =
-        runTest {
+        runTest(testDispatcher) {
             every { playerDataSource.findOrInsert(any(), any()) } returns
                 SelectRankingFixtures.playerEntity()
 
@@ -105,7 +105,7 @@ class RankingRepositoryImplTest {
 
     @Test
     fun `saveSession should return Error mapped from Throwable when findOrInsert throws`() =
-        runTest {
+        runTest(testDispatcher) {
             every { playerDataSource.findOrInsert(any(), any()) } throws IOException("db locked")
 
             val result = createRepository().saveSession(sessionResult())
@@ -116,7 +116,7 @@ class RankingRepositoryImplTest {
 
     @Test
     fun `saveSession should return Error mapped from Throwable when insertSession throws`() =
-        runTest {
+        runTest(testDispatcher) {
             every { playerDataSource.findOrInsert(any(), any()) } returns
                 SelectRankingFixtures.playerEntity()
             every {
@@ -131,7 +131,7 @@ class RankingRepositoryImplTest {
 
     @Test
     fun `getTopRanking should map data source entries to domain RankingEntry list`() =
-        runTest {
+        runTest(testDispatcher) {
             every { quizSessionDataSource.selectRanking() } returns
                 listOf(
                     SelectRankingFixtures.leandroHardTopRow,
@@ -149,7 +149,7 @@ class RankingRepositoryImplTest {
 
     @Test
     fun `getTopRanking should return Success with empty list when there are no sessions`() =
-        runTest {
+        runTest(testDispatcher) {
             every { quizSessionDataSource.selectRanking() } returns emptyList()
 
             val result = createRepository().getTopRanking()
@@ -159,7 +159,7 @@ class RankingRepositoryImplTest {
 
     @Test
     fun `getTopRanking should return Error mapped from Throwable when data source throws`() =
-        runTest {
+        runTest(testDispatcher) {
             every { quizSessionDataSource.selectRanking() } throws RuntimeException("boom")
 
             val result = createRepository().getTopRanking()
@@ -170,7 +170,7 @@ class RankingRepositoryImplTest {
 
     @Test
     fun `getTopRankingByPlayerName should forward player name to the data source`() =
-        runTest {
+        runTest(testDispatcher) {
             every { quizSessionDataSource.selectRankingByPlayerName(any()) } returns emptyList()
 
             createRepository().getTopRankingByPlayerName("Leandro")
@@ -180,7 +180,7 @@ class RankingRepositoryImplTest {
 
     @Test
     fun `getTopRankingByPlayerName should map entries to domain RankingEntry list`() =
-        runTest {
+        runTest(testDispatcher) {
             every { quizSessionDataSource.selectRankingByPlayerName(any()) } returns
                 listOf(
                     SelectRankingFixtures.leandroByNameRow,
@@ -200,8 +200,8 @@ class RankingRepositoryImplTest {
 
     @Test
     fun `getTopRankingByPlayerName should return Error mapped from Throwable when data source throws`() =
-        runTest {
-            every { quizSessionDataSource.selectRankingByPlayerName(any()) } throws IOException("offline")
+        runTest(testDispatcher) {
+            every { quizSessionDataSource.selectRankingByPlayerName(any()) } throws IOException("io")
 
             val result = createRepository().getTopRankingByPlayerName("Leandro")
 

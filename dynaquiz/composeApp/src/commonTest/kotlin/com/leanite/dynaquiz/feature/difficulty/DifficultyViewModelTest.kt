@@ -15,7 +15,8 @@ import dev.mokkery.verifySuspend
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -26,7 +27,7 @@ import kotlin.test.assertEquals
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class DifficultyViewModelTest {
-    private val testDispatcher = UnconfinedTestDispatcher()
+    private val testDispatcher = StandardTestDispatcher()
     private val repository = mock<ChallengeModeRepository>(MockMode.autofill)
     private val getLastChallengeMode = GetLastChallengeModeUseCase(repository)
     private val setLastChallengeMode = SetLastChallengeModeUseCase(repository)
@@ -51,18 +52,19 @@ class DifficultyViewModelTest {
 
     @Test
     fun `Load should reflect the last stored mode in uiState`() =
-        runTest {
+        runTest(testDispatcher) {
             every { repository.getMode() } returns flowOf(ChallengeMode.Timed.Hard)
             val viewModel = createViewModel()
 
             viewModel.onIntent(DifficultyIntent.Load)
+            advanceUntilIdle()
 
             assertEquals(ChallengeMode.Timed.Hard, viewModel.uiState.value.selectedMode)
         }
 
     @Test
     fun `ModeSelected should update selectedMode in uiState without persisting`() =
-        runTest {
+        runTest(testDispatcher) {
             val viewModel = createViewModel()
 
             viewModel.onIntent(DifficultyIntent.ModeSelected(ChallengeMode.Relaxed))
@@ -72,18 +74,19 @@ class DifficultyViewModelTest {
 
     @Test
     fun `ConfirmClicked should persist the selected mode via SetLastChallengeMode`() =
-        runTest {
+        runTest(testDispatcher) {
             val viewModel = createViewModel()
-            viewModel.onIntent(DifficultyIntent.ModeSelected(ChallengeMode.Timed.Medium))
 
+            viewModel.onIntent(DifficultyIntent.ModeSelected(ChallengeMode.Timed.Medium))
             viewModel.onIntent(DifficultyIntent.ConfirmClicked)
 
+            advanceUntilIdle()
             verifySuspend { repository.setMode(ChallengeMode.Timed.Medium) }
         }
 
     @Test
     fun `ConfirmClicked should emit NavigateBack after persisting`() =
-        runTest {
+        runTest(testDispatcher) {
             val viewModel = createViewModel()
             viewModel.onIntent(DifficultyIntent.ModeSelected(ChallengeMode.Timed.Hard))
 
@@ -96,7 +99,7 @@ class DifficultyViewModelTest {
 
     @Test
     fun `ConfirmClicked should clear isConfirming after the flow finishes`() =
-        runTest {
+        runTest(testDispatcher) {
             val viewModel = createViewModel()
 
             viewModel.onIntent(DifficultyIntent.ConfirmClicked)
@@ -106,7 +109,7 @@ class DifficultyViewModelTest {
 
     @Test
     fun `BackClicked should emit NavigateBack`() =
-        runTest {
+        runTest(testDispatcher) {
             val viewModel = createViewModel()
 
             viewModel.events.test {
