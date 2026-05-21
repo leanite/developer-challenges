@@ -16,13 +16,22 @@ import com.leanite.dynaquiz.core.domain.usecase.GetRandomQuestionUseCase
 import com.leanite.dynaquiz.core.domain.usecase.SaveQuizSessionUseCase
 import com.leanite.dynaquiz.core.domain.usecase.SubmitAnswerUseCase
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -39,7 +48,22 @@ class QuizViewModel(
     private val _events = Channel<QuizEvent>(Channel.BUFFERED)
     val events = _events.receiveAsFlow()
 
-    private var prefetchedNextQuestion: Deferred<Question?>? = null
+    private val nextQuestionTrigger: Flow<Int> =
+        _uiState
+            .filter { it.phase is QuizPhase.Playing }
+            .map { it.currentQuestionIndex + 1 }
+            .distinctUntilChanged()
+            .filter { it < QuizRules.TOTAL_QUESTIONS }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val prefetchedQuestion: SharedFlow<Question?> =
+        nextQuestionTrigger
+            .mapLatest { fetchQuestion() }
+            .shareIn(
+                scope = viewModelScope,
+                started = SharingStarted.Eagerly,
+                replay = 1,
+            )
 
     init {
         // Reflete o timer no UiState sem o VM gerenciar a coroutine
@@ -88,7 +112,6 @@ class QuizViewModel(
     private fun startPlaying(question: Question) {
         _uiState.update { it.copy(phase = QuizPhase.Playing(question = question)) }
         startQuestionTimer()
-        schedulePrefetchOfNextQuestion()
     }
 
     private fun startQuestionTimer() {
@@ -108,19 +131,6 @@ class QuizViewModel(
                 outcome = AnswerOutcome.TimedOut,
             )
         viewModelScope.launch { advanceToNextQuestion(log) }
-    }
-
-    // Inicia em background o fetch da próxima pergunta enquanto o user resolve a atual.
-    private fun schedulePrefetchOfNextQuestion() {
-        prefetchedNextQuestion?.cancel()
-        val nextIndex = _uiState.value.currentQuestionIndex + 1
-
-        prefetchedNextQuestion =
-            if (nextIndex < QuizRules.TOTAL_QUESTIONS) {
-                viewModelScope.async { fetchQuestion() }
-            } else {
-                null
-            }
     }
 
     private fun onAnswerSelected(answer: String) {
@@ -222,11 +232,7 @@ class QuizViewModel(
         newLog: List<AnswerLog>,
         nextIndex: Int,
     ) {
-        // Consome o prefetched provavelmente já pronto
-        // Fallback é um fetch reativo caso o prefetched falhe
-        val nextQuestion = prefetchedNextQuestion?.await() ?: fetchQuestion()
-        prefetchedNextQuestion = null
-
+        val nextQuestion = prefetchedQuestion.first() ?: fetchQuestion()
         if (nextQuestion == null) {
             abortWithLoadError()
             return
@@ -240,7 +246,6 @@ class QuizViewModel(
             )
         }
         startQuestionTimer()
-        schedulePrefetchOfNextQuestion()
     }
 
     private suspend fun fetchQuestion(): Question? =
@@ -258,7 +263,6 @@ class QuizViewModel(
 
     override fun onCleared() {
         timer.cancel()
-        prefetchedNextQuestion?.cancel()
         super.onCleared()
     }
 }
