@@ -1,8 +1,7 @@
 package com.leanite.dynaquiz.core.ui.common
 
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.snap
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -34,27 +33,22 @@ fun SimpleSpriteAnimator(
 ) {
     var showActive by remember { mutableStateOf(false) }
 
-    LaunchedEffect(idle, active, shouldAnimate) {
+    LaunchedEffect(shouldAnimate) {
         if (shouldAnimate) {
             while (true) {
-                delay(idleDuration)
                 showActive = true
                 delay(activeDuration)
                 showActive = false
+                delay(idleDuration)
             }
         } else {
             showActive = false
         }
     }
 
-    Crossfade(
-        targetState = showActive,
-        animationSpec = snap(),
-        modifier = modifier,
-        label = "sprite-animator",
-    ) { isActive ->
+    Box(modifier = modifier) {
         Image(
-            painter = painterResource(if (isActive) active else idle),
+            painter = painterResource(if (showActive) active else idle),
             contentDescription = contentDescription,
         )
     }
